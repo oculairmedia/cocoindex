@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test_export.bat)",
+      "Bash(BS_URL=https://knowledge.oculair.ca BS_TOKEN_ID=POnHR9Lbvm73T2IOcyRSeAqpA8bSGdMT BS_TOKEN_SECRET=735wM5dScfUkcOy7qcrgqQ1eC5fBF7IE DRY_RUN=true python scripts/bookstack_export.py --limit 3)",
+      "Bash(DRY_RUN=true cocoindex update --setup flows/bookstack_to_falkor.py)",
+      "Bash(DRY_RUN=true python -m cocoindex update --setup flows/bookstack_to_falkor.py)",
+      "Bash(DRY_RUN=true python -m cocoindex update --setup ../flows/bookstack_to_falkor.py)",
+      "Bash(python test:*)",
+      "Bash(pip show:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(BS_URL=https://knowledge.oculair.ca BS_TOKEN_ID=POnHR9Lbvm73T2IOcyRSeAqpA8bSGdMT BS_TOKEN_SECRET=735wM5dScfUkcOy7qcrgqQ1eC5fBF7IE DRY_RUN=true python check_dependencies.py)",
+      "Bash(set DRY_RUN=true)",
+      "Bash(DRY_RUN=true python -m cocoindex.cli update --setup flows/bookstack_to_falkor.py)",
+      "Bash(where cocoindex)",
+      "Bash(C:UsersEmmanuelAppDataRoamingPythonPython312Scriptscocoindex.exe --help)",
+      "Bash(dir:*)",
+      "Bash(cmd /c dir:*)",
+      "Bash(set PATH=%PATH%)",
+      "Bash(C:UsersEmmanuelAppDataRoamingPythonPython312Scripts)",
+      "Bash(cocoindex:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}

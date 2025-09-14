@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for CocoIndex metadata
+  cocoindex-postgres:
+    image: postgres:15
+    container_name: cocoindex-postgres
+    environment:
+      POSTGRES_DB: cocoindex
+      POSTGRES_USER: cocoindex
+      POSTGRES_PASSWORD: cocoindex
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"  # Use 5433 to avoid conflicts with existing PostgreSQL
+    volumes:
+      - cocoindex_postgres_data:/var/lib/postgresql/data
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cocoindex -d cocoindex"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cocoindex-network
+
+  # Optional: pgAdmin for database management
+  cocoindex-pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: cocoindex-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@cocoindex.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    depends_on:
+      - cocoindex-postgres
+    networks:
+      - cocoindex-network
+    profiles:
+      - admin  # Only start with --profile admin
+
+volumes:
+  cocoindex_postgres_data:
+
+networks:
+  cocoindex-network:
+    driver: bridge

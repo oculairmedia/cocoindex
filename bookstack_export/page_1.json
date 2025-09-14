@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "title": "Getting Started with Machine Learning",
+  "slug": "getting-started-ml",
+  "url": "https://example.com/page/getting-started-ml", 
+  "updated_at": "2024-01-15T10:30:00Z",
+  "body_html": "<h1>Machine Learning Basics</h1><p>This guide covers the fundamentals of <strong>machine learning</strong> including supervised and unsupervised learning approaches.</p><ul><li>Data preprocessing</li><li>Model selection</li><li>Evaluation metrics</li></ul>",
+  "tags": ["machine-learning", "beginner", "tutorial"],
+  "book": "AI Handbook",
+  "chapter": "Introduction"
+}
