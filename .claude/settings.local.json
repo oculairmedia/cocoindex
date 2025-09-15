@@ -35,7 +35,11 @@
       "Bash(set DRY_RUN=false)",
       "Bash(set FALKOR_HOST=localhost)",
       "Bash(set FALKOR_PORT=6379)",
-      "Bash(set FALKOR_GRAPH=graphiti_migration)"
+      "Bash(set FALKOR_GRAPH=graphiti_migration)",
+      "Bash(touch:*)",
+      "Bash(grep:*)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": []
   }

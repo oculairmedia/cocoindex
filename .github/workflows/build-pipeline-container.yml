@@ -1,0 +1,182 @@
+name: Build BookStack Pipeline Container
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'flows/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'docker-compose.yml'
+      - '.github/workflows/build-pipeline-container.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'flows/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Docker tag to build'
+        required: false
+        default: 'latest'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/bookstack-pipeline
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value=${{ github.event.inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+
+    - name: Generate deployment manifest
+      run: |
+        cat > deployment-manifest.yml << 'EOF'
+        # BookStack to FalkorDB Pipeline Deployment
+        # Generated from: ${{ github.repository }}@${{ github.sha }}
+        
+        version: '3.8'
+        
+        services:
+          falkordb:
+            image: falkordb/falkordb:latest
+            ports:
+              - "6379:6379"
+            volumes:
+              - falkor_data:/data
+            restart: unless-stopped
+        
+          postgres:
+            image: postgres:15
+            environment:
+              POSTGRES_DB: cocoindex
+              POSTGRES_USER: cocoindex
+              POSTGRES_PASSWORD: cocoindex
+            ports:
+              - "5433:5432"
+            volumes:
+              - postgres_data:/var/lib/postgresql/data
+            restart: unless-stopped
+        
+          bookstack-pipeline:
+            image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            depends_on:
+              - falkordb
+              - postgres
+            environment:
+              FALKOR_HOST: falkordb
+              FALKOR_PORT: 6379
+              FALKOR_GRAPH: graphiti_migration
+              COCOINDEX_DATABASE_URL: postgresql://cocoindex:cocoindex@postgres:5432/cocoindex
+              BS_URL: ${BS_URL}
+              BS_TOKEN_ID: ${BS_TOKEN_ID}
+              BS_TOKEN_SECRET: ${BS_TOKEN_SECRET}
+            volumes:
+              - ./logs:/app/logs
+            restart: unless-stopped
+        
+        volumes:
+          falkor_data:
+          postgres_data:
+        EOF
+
+    - name: Upload deployment manifest
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-manifest
+        path: deployment-manifest.yml
+
+  test-container:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build test image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        load: true
+        tags: test-pipeline:latest
+        cache-from: type=gha
+
+    - name: Test container startup
+      run: |
+        # Start services
+        docker network create test-network
+        
+        # Start FalkorDB
+        docker run -d --name test-falkor --network test-network \
+          -p 6379:6379 falkordb/falkordb:latest
+        
+        # Start PostgreSQL
+        docker run -d --name test-postgres --network test-network \
+          -e POSTGRES_DB=cocoindex -e POSTGRES_USER=cocoindex -e POSTGRES_PASSWORD=cocoindex \
+          -p 5432:5432 postgres:15
+        
+        # Wait for services
+        sleep 30
+        
+        # Test pipeline container (dry run)
+        docker run --rm --network test-network \
+          -e FALKOR_HOST=test-falkor \
+          -e COCOINDEX_DATABASE_URL=postgresql://cocoindex:cocoindex@test-postgres:5432/cocoindex \
+          -e BS_URL=https://demo.bookstackapp.com \
+          test-pipeline:latest python --version
+        
+        # Cleanup
+        docker stop test-falkor test-postgres
+        docker rm test-falkor test-postgres
+        docker network rm test-network

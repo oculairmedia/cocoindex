@@ -71,7 +71,17 @@ export BS_TOKEN_SECRET=your_token_secret
 
 #### Running the Enhanced Pipeline
 
-**Option 1: Simple Enhanced Extraction (Recommended)**
+**Option 1: 🐳 Docker Deployment (Recommended)**
+```bash
+# One-command deployment with guided setup
+git clone <repository>
+cd cocoindex
+chmod +x deploy.sh
+./deploy.sh
+```
+[📖 Complete Docker Guide](DOCKER_DEPLOYMENT.md)
+
+**Option 2: Simple Enhanced Extraction**
 ```bash
 # Setup and run enhanced pipeline with fallback extraction
 python run_cocoindex.py update --setup flows/bookstack_ollama_simple.py
@@ -80,7 +90,7 @@ python run_cocoindex.py update --setup flows/bookstack_ollama_simple.py
 python run_cocoindex.py update flows/bookstack_ollama_simple.py -L
 ```
 
-**Option 2: Full Ollama Integration**
+**Option 3: Full Ollama Integration**
 ```bash
 # Setup and run with Ollama Gemma3 + fallback
 python run_cocoindex.py update --setup flows/bookstack_ollama_enhanced.py
@@ -89,7 +99,7 @@ python run_cocoindex.py update --setup flows/bookstack_ollama_enhanced.py
 python run_cocoindex.py update flows/bookstack_ollama_enhanced.py -L
 ```
 
-**Option 3: Batch Export All Documents**
+**Option 4: Batch Export All Documents**
 ```bash
 # Direct export of all documents (fastest)
 python export_all_to_falkor.py
