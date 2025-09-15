@@ -1,0 +1,11 @@
+{
+  "id": 94,
+  "title": "Setup Steps",
+  "slug": "setup-steps",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/setup-steps",
+  "updated_at": "2025-04-15T00:28:31.000000Z",
+  "body_html": "<h1 id=\"bkmrk-setup-steps\">Setup Steps</h1>\n<p id=\"bkmrk-this-section-will-pr\">This section will provide detailed instructions on how to set up the small LLM and embedding environment for the proof of concept.</p>\n<ul id=\"bkmrk-environment-requirem\">\n<li>Environment requirements:\n<ul>\n<li>Python 3.8 or higher</li>\n<li>Required libraries: transformers, sentence-transformers, faiss-cpu, numpy</li>\n</ul>\n</li>\n<li>Installation procedures:\n<ul>\n<li>Create and activate a virtual environment</li>\n<li>Install dependencies using pip</li>\n</ul>\n</li>\n<li>Configuration settings:\n<ul>\n<li>Set up API keys if needed</li>\n<li>Configure embedding model and index parameters</li>\n</ul>\n</li>\n<li>Testing and validation:\n<ul>\n<li>Verify installation by running sample embedding queries</li>\n<li>Perform accuracy checks on embedding results</li>\n</ul>\n</li>\n</ul>\n<p id=\"bkmrk-further-details-will\">Further details will be added as the implementation progresses.</p>\n",
+  "tags": [],
+  "book": "Letta MCP Project",
+  "chapter": ""
+}

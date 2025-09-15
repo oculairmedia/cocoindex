@@ -1,0 +1,11 @@
+{
+  "id": 73,
+  "title": "Scheduling Notes",
+  "slug": "scheduling-notes",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/scheduling-notes",
+  "updated_at": "2025-02-28T01:11:33.000000Z",
+  "body_html": "<h1 id=\"bkmrk-scheduling-implement\">Scheduling Implementation Notes</h1>\n\n<h2 id=\"bkmrk-event-types\">Event Types</h2>\n\n<ul id=\"bkmrk-researchevent%3A-topic\">\n    <li><strong>ResearchEvent:</strong> Topic, due_date, keywords</li>\n    <li><strong>SystemCheckEvent:</strong> System_name, check_type, severity</li>\n    <li><strong>NetworkStatusEvent:</strong> Network_name, check_type, threshold</li>\n    <li><strong>SocialMediaReviewEvent:</strong> Platform, account, review_date, suggested_modifications</li>\n    <li><strong>WebsiteReviewEvent:</strong> Website_url, metrics_to_track, suggested_optimizations, review_date</li>\n</ul>",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

@@ -1,0 +1,11 @@
+{
+  "id": 175,
+  "title": "Huly Core Architecture",
+  "slug": "huly-core-architecture-KH6",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/huly-core-architecture-KH6",
+  "updated_at": "2025-09-08T16:28:10.000000Z",
+  "body_html": "<h1 id=\"bkmrk-huly-core-architectu\">Huly Core Architecture</h1>\n<h2 id=\"bkmrk-integrated-webhook-d\">Integrated Webhook Data Flow (Diagram)</h2>\n<pre id=\"bkmrk-flowchart-lr-subgrap\"><code class=\"language-mermaid\">flowchart LR\n  subgraph Huly Core\n    TX[TxCUD Events]\n    TRG[Webhook Trigger]\n    EVT[Create WebhookEvent]\n  end\n\n  subgraph Async Processing\n    Q[Queue / Scheduler]\n    DSV[Delivery Service]\n    RETRY{Retry Policy}\n    DLQ[Dead Letter]\n  end\n\n  subgraph External\n    TGT[(Webhook Target)]\n  end\n\n  TX --&gt; TRG --&gt; EVT --&gt; Q --&gt; DSV --&gt;|HTTP POST| TGT\n  DSV --&gt;|Fail| RETRY\n  RETRY --&gt;|Next attempt| DSV\n  RETRY --&gt;|Max attempts| DLQ\n</code></pre>\n<h2 id=\"bkmrk-notes\">Notes</h2>\n<ul id=\"bkmrk-transactions-%28txcud%29\">\n<li>Transactions (TxCUD) trigger the webhook logic inside Huly</li>\n<li>WebhookEvent documents are created and scheduled for async delivery</li>\n<li>Delivery service handles signing, POSTing, retries, and dead-lettering</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

@@ -1,0 +1,11 @@
+{
+  "id": 131,
+  "title": "Text Extraction (DocLing)",
+  "slug": "text-extraction-docling",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/text-extraction-docling",
+  "updated_at": "2025-05-29T02:33:18.000000Z",
+  "body_html": "<h3 id=\"bkmrk-text-extraction%3A-doc\">Text Extraction: DocLing</h3>\n<p id=\"bkmrk-role%3A-docling-is-the\"><strong>Role:</strong> DocLing is the dedicated component for extracting raw textual data from the diverse content managed by Audiobookshelf.</p>\n<p id=\"bkmrk-functionality%3A\"><strong>Functionality:</strong></p>\n<ul id=\"bkmrk-multi-format-support\">\n<li><strong>Multi-format Support:</strong> Capable of processing various document formats (e.g., PDFs, EPUBs, MOBIs, plain text) to extract their underlying text.</li>\n<li><strong>Layout Awareness:</strong> Designed to handle complex document layouts, ensuring accurate text extraction while preserving structural information where relevant.</li>\n<li><strong>Pre-processing for RAG:</strong> Prepares the extracted text for subsequent stages in the RAG pipeline, ensuring it is clean and ready for chunking and embedding generation.</li>\n</ul>\n<p id=\"bkmrk-integration-within-t\"><strong>Integration within the Pipeline:</strong> DocLing receives processed content from Audiobookshelf and provides clean, raw text to Haystack. Its efficiency and accuracy in text extraction are critical for the quality of the embeddings and the overall effectiveness of the RAG system, as it ensures that Haystack receives optimal input for generating contextual information for the Letta agents.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

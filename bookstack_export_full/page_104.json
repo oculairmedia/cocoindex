@@ -1,0 +1,11 @@
+{
+  "id": 104,
+  "title": "Custom Form Troubleshooting",
+  "slug": "custom-form-troubleshooting",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/custom-form-troubleshooting",
+  "updated_at": "2025-04-30T17:50:45.000000Z",
+  "body_html": "<p id=\"bkmrk-context%3A-this-page-d\"><strong>Context:</strong>\nThis page documents troubleshooting steps and findings regarding the integration between Gravity Forms (WordPress) and Constant Contact in the context of the Lift Superstore.</p>\n<hr id=\"bkmrk-\">\n<h2 id=\"bkmrk-summary-of-findings\">Summary of Findings</h2>\n<ul id=\"bkmrk-gravity-forms-logs-c\">\n<li>Gravity Forms logs confirm that all API activity was limited to form submissions and authentication.</li>\n<li>The Gravity Forms API key used was only capable of submitting data to Constant Contact—not modifying, disabling, or interfering with drip campaigns or other automation within Constant Contact.</li>\n<li>Tests confirmed submissions were functional, as transactional emails were received after form use.</li>\n<li>The reported customer issue (drip campaign no longer functioning) is not related to the lift height calculator</li>\n</ul>\n<h2 id=\"bkmrk-conclusion\">Conclusion</h2>\n<ul id=\"bkmrk-no-evidence-was-foun\">\n<li>No evidence was found that the Gravity Forms API key or integration could have interrupted Constant Contact’s drip campaigns.</li>\n</ul>\n<hr id=\"bkmrk--1\">\n<p id=\"bkmrk-documented-for-lift-\"><em>Documented for Lift Superstore by Emmanuel, April 2025.</em></p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

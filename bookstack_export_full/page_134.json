@@ -1,0 +1,11 @@
+{
+  "id": 134,
+  "title": "Agent Integration (Letta via Hayhooks)",
+  "slug": "agent-integration-letta-via-hayhooks",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/agent-integration-letta-via-hayhooks",
+  "updated_at": "2025-05-29T02:33:33.000000Z",
+  "body_html": "<h3 id=\"bkmrk-agent-integration%3A-l\">Agent Integration: Letta via Hayhooks</h3>\n<p id=\"bkmrk-role%3A-hayhooks-serve\"><strong>Role:</strong> Hayhooks serves as the bridge between the Haystack-orchestrated RAG pipeline and the Letta multi-agent system, enabling agents to access and utilize the contextual knowledge base.</p>\n<p id=\"bkmrk-functionality%3A\"><strong>Functionality:</strong></p>\n<ul id=\"bkmrk-openai-compatible-en\">\n<li><strong>OpenAI-Compatible Endpoint:</strong> Exposes the Haystack RAG pipeline as an OpenAI-compatible API endpoint, allowing seamless integration with various AI agents and applications.</li>\n<li><strong>Dynamic Contextualization:</strong> Enables Letta agents to dynamically query the RAG pipeline for relevant contextual information based on their current tasks or user prompts.</li>\n<li><strong>Tool Call Facilitation:</strong> Supports distinct tool calls, allowing agents to trigger specific data retrieval or processing functions within the RAG system.</li>\n<li><strong>Scalable Access:</strong> Provides a scalable and efficient mechanism for multiple agents to concurrently access the shared knowledge base.</li>\n</ul>\n<p id=\"bkmrk-integration-within-t\"><strong>Integration within the Pipeline:</strong> Hayhooks receives queries from Letta agents, forwards them to the Haystack RAG pipeline, and returns the retrieved contextual information or results of tool calls back to the agents. This integration is crucial for empowering Letta agents with up-to-date and comprehensive knowledge, significantly enhancing their ability to provide informed and accurate responses, and to perform complex tasks that require deep contextual understanding. This completes the documentation of the Refined RAG Pipeline Architecture.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

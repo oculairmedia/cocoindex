@@ -1,0 +1,11 @@
+{
+  "id": 100,
+  "title": "Issue: Verbose Output",
+  "slug": "issue-verbose-output",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/issue-verbose-output",
+  "updated_at": "2025-04-24T06:14:26.000000Z",
+  "body_html": "<h2 id=\"bkmrk-issue%3A-verbose-outpu\">Issue: Verbose Output</h2>\n<p id=\"bkmrk-the-output-generated\">The output generated for the Bookstack MCP Project documentation is currently too verbose. Proposed solutions:</p>\n<ul id=\"bkmrk-summarize-sections-t\">\n<li>Summarize sections</li>\n<li>Truncate excessive details</li>\n</ul>\n<p id=\"bkmrk-goal%3A-improve-readab\">Goal: Improve readability and user experience.</p>\n<p id=\"bkmrk-reported-by%3A-emmanue\">Reported by: Emmanuel Umukoro\nDate: 2025-04-24</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

@@ -1,0 +1,11 @@
+{
+  "id": 179,
+  "title": "Eigenvector Architecture Simple",
+  "slug": "eigenvector-architecture-simple",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/eigenvector-architecture-simple",
+  "updated_at": "2025-09-12T17:55:33.000000Z",
+  "body_html": "<h1 id=\"bkmrk-eigenvector-centrali\">Eigenvector Centrality Architecture</h1>\n<h2 id=\"bkmrk-problem\">Problem</h2>\n<p id=\"bkmrk-current-eigenvector-\">Current eigenvector centrality takes 2-5 minutes for 10k nodes.</p>\n<h2 id=\"bkmrk-solution\">Solution</h2>\n<p id=\"bkmrk-maintain-eigenvector\">Maintain eigenvector as a continuous index instead of batch computation.</p>\n<h2 id=\"bkmrk-key-components\">Key Components</h2>\n<ol id=\"bkmrk-graphblas-integratio\">\n<li>GraphBLAS integration for fast matrix operations</li>\n<li>Power iteration with warm starts</li>\n<li>Multi-resolution caching</li>\n<li>Incremental updates</li>\n</ol>\n<h2 id=\"bkmrk-performance-target\">Performance Target</h2>\n<ul id=\"bkmrk-current%3A-2-5-minutes\">\n<li>Current: 2-5 minutes</li>\n<li>Target: Under 1 millisecond for cached queries</li>\n</ul>\n<h2 id=\"bkmrk-implementation\">Implementation</h2>\n<p id=\"bkmrk-27-issues-created-in\">27 issues created in Huly project GRAPH across 4 phases.</p>\n<h2 id=\"bkmrk-status\">Status</h2>\n<p id=\"bkmrk-architecture-proposa\">Architecture proposal completed and documented.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

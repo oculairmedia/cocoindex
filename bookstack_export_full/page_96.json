@@ -1,0 +1,11 @@
+{
+  "id": 96,
+  "title": "FinGPT Overview",
+  "slug": "fingpt-overview",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/fingpt-overview",
+  "updated_at": "2025-04-16T02:34:39.000000Z",
+  "body_html": "<h1 id=\"bkmrk-fingpt-overview\">FinGPT Overview</h1>\n<p id=\"bkmrk-fingpt-is-an-open-so\">FinGPT is an open-source project that aims to revolutionize financial analysis using large language models. It provides tools for sentiment analysis and financial forecasting, leveraging advanced AI models. Hosted on GitHub, it supports API integration for real-time financial analysis and advisory.</p>\n<h2 id=\"bkmrk-key-features\">Key Features</h2>\n<ul id=\"bkmrk-open-source%3A-freely-\">\n<li><strong>Open-Source</strong>: Freely available for collaboration and improvement.</li>\n<li><strong>Financial Forecasting</strong>: Predictive analytics using financial data.</li>\n<li><strong>Sentiment Analysis</strong>: Analyzing market sentiment from various sources.</li>\n</ul>\n<h2 id=\"bkmrk-success-stories\">Success Stories</h2>\n<p id=\"bkmrk-fingpt-has-been-succ\">FinGPT has been successfully used in various financial applications, enabling users to make informed trading decisions and predictions. Articles on platforms like Medium and LinkedIn highlight its impact on financial analysis.</p>\n<h2 id=\"bkmrk-api-integration\">API Integration</h2>\n<p id=\"bkmrk-fingpt-supports-apis\">FinGPT supports APIs for integration, making it a suitable candidate for use as a data source in an MCP server. Detailed implementation can be found on their <a href=\"https://github.com/AI4Finance-Foundation/FinGPT\">GitHub repository</a>.</p>\n<h2 id=\"bkmrk-resources\">Resources</h2>\n<ul id=\"bkmrk-github-repository-me\">\n<li><a href=\"https://github.com/AI4Finance-Foundation/FinGPT\">GitHub Repository</a></li>\n<li><a href=\"https://medium.com/aimonks/fingpt-the-future-of-financial-analysis-revolutionizing-markets-with-open-source-ai-94684def1889\">Medium Article</a></li>\n<li><a href=\"https://linkedin.com\">LinkedIn Insights</a></li>\n</ul>\n<p id=\"bkmrk-this-page-will-be-up\">This page will be updated with more findings as they become available.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

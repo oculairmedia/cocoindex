@@ -1,0 +1,11 @@
+{
+  "id": 56,
+  "title": "DeepSeek-Powered Bookstack Workflow",
+  "slug": "deepseek-powered-bookstack-workflow",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/deepseek-powered-bookstack-workflow",
+  "updated_at": "2025-02-21T20:02:51.000000Z",
+  "body_html": "<h1 id=\"bkmrk-deepseek-powered-boo\">DeepSeek-Powered Bookstack Workflow</h1>\n<p id=\"bkmrk-this-workflow-levera\">This workflow leverages DeepSeek Reasoner for efficient Bookstack content creation.</p>\n<p id=\"bkmrk-steps%3A\"><strong>Steps:</strong></p>\n<ol id=\"bkmrk-transcript-submissio\">\n<li><strong>Transcript Submission:</strong> Send a short transcript of the relevant conversation to DeepSeek Reasoner.</li>\n<li><strong>Draft Generation:</strong> DeepSeek Reasoner generates the first draft of the Bookstack document based on the transcript.</li>\n<li><strong>Review and Modification:</strong> Review the generated draft, making necessary modifications and improvements.</li>\n<li><strong>Bookstack Upload:</strong> Upload the final, reviewed version of the document to Bookstack.</li>\n</ol>\n<p id=\"bkmrk-benefits%3A\"><strong>Benefits:</strong></p>\n<ul id=\"bkmrk-utilizes-deepseek%27s-\">\n<li>Utilizes DeepSeek's text generation capabilities.</li>\n<li>Mitigates DeepSeek's high latency by using it asynchronously.</li>\n<li>Ensures content quality through a human review step.</li>\n</ul>\n<p id=\"bkmrk-illustration%3A\"><strong>Illustration</strong>:</p>\n<p id=\"bkmrk-\"><img src=\"https://cyberpedia.reasonlabs.com/IMG/system%20optimizer.jpg\" alt=\"System Optimizer\"></p>\n",
+  "tags": [],
+  "book": "System Optimizations",
+  "chapter": ""
+}

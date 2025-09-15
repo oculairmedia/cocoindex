@@ -1,0 +1,11 @@
+{
+  "id": 164,
+  "title": "Huly Development Conventions",
+  "slug": "huly-development-conventions",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/huly-development-conventions",
+  "updated_at": "2025-09-08T16:19:25.000000Z",
+  "body_html": "<h1 id=\"bkmrk-huly-development-con\">Huly Development Conventions</h1>\n<h2 id=\"bkmrk-naming\">Naming</h2>\n<ul id=\"bkmrk-plugin-ids%3A-server-%7B\">\n<li>Plugin IDs: <code>server-{feature}</code> (e.g., <code>server-webhook</code>)</li>\n<li>Resource packages: <code>{feature}-resources</code></li>\n<li>Model classes: <code>T{ClassName}</code></li>\n</ul>\n<h2 id=\"bkmrk-imports-order\">Imports Order</h2>\n<ol id=\"bkmrk-node-built-ins-exter\">\n<li>Node built-ins</li>\n<li>External deps</li>\n<li>Huly core packages</li>\n<li>Huly plugin packages</li>\n<li>Local modules</li>\n</ol>\n<h2 id=\"bkmrk-structure\">Structure</h2>\n<pre id=\"bkmrk-src%2F-%E2%94%9C%E2%94%80-index.ts-%E2%94%9C%E2%94%80-\"><code>src/\n├─ index.ts\n├─ triggers.ts\n├─ api.ts\n├─ services/\n└─ utils/\n</code></pre>\n<h2 id=\"bkmrk-error-handling\">Error Handling</h2>\n<ul id=\"bkmrk-log-with-context%3B-do\">\n<li>Log with context; don’t crash triggers</li>\n<li>Map errors to 4xx/5xx in API</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

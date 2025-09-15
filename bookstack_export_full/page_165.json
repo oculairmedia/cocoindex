@@ -1,0 +1,11 @@
+{
+  "id": 165,
+  "title": "Plugin Development Guide",
+  "slug": "plugin-development-guide",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/plugin-development-guide",
+  "updated_at": "2025-09-08T16:19:26.000000Z",
+  "body_html": "<h1 id=\"bkmrk-plugin-development-g\">Plugin Development Guide</h1>\n<h2 id=\"bkmrk-steps\">Steps</h2>\n<ol id=\"bkmrk-define-plugin-resour\">\n<li>Define plugin resources in <code>server-plugins/webhook</code></li>\n<li>Implement triggers &amp; API in <code>webhook-resources</code></li>\n<li>Define models in <code>models/webhook</code></li>\n<li>Register triggers &amp; endpoints in model builder</li>\n</ol>\n<h2 id=\"bkmrk-triggers\">Triggers</h2>\n<ul id=\"bkmrk-signature%3A-%28txes%2C-co\">\n<li>Signature: <code>(txes, control) =&gt; Promise&lt;Tx[]&gt;</code></li>\n<li>Use <code>control.findAll</code> to fetch docs</li>\n<li>Use <code>control.txFactory</code> to create Tx for model writes</li>\n</ul>\n<h2 id=\"bkmrk-api\">API</h2>\n<ul id=\"bkmrk-express-router-mount\">\n<li>Express router mounted under <code>/api/v1/webhooks</code></li>\n<li>Validate input; enforce permissions</li>\n</ul>\n<h2 id=\"bkmrk-services\">Services</h2>\n<ul id=\"bkmrk-webhookdeliveryservi\">\n<li><code>WebhookDeliveryService</code> encapsulates HTTP calls &amp; retries</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

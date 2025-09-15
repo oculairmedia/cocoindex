@@ -1,0 +1,11 @@
+{
+  "id": 63,
+  "title": "Invoice Ninja Integration",
+  "slug": "invoice-ninja-integration",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/invoice-ninja-integration",
+  "updated_at": "2025-02-22T16:10:47.000000Z",
+  "body_html": "<p id=\"bkmrk-integration-with-emm\">Integration with Emmanuel's Invoice Ninja instance.</p><p id=\"bkmrk-approach%3A-phased-imp\"><strong>Approach:</strong> Phased implementation, starting with read-only access to quotes and invoices.</p><p id=\"bkmrk-future-goal%3A-quote-g\"><strong>Future Goal:</strong> Quote generation from project descriptions.</p>",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

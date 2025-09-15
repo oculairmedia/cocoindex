@@ -25,6 +25,23 @@
 
 Ultra performant data transformation framework for AI, with core engine written in Rust. Support incremental processing and data lineage out-of-box.  Exceptional developer velocity. Production-ready at day 0.
 
+## 🚀 Enhanced BookStack to FalkorDB Pipeline
+
+This repository includes a **production-ready enhanced pipeline** that transforms BookStack documentation into comprehensive knowledge graphs in FalkorDB with:
+
+- ✅ **Enhanced Entity Extraction** - Beyond tags with LLM-powered content analysis
+- ✅ **Relationship Discovery** - Automatic semantic relationship identification
+- ✅ **Multi-Level Deduplication** - Entity normalization and database-level dedup
+- ✅ **Graphiti Schema Compliance** - Full compatibility with existing infrastructure
+- ✅ **Production Monitoring** - CocoIndex observability and PostgreSQL logging
+
+**📊 Current Status**: Successfully processing 153 BookStack pages → 17 enhanced entities → 13 relationships → 206 mentions
+
+**📁 Key Files**:
+- `flows/bookstack_enhanced_localhost.py` - Production enhanced pipeline
+- `test_enhanced_localhost.py` - Pipeline testing and validation
+- `ENHANCED_PIPELINE_README.md` - Complete documentation
+
 ⭐ Drop a star to help us grow!
 
 <div align="center">

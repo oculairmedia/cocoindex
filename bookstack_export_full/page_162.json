@@ -1,0 +1,11 @@
+{
+  "id": 162,
+  "title": "Security and Authentication",
+  "slug": "security-and-authentication",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/security-and-authentication",
+  "updated_at": "2025-09-08T16:19:24.000000Z",
+  "body_html": "<h1 id=\"bkmrk-security-and-authent\">Security and Authentication</h1>\n<h2 id=\"bkmrk-outbound-security\">Outbound Security</h2>\n<ul id=\"bkmrk-sign-payloads-with-h\">\n<li>Sign payloads with HMAC-SHA256: header <code>X-Huly-Signature-256</code></li>\n<li>Enforce HTTPS targets</li>\n<li>Allow per-webhook custom headers; redact in logs</li>\n</ul>\n<h2 id=\"bkmrk-management-api-secur\">Management API Security</h2>\n<ul id=\"bkmrk-auth-via-existing-hu\">\n<li>Auth via existing Huly auth (session/JWT) or API key</li>\n<li>Permission checks at workspace/space level</li>\n<li>Optional IP allowlist</li>\n</ul>\n<h2 id=\"bkmrk-secret-management\">Secret Management</h2>\n<ul id=\"bkmrk-store-secrets-in-hid\">\n<li>Store secrets in hidden fields</li>\n<li>Rotate via update API; avoid logging secret values</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

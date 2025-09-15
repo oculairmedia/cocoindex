@@ -1,0 +1,11 @@
+{
+  "id": 130,
+  "title": "Content Management (Audiobookshelf)",
+  "slug": "content-management-audiobookshelf",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/content-management-audiobookshelf",
+  "updated_at": "2025-05-29T02:33:14.000000Z",
+  "body_html": "<h3 id=\"bkmrk-content-management%3A-\">Content Management: Audiobookshelf</h3>\n<p id=\"bkmrk-role%3A-audiobookshelf\"><strong>Role:</strong> Audiobookshelf is responsible for the comprehensive management and organization of acquired digital content, particularly focusing on audiobooks and ebooks.</p>\n<p id=\"bkmrk-functionality%3A\"><strong>Functionality:</strong></p>\n<ul id=\"bkmrk-content-organization\">\n<li><strong>Content Organization:</strong> Provides a centralized platform for storing, categorizing, and browsing a large library of digital books.</li>\n<li><strong>Metadata Enrichment:</strong> Automatically enriches content with detailed metadata, including cover art, summaries, narrators, and series information.</li>\n<li><strong>Format Conversion:</strong> Handles various ebook and audiobook formats, often with built-in conversion capabilities to ensure compatibility across devices.</li>\n<li><strong>User Interface:</strong> Offers a user-friendly web interface for easy access, playback, and management of content.</li>\n</ul>\n<p id=\"bkmrk-integration-within-t\"><strong>Integration within the Pipeline:</strong> Audiobookshelf receives content from Readarr and prepares it for the next stage, DocLing. It ensures that the content is properly organized and accessible, facilitating efficient text extraction and subsequent processing in the RAG pipeline. Its robust management capabilities are key to maintaining a well-structured and easily navigable knowledge base for the Letta agents.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

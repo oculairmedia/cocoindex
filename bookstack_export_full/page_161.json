@@ -1,0 +1,11 @@
+{
+  "id": 161,
+  "title": "Delivery System and Retry Logic",
+  "slug": "delivery-system-and-retry-logic",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/delivery-system-and-retry-logic",
+  "updated_at": "2025-09-08T16:41:40.000000Z",
+  "body_html": "<h1 id=\"bkmrk-delivery-system-and-\">Delivery System and Retry Logic</h1>\n<h2 id=\"bkmrk-request\">Request</h2>\n<ul id=\"bkmrk-json-body%2C-headers-i\">\n<li>JSON body, headers incl. <code>X-Huly-*</code></li>\n<li>HMAC-SHA256 signature when <code>secret</code> exists</li>\n</ul>\n<h2 id=\"bkmrk-retry-policy\">Retry Policy</h2>\n<ul id=\"bkmrk-exponential-backoff%3A\">\n<li>Exponential backoff: 1s, 2s, 4s, ... up to 5m cap</li>\n<li>Max attempts from config (default 3)</li>\n<li>Status transitions: <code>pending → delivered/failed → retrying</code></li>\n</ul>\n<h2 id=\"bkmrk-recording\">Recording</h2>\n<ul id=\"bkmrk-create-webhookdelive\">\n<li>Create <code>WebhookDeliveryAttempt</code> per attempt</li>\n<li>Update <code>WebhookEvent.status</code> and <code>attemptCount</code></li>\n<li>Increment config counters (<code>deliveryCount</code>, <code>failureCount</code>)</li>\n</ul>\n<h2 id=\"bkmrk-retry-sequence-%28diag\">Retry Sequence (Diagram)</h2>\n<pre id=\"bkmrk-sequencediagram-part\"><code class=\"language-mermaid\">sequenceDiagram\n  participant Q as Queue\n  participant Svc as DeliveryService\n  participant Target\n  Q-&gt;&gt;Svc: process(WebhookEvent)\n  Svc-&gt;&gt;Target: POST payload\n  alt success\n    Target--&gt;&gt;Svc: 2xx\n    Svc--&gt;&gt;Q: mark delivered\n  else failure/timeout\n    Target--&gt;&gt;Svc: 5xx/timeout\n    Svc--&gt;&gt;Q: schedule retry (exponential backoff)\n    loop until max attempts\n      Q-&gt;&gt;Svc: retry\n      Svc-&gt;&gt;Target: POST payload\n    end\n    Svc--&gt;&gt;Q: mark failed (DLQ)\n  end\n</code></pre>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

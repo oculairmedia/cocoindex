@@ -1,0 +1,11 @@
+{
+  "id": 69,
+  "title": "Other Agent Platforms with MCP Support",
+  "slug": "other-agent-platforms-with-mcp-support",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/other-agent-platforms-with-mcp-support",
+  "updated_at": "2025-02-26T05:26:45.000000Z",
+  "body_html": "<p id=\"bkmrk-several-agent-platfo\">Several agent platforms and frameworks have started to incorporate support for MCP (Model Context Protocol), indicating a growing trend towards standardized communication between AI agents and external systems. Some notable examples include:</p><ul id=\"bkmrk-mcp-agent%3A-a-framewo\"><li><b>mcp-agent:</b> A framework specifically designed for building agents using MCP.</li><li><b>LastMile AI:</b> This platform appears to have integrated MCP support, according to search results.</li><li><b>Dive:</b> An open-source AI agent desktop application with MCP integration.</li><li><b>LangChain:</b> There's evidence of MCP server integration with LangChain, suggesting its use in agent development.</li></ul><p id=\"bkmrk-this-suggests-that-r\">This suggests that rather than reinventing the wheel, we might be able to leverage existing libraries or frameworks that already handle MCP communication, potentially simplifying the integration process with Letta.</p>",
+  "tags": [],
+  "book": "MCP Integration Research",
+  "chapter": ""
+}

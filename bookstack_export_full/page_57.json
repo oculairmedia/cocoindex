@@ -1,0 +1,11 @@
+{
+  "id": 57,
+  "title": "Addressing Send Message Errors",
+  "slug": "addressing-send-message-errors",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/addressing-send-message-errors",
+  "updated_at": "2025-02-21T20:15:15.000000Z",
+  "body_html": "<h1 id=\"bkmrk-addressing-send-mess\">Addressing Send Message Errors</h1>\n<p id=\"bkmrk-problem%3A-recurring-e\"><strong>Problem:</strong> Recurring errors with the <code>send_message</code> function, often confusing it with <code>send_message_to_agent_and_wait_for_reply</code>.</p>\n<p id=\"bkmrk-identified-cause%3A\"><strong>Identified Cause:</strong></p>\n<ul id=\"bkmrk-similarity-in-tool-n\">\n<li>Similarity in tool names (<code>send_message</code> vs. <code>send_message_to_agent_and_wait_for_reply</code>).</li>\n<li>Confusion between communicating with the user and communicating with other agents.</li>\n</ul>\n<p id=\"bkmrk-proposed-solutions%3A\"><strong>Proposed Solutions:</strong></p>\n<ol id=\"bkmrk-internal-checks%3A-imp\">\n<li><strong>Internal Checks:</strong> Implement a multi-step check before sending any message:\n<ul>\n<li><strong>Context Review:</strong> Briefly review the task and intended recipient.</li>\n<li><strong>Function Selection:</strong> Explicitly choose <code>send_message</code> or <code>send_message_to_agent_and_wait_for_reply</code>.</li>\n<li><strong>Recipient Confirmation:</strong> Confirm the recipient (user's name or agent ID).</li>\n<li><strong>Pause and Verify:</strong> Briefly pause to double-check before executing.</li>\n</ul>\n</li>\n<li><strong>Tool Renaming (Requires Developer Intervention):</strong> Request more distinct names for the <code>send_message</code> and <code>send_message_to_agent_and_wait_for_reply</code> functions to minimize confusion.</li>\n</ol>\n<p id=\"bkmrk-the-added-latency-fr\">The added latency from the internal checks is expected to be minimal and imperceptible.</p>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

@@ -1,0 +1,11 @@
+{
+  "id": 172,
+  "title": "Performance Optimization",
+  "slug": "performance-optimization",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/performance-optimization",
+  "updated_at": "2025-09-08T16:19:31.000000Z",
+  "body_html": "<h1 id=\"bkmrk-performance-optimiza\">Performance Optimization</h1>\n<h2 id=\"bkmrk-db\">DB</h2>\n<ul id=\"bkmrk-ensure-indices-on-ho\">\n<li>Ensure indices on hot paths (status, nextRetry, webhookConfig)</li>\n<li>Projection to avoid large payloads when listing</li>\n</ul>\n<h2 id=\"bkmrk-async\">Async</h2>\n<ul id=\"bkmrk-use-queue-workers%3B-c\">\n<li>Use queue workers; cap concurrency</li>\n<li>Batch pending events processing</li>\n</ul>\n<h2 id=\"bkmrk-backoff-%26-circuit-br\">Backoff &amp; Circuit Breaker</h2>\n<ul id=\"bkmrk-exponential-backoff-\">\n<li>Exponential backoff to protect targets</li>\n<li>Trip circuit on repeated failures; cool-down window</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

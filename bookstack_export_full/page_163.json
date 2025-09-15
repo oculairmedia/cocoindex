@@ -1,0 +1,11 @@
+{
+  "id": 163,
+  "title": "Error Handling and Observability",
+  "slug": "error-handling-and-observability",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/error-handling-and-observability",
+  "updated_at": "2025-09-08T16:19:24.000000Z",
+  "body_html": "<h1 id=\"bkmrk-error-handling-and-o\">Error Handling and Observability</h1>\n<h2 id=\"bkmrk-error-handling\">Error Handling</h2>\n<ul id=\"bkmrk-validate-inputs%3B-ret\">\n<li>Validate inputs; return structured errors</li>\n<li>Catch trigger errors; log and continue</li>\n<li>Capture HTTP errors (status/body) in attempts</li>\n</ul>\n<h2 id=\"bkmrk-metrics\">Metrics</h2>\n<ul id=\"bkmrk-counters%3A-deliveries\">\n<li>Counters: deliveries total by status</li>\n<li>Histogram: delivery duration</li>\n<li>Gauge: active webhooks</li>\n</ul>\n<h2 id=\"bkmrk-health\">Health</h2>\n<ul id=\"bkmrk-%2Fapi%2Fhealth-includes\">\n<li><code>/api/health</code> includes webhook checks</li>\n<li><code>/metrics</code> for Prometheus</li>\n</ul>\n<h2 id=\"bkmrk-logging\">Logging</h2>\n<ul id=\"bkmrk-structured-logs-%28jso\">\n<li>Structured logs (JSON) with context: webhookId, eventId, url, duration, status</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

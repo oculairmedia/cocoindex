@@ -1,0 +1,11 @@
+{
+  "id": 153,
+  "title": "Out-of-Scope and Assumptions",
+  "slug": "out-of-scope-and-assumptions",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/out-of-scope-and-assumptions",
+  "updated_at": "2025-09-08T16:19:17.000000Z",
+  "body_html": "<h1 id=\"bkmrk-out-of-scope-and-ass\">Out-of-Scope and Assumptions</h1>\n<h2 id=\"bkmrk-out-of-scope-%28initia\">Out-of-Scope (Initial Phases)</h2>\n<ul id=\"bkmrk-incoming-webhooks-%28e\">\n<li>Incoming webhooks (external -&gt; Huly) beyond existing livekit usage</li>\n<li>Complex template engines for payloads</li>\n<li>UI for webhook analytics (basic pages are in scope; advanced dashboards future)</li>\n<li>Cross-workspace deliveries</li>\n</ul>\n<h2 id=\"bkmrk-assumptions\">Assumptions</h2>\n<ul id=\"bkmrk-huly-environment-has\">\n<li>Huly environment has queue capability or falls back to inline async</li>\n<li>MongoDB and model indices are properly configured</li>\n<li>Webhook consumers will handle at-least-once delivery</li>\n<li>Secrets are managed via environment or secret manager</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

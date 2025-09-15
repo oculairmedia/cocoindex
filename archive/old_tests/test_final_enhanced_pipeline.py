@@ -12,7 +12,7 @@ from pathlib import Path
 
 # Set up environment for testing
 os.environ["DRY_RUN"] = "true"
-os.environ["FALKOR_HOST"] = "192.168.50.90"
+os.environ["FALKOR_HOST"] = "localhost"
 os.environ["FALKOR_PORT"] = "6379"
 os.environ["FALKOR_GRAPH"] = "graphiti_migration"
 
@@ -32,7 +32,7 @@ from flows.bookstack_to_falkor import (
 
 def test_enhanced_pipeline():
     """Test the complete enhanced pipeline with all features."""
-    print("🚀 Testing Enhanced BookStack to FalkorDB Pipeline")
+    print("Testing Enhanced BookStack to FalkorDB Pipeline")
     print("=" * 60)
     
     # Test data
@@ -53,7 +53,7 @@ def test_enhanced_pipeline():
             print(f"⚠️  Skipping {file_path} (not found)")
             continue
             
-        print(f"\n📄 Processing: {file_path}")
+        print(f"\nProcessing: {file_path}")
         
         # Load and parse JSON
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -70,9 +70,9 @@ def test_enhanced_pipeline():
             "chapter": page_data.get("chapter"),
         }
         
-        print(f"   📋 Title: {page_info['title']}")
-        print(f"   📚 Book: {page_info['book']}")
-        print(f"   🏷️  Tags: {page_info['tags']}")
+        print(f"   Title: {page_info['title']}")
+        print(f"   Book: {page_info['book']}")
+        print(f"   Tags: {page_info['tags']}")
         
         # Convert HTML to text
         body_html = page_data.get("body_html", "")
@@ -87,8 +87,8 @@ def test_enhanced_pipeline():
             if chunk.strip():
                 chunks.append(chunk.strip())
         
-        print(f"   📝 Content length: {len(text_content)} chars")
-        print(f"   🧩 Chunks created: {len(chunks)}")
+        print(f"   Content length: {len(text_content)} chars")
+        print(f"   Chunks created: {len(chunks)}")
         
         page_entities = 0
         page_relationships = 0
@@ -105,8 +105,8 @@ def test_enhanced_pipeline():
             entities = deduplicate_entities(entities)
             relationships = deduplicate_relationships(relationships)
             
-            print(f"         🎯 Entities: {len(entities)}")
-            print(f"         🔗 Relationships: {len(relationships)}")
+            print(f"         Entities: {len(entities)}")
+            print(f"         Relationships: {len(relationships)}")
             
             # Show extracted entities
             for entity in entities:
@@ -122,7 +122,7 @@ def test_enhanced_pipeline():
             page_entities += len(entities)
             page_relationships += len(relationships)
         
-        print(f"   ✅ Page totals: {page_entities} entities, {page_relationships} relationships")
+        print(f"   Page totals: {page_entities} entities, {page_relationships} relationships")
         
         total_pages += 1
         total_chunks += len(chunks)
@@ -131,26 +131,26 @@ def test_enhanced_pipeline():
     
     # Summary
     print("\n" + "=" * 60)
-    print("📊 PIPELINE SUMMARY")
+    print("PIPELINE SUMMARY")
     print("=" * 60)
-    print(f"📄 Pages processed: {total_pages}")
+    print(f"Pages processed: {total_pages}")
     print(f"🧩 Total chunks: {total_chunks}")
-    print(f"🎯 Total entities extracted: {total_entities}")
-    print(f"🔗 Total relationships extracted: {total_relationships}")
+    print(f"Total entities extracted: {total_entities}")
+    print(f"Total relationships extracted: {total_relationships}")
     print(f"💾 Database operations: {len(_FALKOR.r) if hasattr(_FALKOR, 'r') and _FALKOR.r else 'DRY RUN'}")
     
-    print("\n✅ Enhanced pipeline test completed successfully!")
-    print("\n🎯 Key Features Demonstrated:")
-    print("   ✅ Proper CocoIndex flow structure")
-    print("   ✅ Enhanced entity extraction beyond tags")
-    print("   ✅ Relationship extraction between entities")
-    print("   ✅ Multi-level deduplication")
-    print("   ✅ Entity name normalization")
-    print("   ✅ Embedding caching")
-    print("   ✅ FalkorDB export with proper Cypher")
-    print("   ✅ Graphiti-compatible schema")
+    print("\nEnhanced pipeline test completed successfully!")
+    print("\nKey Features Demonstrated:")
+    print("   Proper CocoIndex flow structure")
+    print("   Enhanced entity extraction beyond tags")
+    print("   Relationship extraction between entities")
+    print("   Multi-level deduplication")
+    print("   Entity name normalization")
+    print("   Embedding caching")
+    print("   FalkorDB export with proper Cypher")
+    print("   Graphiti-compatible schema")
     
-    print("\n🚀 Ready for production integration!")
+    print("\nReady for production integration!")
 
 if __name__ == "__main__":
     test_enhanced_pipeline()

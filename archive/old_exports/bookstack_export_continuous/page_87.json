@@ -1,0 +1,13 @@
+{
+  "id": 87,
+  "title": "Architecture Overview",
+  "slug": "architecture-overview",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/architecture-overview",
+  "updated_at": "2025-04-10T02:30:37.000000Z",
+  "body_html": "<h1 id=\"bkmrk-multi-agent-search-s\">Multi-Agent Search System Architecture</h1>\n<h2 id=\"bkmrk-hierarchical-design\">Hierarchical Design</h2>\n<pre id=\"bkmrk-graph-td-coordinator\"><code class=\"language-mermaid\">graph TD\n    Coordinator --&gt; Searcher1\n    Coordinator --&gt; Searcher2\n    Coordinator --&gt; Searcher3\n    Searcher1 --&gt; Aggregator\n    Searcher2 --&gt; Aggregator\n    Searcher3 --&gt; Aggregator\n    Aggregator --&gt; User\n</code></pre>\n<h3 id=\"bkmrk-key-components%3A\">Key Components:</h3>\n<ol id=\"bkmrk-coordinator-agent-qu\">\n<li>\n<p><strong>Coordinator Agent</strong></p>\n<ul>\n<li>Query decomposition</li>\n<li>Agent orchestration</li>\n<li>Quality control</li>\n</ul>\n</li>\n<li>\n<p><strong>Searcher Agents</strong></p>\n<ul>\n<li>Specialized search execution</li>\n<li>Result collection</li>\n<li>Relevance scoring</li>\n</ul>\n</li>\n<li>\n<p><strong>Aggregator Agent</strong></p>\n<ul>\n<li>Deduplication</li>\n<li>Conflict resolution</li>\n<li>Synthesis</li>\n</ul>\n</li>\n</ol>\n<h2 id=\"bkmrk-letta-integration-po\">Letta Integration Points</h2>\n<ul id=\"bkmrk-state-management-too\">\n<li>State management</li>\n<li>Tool calling framework</li>\n<li>Message bus</li>\n</ul>\n<h2 id=\"bkmrk-performance-consider\">Performance Considerations</h2>\n<ul id=\"bkmrk-optimal-agent-count-\">\n<li>Optimal agent count (3-7)</li>\n<li>Timeout handling</li>\n<li>Fallback mechanisms</li>\n</ul>\n",
+  "tags": [
+    "content_type"
+  ],
+  "book": "Multiagent Search System Implementation",
+  "chapter": ""
+}

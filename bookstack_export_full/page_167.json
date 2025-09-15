@@ -1,0 +1,11 @@
+{
+  "id": 167,
+  "title": "Code Examples and References",
+  "slug": "code-examples-and-references",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/code-examples-and-references",
+  "updated_at": "2025-09-08T16:19:27.000000Z",
+  "body_html": "<h1 id=\"bkmrk-code-examples-and-re\">Code Examples and References</h1>\n<h2 id=\"bkmrk-where-to-look-in-hul\">Where to Look in Huly</h2>\n<ul id=\"bkmrk-trigger-patterns%3A-se\">\n<li>Trigger patterns: <code>server-plugins/*-resources/src/</code></li>\n<li>Model definitions: <code>models/*/src/</code></li>\n<li>Transaction types: <code>models/core/src/</code></li>\n</ul>\n<h2 id=\"bkmrk-example-snippets\">Example Snippets</h2>\n<ul id=\"bkmrk-trigger-skeletons-ap\">\n<li>Trigger skeletons</li>\n<li>API route handlers</li>\n<li>Delivery service method signatures</li>\n</ul>\n<h2 id=\"bkmrk-tips\">Tips</h2>\n<ul id=\"bkmrk-start-small%3A-issue-c\">\n<li>Start small: issue created/updated</li>\n<li>Add filters incrementally</li>\n<li>Collect metrics early</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

@@ -4,11 +4,12 @@
 
 ### 1. Setup Environment
 ```bash
-# Start PostgreSQL for CocoIndex
-powershell -ExecutionPolicy Bypass -File start-cocoindex.ps1
+# Start PostgreSQL and FalkorDB
+docker-compose -f docker-compose.cocoindex.yml up -d
 
-# Verify FalkorDB connection
-redis-cli -h 192.168.50.90 -p 6379 ping
+# Verify services
+docker-compose -f docker-compose.cocoindex.yml ps
+docker exec cocoindex-falkordb redis-cli ping
 ```
 
 ### 2. Run Pipeline
@@ -35,7 +36,7 @@ python test_final_enhanced_pipeline.py
 ### Environment Variables
 ```bash
 export DRY_RUN=true                    # Enable dry run mode
-export FALKOR_HOST=192.168.50.90       # FalkorDB host
+export FALKOR_HOST=localhost           # FalkorDB host (Docker)
 export FALKOR_PORT=6379                # FalkorDB port
 export FALKOR_GRAPH=graphiti_migration # Graph name
 export COCOINDEX_DB=postgresql://cocoindex:cocoindex@localhost:5433/cocoindex

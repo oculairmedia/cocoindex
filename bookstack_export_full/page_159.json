@@ -1,0 +1,11 @@
+{
+  "id": 159,
+  "title": "API Endpoint Design",
+  "slug": "api-endpoint-design",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/api-endpoint-design",
+  "updated_at": "2025-09-08T16:41:38.000000Z",
+  "body_html": "<h1 id=\"bkmrk-api-endpoint-design\">API Endpoint Design</h1>\n<h2 id=\"bkmrk-routes-%28prefix-%2Fapi%2F\">Routes (prefix <code>/api/v1/webhooks</code>)</h2>\n<ul id=\"bkmrk-get-%2F-%E2%80%93-list-webhook\">\n<li><code>GET /</code> – list webhooks (filter by space)</li>\n<li><code>POST /</code> – create webhook</li>\n<li><code>PUT /:id</code> – update webhook</li>\n<li><code>DELETE /:id</code> – delete webhook</li>\n<li><code>POST /:id/test</code> – send test payload</li>\n<li><code>GET /:id/deliveries</code> – delivery history</li>\n</ul>\n<h2 id=\"bkmrk-validation\">Validation</h2>\n<ul id=\"bkmrk-require-name%2C-url%2C-e\">\n<li>Require <code>name</code>, <code>url</code>, <code>events[]</code></li>\n<li>Validate URL and headers</li>\n<li>Enforce permissions (workspace scope)</li>\n</ul>\n<h2 id=\"bkmrk-responses\">Responses</h2>\n<ul id=\"bkmrk-201-on-create-with-%7B\">\n<li>201 on create with <code>{ id }</code></li>\n<li>400 on validation errors; 404 if not found</li>\n<li>Paginate deliveries; support <code>limit</code>, <code>offset</code></li>\n</ul>\n<h2 id=\"bkmrk-test-delivery-sequen\">Test Delivery Sequence (Diagram)</h2>\n<pre id=\"bkmrk-sequencediagram-part\"><code class=\"language-mermaid\">sequenceDiagram\n  participant Client\n  participant API as Huly API\n  participant Svc as DeliveryService\n  participant Target\n  Client-&gt;&gt;API: POST /api/v1/webhooks/:id/test\n  API-&gt;&gt;API: Build test payload\n  API-&gt;&gt;Svc: deliverWebhook(webhook, payload)\n  Svc-&gt;&gt;Target: HTTP POST payload\n  Target--&gt;&gt;Svc: 200 OK / 4xx / 5xx\n  Svc--&gt;&gt;API: result {status, duration, response}\n  API--&gt;&gt;Client: 200/4xx with details\n</code></pre>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

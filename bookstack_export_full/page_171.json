@@ -1,0 +1,11 @@
+{
+  "id": 171,
+  "title": "Monitoring and Metrics",
+  "slug": "monitoring-and-metrics",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/monitoring-and-metrics",
+  "updated_at": "2025-09-08T16:19:30.000000Z",
+  "body_html": "<h1 id=\"bkmrk-monitoring-and-metri\">Monitoring and Metrics</h1>\n<h2 id=\"bkmrk-endpoints\">Endpoints</h2>\n<ul id=\"bkmrk-%2Fapi%2Fhealth-%E2%80%93-livene\">\n<li><code>/api/health</code> – liveness &amp; readiness (includes webhook checks)</li>\n<li><code>/metrics</code> – Prometheus metrics</li>\n</ul>\n<h2 id=\"bkmrk-metrics-%28examples%29\">Metrics (examples)</h2>\n<ul id=\"bkmrk-counter-webhook_deli\">\n<li>Counter <code>webhook_deliveries_total{status,webhook_id}</code></li>\n<li>Histogram <code>webhook_delivery_duration_seconds</code></li>\n<li>Gauge <code>active_webhooks_total</code></li>\n</ul>\n<h2 id=\"bkmrk-logging\">Logging</h2>\n<ul id=\"bkmrk-structured-json-with\">\n<li>Structured JSON with context (webhookId, eventId, url, status, duration)</li>\n<li>Log redaction for secrets</li>\n</ul>\n<h2 id=\"bkmrk-alerts\">Alerts</h2>\n<ul id=\"bkmrk-high-failure-rate-lo\">\n<li>High failure rate</li>\n<li>Long delivery latency</li>\n<li>Queue backlog</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

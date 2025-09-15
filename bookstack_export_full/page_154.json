@@ -1,0 +1,11 @@
+{
+  "id": 154,
+  "title": "Phased Implementation Plan",
+  "slug": "phased-implementation-plan",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/phased-implementation-plan",
+  "updated_at": "2025-09-08T16:19:18.000000Z",
+  "body_html": "<h1 id=\"bkmrk-phased-implementatio\">Phased Implementation Plan</h1>\n<h2 id=\"bkmrk-phase-1%3A-foundations\">Phase 1: Foundations</h2>\n<ul id=\"bkmrk-models%3A-webhookconfi\">\n<li>Models: WebhookConfig, WebhookEvent, WebhookDeliveryAttempt</li>\n<li>Basic API: create/list/update/delete, test delivery</li>\n<li>Trigger: emit events for Issues &amp; Projects</li>\n<li>Delivery: retry, HMAC signatures, attempts log</li>\n</ul>\n<h2 id=\"bkmrk-phase-2%3A-coverage-%26-\">Phase 2: Coverage &amp; Filters</h2>\n<ul id=\"bkmrk-expand-events-%28comme\">\n<li>Expand events (comments, attachments)</li>\n<li>Add rich filters (project/status/assignee/etc.)</li>\n<li>Delivery metrics &amp; health endpoints</li>\n</ul>\n<h2 id=\"bkmrk-phase-3%3A-ux-%26-operat\">Phase 3: UX &amp; Operations</h2>\n<ul id=\"bkmrk-admin-ui-pages-in-hu\">\n<li>Admin UI pages in Huly (manage webhooks)</li>\n<li>Replay failed deliveries</li>\n<li>Rate limiting and circuit breaker</li>\n</ul>\n<h2 id=\"bkmrk-phase-4%3A-migration-t\">Phase 4: Migration Tools</h2>\n<ul id=\"bkmrk-dual-run-with-standa\">\n<li>Dual-run with standalone service</li>\n<li>Replay window &amp; backfill</li>\n<li>Cutover plan and rollback</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

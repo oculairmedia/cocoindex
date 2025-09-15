@@ -23,6 +23,30 @@ services:
     networks:
       - cocoindex-network
 
+  # FalkorDB for graph database storage (includes browser on port 3000)
+  falkordb:
+    image: falkordb/falkordb:latest
+    container_name: cocoindex-falkordb
+    restart: unless-stopped
+    ports:
+      - "${FALKORDB_PORT:-6379}:6379"  # Database port
+      - "${FALKORDB_BROWSER_PORT:-3000}:3000"  # Browser UI port
+    environment:
+      - REDIS_ARGS=--loglevel warning --maxmemory 2g --maxmemory-policy allkeys-lru --save ""
+      - FALKORDB_ARGS=NODE_CREATION_BUFFER 128 QUERY_MEM_CAPACITY 134217728 CMD_INFO no OMP_THREAD_COUNT 1 CACHE_SIZE 5
+    mem_limit: 2g
+    memswap_limit: 2g
+    networks:
+      - cocoindex-network
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   # Optional: pgAdmin for database management
   cocoindex-pgadmin:
     image: dpage/pgadmin4:latest

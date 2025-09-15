@@ -1,0 +1,11 @@
+{
+  "id": 61,
+  "title": "NocoDB Integration",
+  "slug": "nocodb-integration",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/nocodb-integration",
+  "updated_at": "2025-02-22T16:10:22.000000Z",
+  "body_html": "<p id=\"bkmrk-integration-with-emm\">Integration with Emmanuel's No-Code DB instance.</p><p id=\"bkmrk-approach%3A-phased-cru\"><strong>Approach:</strong> Phased CRUD (Create, Read, Update, Delete) implementation.</p><p id=\"bkmrk-initial-step%3A-read-o\"><strong>Initial Step:</strong> Read-only access.</p>",
+  "tags": [],
+  "book": "Letta Integration and Expansion Ideas",
+  "chapter": ""
+}

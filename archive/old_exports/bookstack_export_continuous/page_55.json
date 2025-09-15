@@ -1,0 +1,11 @@
+{
+  "id": 55,
+  "title": "DeepSeek Reasoner - Potential Use Cases",
+  "slug": "deepseek-reasoner-potential-use-cases",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/deepseek-reasoner-potential-use-cases",
+  "updated_at": "2025-02-21T19:47:22.000000Z",
+  "body_html": "<h1 id=\"bkmrk-deepseek-reasoner---\">DeepSeek Reasoner - Potential Use Cases</h1>\n<p id=\"bkmrk-characteristics%3A\"><strong>Characteristics:</strong></p>\n<ul id=\"bkmrk-strong-reasoning-cap\">\n<li>Strong reasoning capabilities.</li>\n<li>Limited tool-calling proficiency.</li>\n<li>High latency.</li>\n</ul>\n<p id=\"bkmrk-suitable-use-cases%3A\"><strong>Suitable Use Cases:</strong></p>\n<ol id=\"bkmrk-text-summarization%3A-\">\n<li><strong>Text Summarization:</strong> Condensing large texts into concise summaries.</li>\n<li><strong>Content Generation:</strong> Creating articles, reports, or creative writing pieces.</li>\n<li><strong>Logical Reasoning:</strong> Solving puzzles, analyzing arguments, or making inferences.</li>\n<li><strong>Textual Data Analysis:</strong> Extracting insights from textual data without relying on external APIs.</li>\n<li><strong>Simple Code Generation:</strong> Producing basic code snippets from natural language descriptions.</li>\n</ol>\n<p id=\"bkmrk-workflow-integration\"><strong>Workflow Integration:</strong>\nDue to its high latency, direct interaction is not recommended. Consider using DeepSeek Reasoner for asynchronous tasks or background processes where immediate responses are not critical (e.g., offline analysis, report generation).</p>\n",
+  "tags": [],
+  "book": "System Optimizations",
+  "chapter": ""
+}

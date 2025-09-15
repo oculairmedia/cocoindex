@@ -1,0 +1,11 @@
+{
+  "id": 109,
+  "title": "Embedding Generation Pipeline Best Practices",
+  "slug": "embedding-generation-pipeline-best-practices",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/embedding-generation-pipeline-best-practices",
+  "updated_at": "2025-05-06T05:38:10.000000Z",
+  "body_html": "<p id=\"bkmrk-when-replicating-cha\">When replicating chat data from Letta into Neo4j/Graphiti, generating vector embeddings for each chat entry can enable powerful semantic search, recommendation, and meta-context capabilities. However, embedding generation can be resource-intensive and may slow down ingestion if not managed properly.</p>\r\n<h2 id=\"bkmrk-strategies-for-effic\">Strategies for Efficient Embedding Generation</h2>\r\n<ul id=\"bkmrk-asynchronous-process\">\r\n<li><strong>Asynchronous Processing</strong>: Store new chat messages in Neo4j/Graphiti immediately. Use a background worker, task queue (e.g., Celery, Sidekiq), or scheduled batch process to generate embeddings for new entries.</li>\r\n<li><strong>Batching</strong>: Group multiple chat entries and generate embeddings in batches. This reduces API calls, improves throughput, and leverages vector database bulk-insert features.</li>\r\n<li><strong>Queueing</strong>: Use a message queue (e.g., RabbitMQ, Kafka, Redis Streams) to decouple ingestion from embedding generation. This ensures ingestion is never blocked, and you can monitor/retry failed embedding jobs.</li>\r\n<li><strong>Resource Monitoring</strong>: Track CPU/GPU, memory, and API usage. Adjust worker counts, batch size, and scheduling to fit your infrastructure and cost constraints.</li>\r\n<li><strong>Prioritization</strong>: Optionally prioritize embedding for high-value conversations or recent chats, and schedule the rest during off-peak hours.</li>\r\n</ul>\r\n<h2 id=\"bkmrk-summary\">Summary</h2>\r\n<p id=\"bkmrk-by-decoupling-embedd\">By decoupling embedding generation from core ingestion, you ensure fast, reliable chat replication and cost-effective semantic enrichment. This architecture supports scaling as your chat volume grows, while keeping operational costs and latency under control.</p>",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

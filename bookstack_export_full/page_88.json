@@ -1,0 +1,13 @@
+{
+  "id": 88,
+  "title": "Coordinator Agent",
+  "slug": "coordinator-agent",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/coordinator-agent",
+  "updated_at": "2025-04-10T02:31:07.000000Z",
+  "body_html": "<h1 id=\"bkmrk-coordinator-agent-im\">Coordinator Agent Implementation</h1>\n<h2 id=\"bkmrk-responsibilities\">Responsibilities</h2>\n<ol id=\"bkmrk-query-processing-nat\">\n<li>\n<p><strong>Query Processing</strong></p>\n<ul>\n<li>Natural language understanding</li>\n<li>Intent extraction</li>\n<li>Task decomposition</li>\n</ul>\n</li>\n<li>\n<p><strong>Agent Management</strong></p>\n<ul>\n<li>Dynamic agent creation</li>\n<li>Specialization assignment</li>\n<li>Load balancing</li>\n</ul>\n</li>\n<li>\n<p><strong>Quality Control</strong></p>\n<ul>\n<li>Timeout enforcement</li>\n<li>Error handling</li>\n<li>Fallback mechanisms</li>\n</ul>\n</li>\n</ol>\n<h2 id=\"bkmrk-letta-specific-imple\">Letta-Specific Implementation</h2>\n<pre id=\"bkmrk-class-coordinatorage\"><code class=\"language-python\">class CoordinatorAgent(letta.Agent):\n    def __init__(self):\n        super().__init__(\n            tools=[SearchTool, AnalysisTool],\n            memory=letta.HierarchicalMemory()\n        )\n    \n    async def process_query(self, query):\n        # Implementation logic here\n        pass\n</code></pre>\n<h2 id=\"bkmrk-configuration-parame\">Configuration Parameters</h2>\n<table id=\"bkmrk-parameter-descriptio\">\n<thead>\n<tr>\n<th>Parameter</th>\n<th>Description</th>\n<th>Default</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>max_agents</td>\n<td>Maximum concurrent searchers</td>\n<td>7</td>\n</tr>\n<tr>\n<td>timeout</td>\n<td>Search timeout (seconds)</td>\n<td>30</td>\n</tr>\n<tr>\n<td>fallback_strategy</td>\n<td>Fallback approach</td>\n<td>\"retry_then_simplify\"</td>\n</tr>\n</tbody>\n</table>\n",
+  "tags": [
+    "agent_type"
+  ],
+  "book": "Unknown",
+  "chapter": ""
+}

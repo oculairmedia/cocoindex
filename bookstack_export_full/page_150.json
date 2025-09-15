@@ -1,0 +1,11 @@
+{
+  "id": 150,
+  "title": "Functional Requirements",
+  "slug": "functional-requirements",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/functional-requirements",
+  "updated_at": "2025-09-08T16:19:15.000000Z",
+  "body_html": "<h1 id=\"bkmrk-functional-requireme\">Functional Requirements</h1>\n<h2 id=\"bkmrk-event-coverage\">Event Coverage</h2>\n<ul id=\"bkmrk-issues%3A-created%2C-upd\">\n<li>Issues: created, updated, deleted, status_changed, assigned, priority_changed</li>\n<li>Projects: created, updated, archived</li>\n<li>Comments/Attachments: created/added</li>\n</ul>\n<h2 id=\"bkmrk-webhook-management\">Webhook Management</h2>\n<ul id=\"bkmrk-create%2C-list%2C-update\">\n<li>Create, list, update, delete webhooks per workspace/space</li>\n<li>Configure events, filters (project/status/etc.), headers</li>\n<li>Enable/disable webhooks</li>\n<li>Test delivery endpoint</li>\n</ul>\n<h2 id=\"bkmrk-delivery\">Delivery</h2>\n<ul id=\"bkmrk-post-json-payloads-w\">\n<li>POST JSON payloads with HMAC-SHA256 signature (optional)</li>\n<li>Configurable timeout and retry attempts</li>\n<li>Exponential backoff and dead-letter recording</li>\n</ul>\n<h2 id=\"bkmrk-observability\">Observability</h2>\n<ul id=\"bkmrk-delivery-attempts-hi\">\n<li>Delivery attempts history</li>\n<li>Metrics (success rate, latency)</li>\n<li>Health/status endpoints</li>\n</ul>\n<h2 id=\"bkmrk-permissions\">Permissions</h2>\n<ul id=\"bkmrk-only-authorized-user\">\n<li>Only authorized users can manage webhooks</li>\n<li>Webhook processing respects workspace/space segregation</li>\n</ul>\n",
+  "tags": [],
+  "book": "Unknown",
+  "chapter": ""
+}

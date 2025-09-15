@@ -24,7 +24,18 @@
       "Bash(git remote set-url:*)",
       "Bash(git push:*)",
       "Bash(git pull:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(docker-compose:*)",
+      "Bash(redis-cli:*)",
+      "Bash(docker exec:*)",
+      "Bash(chcp 65001)",
+      "Bash(powershell:*)",
+      "Bash(python run_cocoindex.py update:*)",
+      "Bash(set DRY_RUN=false)",
+      "Bash(set FALKOR_HOST=localhost)",
+      "Bash(set FALKOR_PORT=6379)",
+      "Bash(set FALKOR_GRAPH=graphiti_migration)"
     ],
     "deny": []
   }

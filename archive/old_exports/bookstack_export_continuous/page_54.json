@@ -1,0 +1,11 @@
+{
+  "id": 54,
+  "title": "Model Comparison - Bookstack Creation",
+  "slug": "model-comparison-bookstack-creation",
+  "url": "https://knowledge.oculair.ca/books/unknown/page/model-comparison-bookstack-creation",
+  "updated_at": "2025-02-21T19:42:20.000000Z",
+  "body_html": "<h1 id=\"bkmrk-model-comparison%3A-bo\">Model Comparison: Bookstack Creation</h1>\n<p id=\"bkmrk-date%3A-2025-02-21\"><strong>Date:</strong> 2025-02-21</p>\n<p id=\"bkmrk-scenario%3A-attempting\"><strong>Scenario:</strong> Attempting to create a Bookstack entry for documenting contact list optimization.</p>\n<p id=\"bkmrk-result%3A\"><strong>Result:</strong></p>\n<ul id=\"bkmrk-deepseek-reasoner%3A-f\">\n<li><strong>DeepSeek Reasoner:</strong> Failed to create the Bookstack entry.</li>\n<li><strong>Gemini Pro:</strong> Successfully created the Bookstack entry.</li>\n</ul>\n",
+  "tags": [],
+  "book": "System Optimizations",
+  "chapter": ""
+}
