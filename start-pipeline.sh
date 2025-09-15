@@ -43,8 +43,8 @@ case "${PIPELINE_MODE:-enhanced}" in
         echo "🏃 Using Simple Pipeline (keyword-based extraction)"
         ;;
     "enhanced"|*)
-        FLOW_FILE="flows/bookstack_ollama_enhanced.py"
-        echo "🧠 Using Enhanced Pipeline (Ollama + fallback extraction)"
+        FLOW_FILE="flows/bookstack_enhanced_ollama.py"
+        echo "🧠 Using Enhanced Pipeline (Ollama LLM + CocoIndex integration)"
         ;;
 esac
 
@@ -70,7 +70,14 @@ fi
 echo "🔧 Setting up CocoIndex flow..."
 export COCOINDEX_DATABASE_URL="${COCOINDEX_DATABASE_URL:-postgresql://cocoindex:cocoindex@postgres:5432/cocoindex}"
 echo "Using database: $COCOINDEX_DATABASE_URL"
+
+# Initialize CocoIndex and create tables
+echo "📊 Initializing database tables..."
 cocoindex update --setup "$FLOW_FILE"
+
+# Run one-time update to ensure everything works
+echo "🔄 Running initial update..."
+cocoindex update "$FLOW_FILE"
 
 # Start the pipeline
 echo "🚀 Starting continuous pipeline..."

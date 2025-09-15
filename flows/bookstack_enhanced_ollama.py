@@ -239,7 +239,7 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
                     api_type=cocoindex.LlmApiType.OLLAMA,
                     model="gemma3:12b"
                 ),
-                output_type=DocumentAnalysis,
+                output_type=DocumentSummary,
                 instruction="Please summarize the content of this BookStack document. Extract a clear title and concise summary."
             )
         )

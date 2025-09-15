@@ -41,7 +41,8 @@
       "Bash(pkill:*)",
       "Bash(taskkill:*)",
       "Bash(export PIPELINE_MODE=enhanced)",
-      "Bash(export USE_SIMPLE_STARTUP=true)"
+      "Bash(export USE_SIMPLE_STARTUP=true)",
+      "Bash(export USE_SIMPLE_STARTUP=false)"
     ],
     "deny": []
   }

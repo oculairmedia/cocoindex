@@ -61,7 +61,7 @@ services:
       # Pipeline Configuration
       PIPELINE_MODE: ${PIPELINE_MODE:-enhanced}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
-      USE_SIMPLE_STARTUP: ${USE_SIMPLE_STARTUP:-true}
+      USE_SIMPLE_STARTUP: ${USE_SIMPLE_STARTUP:-false}
     volumes:
       - ./bookstack_export_full:/app/bookstack_export_full
       - ./logs:/app/logs
