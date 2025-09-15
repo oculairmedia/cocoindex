@@ -42,15 +42,75 @@ def get_falkor_connection():
             decode_responses=True
         )
         r.ping()
-        print(f"✅ Connected to FalkorDB at {r.connection_pool.connection_kwargs['host']}:{r.connection_pool.connection_kwargs['port']}")
+        print(f"Connected to FalkorDB at {r.connection_pool.connection_kwargs['host']}:{r.connection_pool.connection_kwargs['port']}")
         return r
     except Exception as e:
-        print(f"❌ FalkorDB connection failed: {e}")
+        print(f"FalkorDB connection failed: {e}")
         return None
 
 # Global connection
 _FALKOR = get_falkor_connection()
 _GRAPH_NAME = os.environ.get('FALKOR_GRAPH', 'graphiti_migration')
+
+# --- CocoIndex helper functions ---
+@cocoindex.op.function()
+def extract_text_from_json(parsed_json: dict) -> str:
+    """Extract and convert HTML content to text from parsed JSON."""
+    return html_to_text(parsed_json.get("body_html", ""))
+
+@cocoindex.op.function()
+def extract_title_from_json(parsed_json: dict) -> str:
+    """Extract title from parsed JSON."""
+    return parsed_json.get("title", "Untitled")
+
+@cocoindex.op.function()
+def extract_book_from_json(parsed_json: dict) -> str:
+    """Extract book name from parsed JSON."""
+    return parsed_json.get("book", "Unknown")
+
+@cocoindex.op.function()
+def extract_tags_from_json(parsed_json: dict) -> List[str]:
+    """Extract tags from parsed JSON."""
+    return parsed_json.get("tags", [])
+
+@cocoindex.op.function()
+def generate_episodic_uuid(filename: str) -> str:
+    """Generate deterministic UUID for episodic node."""
+    page_id = filename.replace("page_", "").replace(".json", "")
+    return str(uuid.uuid5(uuid.NAMESPACE_DNS, f"doc:{page_id}"))
+
+@cocoindex.op.function()
+def generate_entity_uuid_from_obj(entity: Entity) -> str:
+    """Generate deterministic UUID for entity from Entity object."""
+    return str(uuid.uuid5(uuid.NAMESPACE_DNS, f"ent:{entity.name.lower()}"))
+
+@cocoindex.op.function()
+def generate_group_id(book_name: str) -> str:
+    """Generate group ID from book name."""
+    return slugify_name(book_name)
+
+@cocoindex.op.function()
+def extract_entities_from_tags(tags: List[str]) -> List[Entity]:
+    """Extract entities from BookStack tags."""
+    entities = []
+    for tag in tags:
+        entities.append(Entity(
+            name=normalize_entity_name(tag),
+            type="TAG",
+            description=f"BookStack tag: {tag}"
+        ))
+    return entities
+
+@cocoindex.op.function()
+def extract_relationships_from_text(text: str) -> List[Relationship]:
+    """Extract relationships from text using LLM (simplified for CocoIndex)."""
+    try:
+        # For now, use fallback extraction since we can't access other page data in transform
+        entities = extract_entities_with_llm(text)
+        return extract_relationships_fallback(entities)
+    except Exception as e:
+        print(f"Relationship extraction failed: {e}")
+        return []
 
 # --- Enhanced helper functions ---
 def html_to_text(html_content: str) -> str:
@@ -85,9 +145,42 @@ def extract_entities_from_tags(tags: List[str]) -> List[Entity]:
         ))
     return entities
 
+@cocoindex.op.function()
 def extract_entities_with_llm(text: str) -> List[Entity]:
-    """Extract entities from text using LLM (mock for now)."""
-    # Mock implementation - replace with real LLM call
+    """Extract entities from text using LLM."""
+    # Use CocoIndex LLM extraction
+    try:
+        extractor = cocoindex.functions.ExtractByLlm(
+            llm_spec=cocoindex.LlmSpec(
+                api_type=cocoindex.LlmApiType.OPENAI,
+                model="gpt-4o"
+            ),
+            output_type=List[Entity],
+            instruction="""
+            Extract important entities from this BookStack documentation text.
+            Focus on:
+            - Technologies, tools, and frameworks mentioned
+            - Important concepts and methodologies
+            - Product names and systems
+            - Organizations and people (if relevant)
+            
+            For each entity, provide:
+            - name: The exact name as it appears
+            - type: TECHNOLOGY, CONCEPT, ORGANIZATION, PERSON, LOCATION, or TAG
+            - description: Brief description of what this entity represents
+            
+            Exclude common words and focus on domain-specific entities.
+            """
+        )
+        entities = extractor(text)
+        return entities if entities else []
+    except Exception as e:
+        print(f"LLM extraction failed: {e}")
+        # Fallback to keyword extraction
+        return extract_entities_fallback(text)
+
+def extract_entities_fallback(text: str) -> List[Entity]:
+    """Fallback entity extraction using keywords."""
     entities = []
     
     # Simple keyword-based extraction for demo
@@ -111,8 +204,41 @@ def extract_entities_with_llm(text: str) -> List[Entity]:
     
     return entities
 
+@cocoindex.op.function()
 def extract_relationships_with_llm(text: str, entities: List[Entity]) -> List[Relationship]:
-    """Extract relationships between entities (mock for now)."""
+    """Extract relationships between entities using LLM."""
+    if not entities or len(entities) < 2:
+        return []
+    
+    try:
+        entity_list = ", ".join([e.name for e in entities])
+        extractor = cocoindex.functions.ExtractByLlm(
+            llm_spec=cocoindex.LlmSpec(
+                api_type=cocoindex.LlmApiType.OPENAI,
+                model="gpt-4o"
+            ),
+            output_type=List[Relationship],
+            instruction=f"""
+            Extract relationships between these entities from the given text: {entity_list}
+            
+            For each relationship, provide:
+            - subject: The entity that is doing something or has a property
+            - predicate: The relationship type (e.g., "uses", "implements", "is_part_of", "requires", "connects_to")
+            - object: The entity being acted upon or related to
+            - fact: A brief description of evidence from the text supporting this relationship
+            
+            Focus on meaningful technical relationships. Only extract relationships that are clearly stated or strongly implied in the text.
+            """
+        )
+        relationships = extractor(text)
+        return relationships if relationships else []
+    except Exception as e:
+        print(f"LLM relationship extraction failed: {e}")
+        # Fallback to simple relationship extraction
+        return extract_relationships_fallback(entities)
+
+def extract_relationships_fallback(entities: List[Entity]) -> List[Relationship]:
+    """Fallback relationship extraction."""
     relationships = []
     entity_names = [e.name for e in entities]
     
@@ -288,7 +414,7 @@ def process_page_enhanced(json_content: str) -> str:
 # --- Main CocoIndex Flow ---
 @cocoindex.flow_def(name="BookStackEnhancedLocalhost")
 def bookstack_enhanced_flow(flow_builder: FlowBuilder, data_scope: DataScope) -> None:
-    """Enhanced BookStack to FalkorDB flow for localhost setup."""
+    """Enhanced BookStack to FalkorDB flow with LLM entity extraction."""
     
     # Add source for BookStack JSON files
     data_scope["pages"] = flow_builder.add_source(
@@ -299,26 +425,176 @@ def bookstack_enhanced_flow(flow_builder: FlowBuilder, data_scope: DataScope) ->
         refresh_interval=timedelta(minutes=2)
     )
     
-    # Add collector for processing results
-    processed_pages = data_scope.add_collector()
+    # Add collectors for entities and relationships
+    episodic_nodes = data_scope.add_collector()
+    entity_nodes = data_scope.add_collector()
+    mentions_edges = data_scope.add_collector()
+    relates_edges = data_scope.add_collector()
     
     # Process each page
     with data_scope["pages"].row() as page:
-        # Process the page with enhanced extraction
-        result = page["content"].transform(process_page_enhanced)
+        # Parse JSON content
+        page["parsed"] = page["content"].transform(cocoindex.functions.ParseJson())
         
-        # Collect processing results
-        processed_pages.collect(
-            filename=page["filename"],
-            result=result
+        # Extract text content from HTML
+        page["text_content"] = page["parsed"].transform(extract_text_from_json)
+        
+        # Extract page metadata
+        page["title"] = page["parsed"].transform(extract_title_from_json)
+        page["book"] = page["parsed"].transform(extract_book_from_json)
+        page["tags"] = page["parsed"].transform(extract_tags_from_json)
+        
+        # LLM-powered entity extraction from content
+        page["llm_entities"] = page["text_content"].transform(extract_entities_with_llm)
+        
+        # Extract tag-based entities
+        page["tag_entities"] = page["tags"].transform(extract_entities_from_tags)
+        
+        # LLM-powered relationship extraction
+        page["relationships"] = page["text_content"].transform(extract_relationships_from_text)
+        
+        # Create episodic node for the document
+        episodic_nodes.collect(
+            uuid=page["filename"].transform(generate_episodic_uuid),
+            name=page["title"],
+            content=page["text_content"],
+            source="BookStack",
+            source_description=page["book"],
+            valid_at=cocoindex.GeneratedField.NOW,
+            group_id=page["book"].transform(generate_group_id),
+            created_at=cocoindex.GeneratedField.NOW
         )
+        
+        # Create entity nodes from LLM extraction
+        with page["llm_entities"].row() as entity:
+            entity_nodes.collect(
+                uuid=entity.transform(generate_entity_uuid_from_obj),
+                name=entity["name"],
+                labels=[entity["type"]],
+                summary=entity["description"],
+                group_id=page["book"].transform(generate_group_id),
+                created_at=cocoindex.GeneratedField.NOW
+            )
+            
+            # Create mention relationships
+            mentions_edges.collect(
+                uuid=cocoindex.GeneratedField.UUID,
+                group_id=page["book"].transform(generate_group_id),
+                created_at=cocoindex.GeneratedField.NOW,
+                source_uuid=page["filename"].transform(generate_episodic_uuid),
+                target_uuid=entity.transform(generate_entity_uuid_from_obj)
+            )
+        
+        # Create entity nodes from tags
+        with page["tag_entities"].row() as entity:
+            entity_nodes.collect(
+                uuid=entity.transform(generate_entity_uuid_from_obj),
+                name=entity["name"],
+                labels=[entity["type"]],
+                summary=entity["description"],
+                group_id=page["book"].transform(generate_group_id),
+                created_at=cocoindex.GeneratedField.NOW
+            )
+            
+            # Create mention relationships
+            mentions_edges.collect(
+                uuid=cocoindex.GeneratedField.UUID,
+                group_id=page["book"].transform(generate_group_id),
+                created_at=cocoindex.GeneratedField.NOW,
+                source_uuid=page["filename"].transform(generate_episodic_uuid),
+                target_uuid=entity.transform(generate_entity_uuid_from_obj)
+            )
+        
+        # Create relationship edges
+        with page["relationships"].row() as relationship:
+            relates_edges.collect(
+                uuid=cocoindex.GeneratedField.UUID,
+                name=relationship["predicate"],
+                fact=relationship["fact"],
+                group_id=page["book"].transform(generate_group_id),
+                created_at=cocoindex.GeneratedField.NOW,
+                source_entity=relationship["subject"],
+                target_entity=relationship["object"]
+            )
     
-    # Export processing statistics to PostgreSQL for observability
-    processed_pages.export(
-        "bookstack_enhanced_processing",
-        cocoindex.targets.Postgres(),
-        primary_key_fields=["filename"]
-    )
+    # Export to FalkorDB using Neo4j targets if available
+    if _FALKOR:
+        # Create Neo4j connection spec for CocoIndex
+        falkor_conn_spec = cocoindex.add_auth_entry(
+            "FalkorDBConnection",
+            cocoindex.targets.Neo4jConnection(
+                uri=f"bolt://localhost:6379",
+                user="",
+                password="",
+            ),
+        )
+        
+        # Export Episodic nodes
+        episodic_nodes.export(
+            "episodic_nodes",
+            cocoindex.targets.Neo4j(
+                connection=falkor_conn_spec,
+                mapping=cocoindex.targets.Nodes(label="Episodic")
+            ),
+            primary_key_fields=["uuid"],
+        )
+        
+        # Export Entity nodes (with deduplication on name+group_id)
+        entity_nodes.export(
+            "entity_nodes",
+            cocoindex.targets.Neo4j(
+                connection=falkor_conn_spec,
+                mapping=cocoindex.targets.Nodes(label="Entity")
+            ),
+            primary_key_fields=["name", "group_id"],
+        )
+        
+        # Export MENTIONS relationships
+        mentions_edges.export(
+            "mentions_edges",
+            cocoindex.targets.Neo4j(
+                connection=falkor_conn_spec,
+                mapping=cocoindex.targets.Relationships(
+                    rel_type="MENTIONS",
+                    source=cocoindex.targets.NodeFromFields(
+                        label="Episodic",
+                        fields=[cocoindex.targets.TargetFieldMapping("source_uuid", "uuid")]
+                    ),
+                    target=cocoindex.targets.NodeFromFields(
+                        label="Entity",
+                        fields=[cocoindex.targets.TargetFieldMapping("target_uuid", "uuid")]
+                    ),
+                ),
+            ),
+            primary_key_fields=["uuid"],
+        )
+        
+        # Export RELATES_TO relationships
+        relates_edges.export(
+            "relates_edges",
+            cocoindex.targets.Neo4j(
+                connection=falkor_conn_spec,
+                mapping=cocoindex.targets.Relationships(
+                    rel_type="RELATES_TO",
+                    source=cocoindex.targets.NodeFromFields(
+                        label="Entity",
+                        fields=[cocoindex.targets.TargetFieldMapping("source_entity", "name")]
+                    ),
+                    target=cocoindex.targets.NodeFromFields(
+                        label="Entity", 
+                        fields=[cocoindex.targets.TargetFieldMapping("target_entity", "name")]
+                    ),
+                ),
+            ),
+            primary_key_fields=["uuid"],
+        )
+    else:
+        # Fallback to PostgreSQL for observability
+        episodic_nodes.export(
+            "bookstack_episodic_nodes",
+            cocoindex.targets.Postgres(),
+            primary_key_fields=["uuid"]
+        )
 
 if __name__ == "__main__":
     print("Enhanced BookStack to FalkorDB Flow (Localhost)")
