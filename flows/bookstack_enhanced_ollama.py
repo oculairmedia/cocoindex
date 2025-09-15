@@ -106,7 +106,8 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         doc_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"doc_{page_info['id']}"))
         title = safe_cypher_string(summary.title)
         summary_text = safe_cypher_string(summary.summary)
-        book = safe_cypher_string(page_info.get('book', 'Unknown'))
+        group_id = "bookstack"  # Unified group for all BookStack content
+        book_metadata = safe_cypher_string(page_info.get('book', 'Unknown'))
         url = safe_cypher_string(page_info.get('url', ''))
         
         doc_cypher = f"""
@@ -114,9 +115,10 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         ON CREATE SET d.created_at = timestamp()
         SET d.name = '{title}',
             d.content = '{summary_text}',
-            d.group_id = '{book}',
-            d.source = 'text',
+            d.group_id = '{group_id}',
+            d.source = 'BookStack',
             d.source_description = '{url}',
+            d.book = '{book_metadata}',
             d.valid_at = timestamp()
         RETURN d.uuid
         """
@@ -126,12 +128,12 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         
         # 2. Create entities with deduplication
         for entity in entities:
-            entity_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"entity_{entity.name}_{book}"))
+            entity_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"entity_{entity.name}_{group_id}"))
             entity_name = safe_cypher_string(normalize_entity_name(entity.name))
             entity_desc = safe_cypher_string(entity.description)
             
             entity_cypher = f"""
-            MERGE (e:Entity {{name: '{entity_name}', group_id: '{book}'}})
+            MERGE (e:Entity {{name: '{entity_name}', group_id: '{group_id}'}})
             ON CREATE SET e.uuid = '{entity_uuid}',
                          e.created_at = timestamp(),
                          e.labels = ['Entity']
@@ -146,8 +148,8 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
             mention_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"mention_{doc_uuid}_{entity_name}"))
             mention_cypher = f"""
             MATCH (d:Episodic {{uuid: '{doc_uuid}'}}),
-                  (e:Entity {{name: '{entity_name}', group_id: '{book}'}})
-            MERGE (d)-[r:MENTIONS {{group_id: '{book}'}}]->(e)
+                  (e:Entity {{name: '{entity_name}', group_id: '{group_id}'}})
+            MERGE (d)-[r:MENTIONS {{group_id: '{group_id}'}}]->(e)
             ON CREATE SET r.uuid = '{mention_uuid}',
                          r.created_at = timestamp()
             """
@@ -156,14 +158,14 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         
         # 4. Create relationships between entities
         for rel in relationships:
-            rel_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"rel_{rel.subject}_{rel.predicate}_{rel.object}_{book}"))
+            rel_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"rel_{rel.subject}_{rel.predicate}_{rel.object}_{group_id}"))
             subject = safe_cypher_string(normalize_entity_name(rel.subject))
             object_name = safe_cypher_string(normalize_entity_name(rel.object))
             
             rel_cypher = f"""
-            MATCH (e1:Entity {{name: '{subject}', group_id: '{book}'}}),
-                  (e2:Entity {{name: '{object_name}', group_id: '{book}'}})
-            MERGE (e1)-[r:RELATES_TO {{predicate: '{rel.predicate}', group_id: '{book}'}}]->(e2)
+            MATCH (e1:Entity {{name: '{subject}', group_id: '{group_id}'}}),
+                  (e2:Entity {{name: '{object_name}', group_id: '{group_id}'}})
+            MERGE (e1)-[r:RELATES_TO {{predicate: '{rel.predicate}', group_id: '{group_id}'}}]->(e2)
             ON CREATE SET r.uuid = '{rel_uuid}',
                          r.created_at = timestamp()
             SET r.fact = 'Extracted from: {title}'

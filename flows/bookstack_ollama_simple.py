@@ -148,7 +148,8 @@ def process_page_with_ollama(content: str) -> dict:
             'url': url,
             'content': text_content[:1000],  # Limit content
             'summary': f"BookStack documentation: {title}",
-            'group_id': slugify_name(book),
+            'group_id': 'bookstack',  # Unified group for all BookStack content
+            'book': book,  # Keep book metadata
             'uuid': str(uuid.uuid5(uuid.NAMESPACE_DNS, f"doc:{data.get('id', 'unknown')}")),
             'entities': tag_entities + content_entities
         }
