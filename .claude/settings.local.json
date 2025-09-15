@@ -39,7 +39,9 @@
       "Bash(touch:*)",
       "Bash(grep:*)",
       "Bash(pkill:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(export PIPELINE_MODE=enhanced)",
+      "Bash(export USE_SIMPLE_STARTUP=true)"
     ],
     "deny": []
   }

@@ -41,13 +41,13 @@ ENV BS_TOKEN_ID=""
 ENV BS_TOKEN_SECRET=""
 
 # Copy and setup scripts
-COPY docker-healthcheck.sh start-pipeline.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-healthcheck.sh /usr/local/bin/start-pipeline.sh
+COPY docker-healthcheck.sh start-pipeline.sh start-pipeline-simple.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-healthcheck.sh /usr/local/bin/start-pipeline.sh /usr/local/bin/start-pipeline-simple.sh
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD /usr/local/bin/docker-healthcheck.sh
 
 # Expose ports (if needed for monitoring)
 EXPOSE 8000
 
-# Default command - run the pipeline startup script
-CMD ["/usr/local/bin/start-pipeline.sh"]
+# Default command - run the appropriate startup script
+CMD ["/bin/bash", "-c", "if [ \"$USE_SIMPLE_STARTUP\" = \"true\" ]; then exec /usr/local/bin/start-pipeline-simple.sh; else exec /usr/local/bin/start-pipeline.sh; fi"]

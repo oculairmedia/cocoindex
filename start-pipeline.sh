@@ -68,8 +68,10 @@ fi
 
 # Setup CocoIndex flow
 echo "🔧 Setting up CocoIndex flow..."
-python run_cocoindex.py update --setup "$FLOW_FILE"
+export COCOINDEX_DATABASE_URL="${COCOINDEX_DATABASE_URL:-postgresql://cocoindex:cocoindex@postgres:5432/cocoindex}"
+echo "Using database: $COCOINDEX_DATABASE_URL"
+cocoindex update --setup "$FLOW_FILE"
 
 # Start the pipeline
 echo "🚀 Starting continuous pipeline..."
-exec python run_cocoindex.py update "$FLOW_FILE" -L
+exec cocoindex update "$FLOW_FILE" -L
