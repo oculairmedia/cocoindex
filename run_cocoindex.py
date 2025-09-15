@@ -21,7 +21,7 @@ def setup_environment():
     os.environ["BS_TOKEN_SECRET"] = "735wM5dScfUkcOy7qcrgqQ1eC5fBF7IE"
     
     # Set FalkorDB defaults (for dry run)
-    os.environ["FALKOR_HOST"] = "192.168.50.90"
+    os.environ["FALKOR_HOST"] = "localhost"
     os.environ["FALKOR_PORT"] = "6379"
     os.environ["FALKOR_GRAPH"] = "graphiti_migration"
     
