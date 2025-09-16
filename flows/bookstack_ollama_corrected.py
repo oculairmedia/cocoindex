@@ -5,12 +5,22 @@ Follows official CocoIndex patterns for Ollama LLM integration.
 """
 
 import os
+import uuid
+import redis
 import dataclasses
+import logging
 from datetime import timedelta
 from typing import List
 
 import cocoindex
 from cocoindex import DataScope, FlowBuilder
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('BookStackOllamaCorrect')
 
 # --- Data structures following CocoIndex patterns ---
 @dataclasses.dataclass
@@ -41,6 +51,15 @@ class DocumentAnalysis:
     relationships: List[Relationship]
     summary: DocumentSummary
 
+@dataclasses.dataclass
+class PageMetadata:
+    """Page metadata structure."""
+    page_id: str
+    title: str
+    book: str
+    url: str
+    tags: List[str]
+
 # --- Helper functions following CocoIndex patterns ---
 @cocoindex.op.function()
 def extract_text_from_html(parsed_json: dict) -> str:
@@ -67,20 +86,147 @@ def extract_text_from_html(parsed_json: dict) -> str:
     return text
 
 @cocoindex.op.function()
-def extract_page_metadata(parsed_json: dict) -> dict:
+def extract_page_metadata(parsed_json: dict) -> PageMetadata:
     """Extract page metadata from parsed JSON."""
-    return {
-        "page_id": str(parsed_json.get("id", 0)),
-        "title": parsed_json.get("title", "Untitled"),
-        "book": parsed_json.get("book", "Unknown"),
-        "url": parsed_json.get("url", ""),
-        "tags": parsed_json.get("tags", [])
-    }
+    return PageMetadata(
+        page_id=str(parsed_json.get("id", 0)),
+        title=parsed_json.get("title", "Untitled"),
+        book=parsed_json.get("book", "Unknown"),
+        url=parsed_json.get("url", ""),
+        tags=parsed_json.get("tags", [])
+    )
 
 @cocoindex.op.function()
 def create_group_id(book_name: str) -> str:
     """Create group_id from book name."""
     return book_name.lower().replace(" ", "-").replace("_", "-")
+
+@cocoindex.op.function()
+def log_llm_start(text_content: str) -> str:
+    """Log before LLM processing starts."""
+    logger.info(f"🤖 Starting LLM extraction for document (length: {len(text_content)} chars)")
+    logger.info(f"📄 Content preview: {text_content[:200]}...")
+    return text_content
+
+@cocoindex.op.function()
+def log_llm_result(analysis: DocumentAnalysis) -> DocumentAnalysis:
+    """Log LLM extraction results."""
+    logger.info(f"✅ LLM extraction completed successfully!")
+    logger.info(f"📊 Extracted {len(analysis.entities)} entities, {len(analysis.relationships)} relationships")
+    logger.info(f"📝 Summary: {analysis.summary.title}")
+    for i, entity in enumerate(analysis.entities[:3]):  # Log first 3 entities
+        logger.info(f"   Entity {i+1}: {entity.name} ({entity.type})")
+    return analysis
+
+@cocoindex.op.function()
+def log_document_start(parsed_json: dict) -> dict:
+    """Log when starting to process a document."""
+    title = parsed_json.get("title", "Untitled")
+    page_id = parsed_json.get("id", "unknown")
+    logger.info(f"📄 Processing document: {title} (ID: {page_id})")
+    return parsed_json
+
+# --- FalkorDB Export Functions ---
+def get_falkor_connection():
+    """Get FalkorDB connection."""
+    try:
+        r = redis.Redis(
+            host=os.environ.get('FALKOR_HOST', 'localhost'),
+            port=int(os.environ.get('FALKOR_PORT', '6379')),
+            decode_responses=True
+        )
+        r.ping()
+        return r
+    except Exception as e:
+        logger.error(f"FalkorDB connection failed: {e}")
+        return None
+
+def safe_cypher_string(text: str) -> str:
+    """Make string safe for Cypher queries."""
+    if not text:
+        return ""
+    return text.replace("'", "\\'").replace('"', '\\"')[:500]
+
+@cocoindex.op.function()
+def export_to_falkor(analysis: DocumentAnalysis) -> DocumentAnalysis:
+    """Export analysis results to FalkorDB."""
+    falkor = get_falkor_connection()
+    if not falkor:
+        logger.error("❌ No FalkorDB connection available")
+        return analysis
+
+    graph_name = os.environ.get('FALKOR_GRAPH', 'graphiti_migration')
+
+    try:
+        # Create document node
+        title = safe_cypher_string(analysis.summary.title)
+        summary_text = safe_cypher_string(analysis.summary.summary)
+        doc_uuid = str(uuid.uuid4())
+        group_id = "bookstack"
+
+        doc_cypher = f"""
+        MERGE (d:Document {{name: '{title}'}})
+        ON CREATE SET d.uuid = '{doc_uuid}',
+                     d.created_at = timestamp(),
+                     d.group_id = '{group_id}'
+        SET d.content = '{summary_text}',
+            d.source = 'bookstack'
+        RETURN d.uuid
+        """
+
+        falkor.execute_command('GRAPH.QUERY', graph_name, doc_cypher)
+        logger.info(f"📄 Created FalkorDB document: {title[:50]}...")
+
+        # Create entities with deduplication
+        for entity in analysis.entities:
+            entity_name = safe_cypher_string(entity.name.lower().strip())
+            entity_desc = safe_cypher_string(entity.description)
+            entity_uuid = str(uuid.uuid4())
+
+            entity_cypher = f"""
+            MERGE (e:Entity {{name: '{entity_name}'}})
+            ON CREATE SET e.uuid = '{entity_uuid}',
+                         e.created_at = timestamp(),
+                         e.group_id = '{group_id}'
+            SET e.entity_type = '{entity.type}',
+                e.description = '{entity_desc}'
+            RETURN e.uuid
+            """
+
+            falkor.execute_command('GRAPH.QUERY', graph_name, entity_cypher)
+
+            # Create mention relationship
+            mention_cypher = f"""
+            MATCH (d:Document {{name: '{title}'}}),
+                  (e:Entity {{name: '{entity_name}'}})
+            MERGE (d)-[r:MENTIONS]->(e)
+            ON CREATE SET r.created_at = timestamp()
+            """
+
+            falkor.execute_command('GRAPH.QUERY', graph_name, mention_cypher)
+
+        # Create relationships between entities
+        for rel in analysis.relationships:
+            subject = safe_cypher_string(rel.subject.lower().strip())
+            object_name = safe_cypher_string(rel.object.lower().strip())
+            predicate = safe_cypher_string(rel.predicate)
+
+            rel_cypher = f"""
+            MATCH (e1:Entity {{name: '{subject}'}}),
+                  (e2:Entity {{name: '{object_name}'}})
+            MERGE (e1)-[r:RELATES_TO {{predicate: '{predicate}'}}]->(e2)
+            ON CREATE SET r.created_at = timestamp()
+            SET r.fact = '{safe_cypher_string(rel.fact)}'
+            """
+
+            falkor.execute_command('GRAPH.QUERY', graph_name, rel_cypher)
+
+        logger.info(f"✅ Exported to FalkorDB: {len(analysis.entities)} entities, {len(analysis.relationships)} relationships")
+
+    except Exception as e:
+        logger.error(f"❌ Error exporting to FalkorDB: {e}")
+
+    return analysis
 
 # --- Main CocoIndex Flow ---
 @cocoindex.flow_def(name="BookStackOllamaCorrect")
@@ -115,9 +261,12 @@ def bookstack_ollama_corrected_flow(flow_builder: FlowBuilder, data_scope: DataS
         
         # Create group_id
         doc["group_id"] = doc["metadata"]["book"].transform(create_group_id)
-        
+
+        # Log before LLM processing
+        doc["text_logged"] = doc["text_content"].transform(log_llm_start)
+
         # Extract comprehensive analysis using Ollama
-        doc["analysis"] = doc["text_content"].transform(
+        doc["analysis"] = doc["text_logged"].transform(
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
@@ -147,7 +296,13 @@ def bookstack_ollama_corrected_flow(flow_builder: FlowBuilder, data_scope: DataS
                 """
             )
         )
-        
+
+        # Log LLM extraction results
+        doc["analysis_logged"] = doc["analysis"].transform(log_llm_result)
+
+        # Export to FalkorDB
+        doc["falkor_exported"] = doc["analysis_logged"].transform(export_to_falkor)
+
         # Collect document information
         documents_collector.collect(
             filename=doc["filename"],
@@ -156,8 +311,7 @@ def bookstack_ollama_corrected_flow(flow_builder: FlowBuilder, data_scope: DataS
             summary=doc["analysis"]["summary"]["summary"],
             book=doc["metadata"]["book"],
             group_id=doc["group_id"],
-            url=doc["metadata"]["url"],
-            content_length=len(doc["text_content"])
+            url=doc["metadata"]["url"]
         )
         
         # Process extracted entities
