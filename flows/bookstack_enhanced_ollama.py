@@ -106,8 +106,7 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         doc_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"doc_{page_info['id']}"))
         title = safe_cypher_string(summary.title)
         summary_text = safe_cypher_string(summary.summary)
-        group_id = "bookstack"  # Unified group for all BookStack content
-        book_metadata = safe_cypher_string(page_info.get('book', 'Unknown'))
+        book = safe_cypher_string(page_info.get('book', 'Unknown'))
         url = safe_cypher_string(page_info.get('url', ''))
         
         doc_cypher = f"""
@@ -115,10 +114,9 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         ON CREATE SET d.created_at = timestamp()
         SET d.name = '{title}',
             d.content = '{summary_text}',
-            d.group_id = '{group_id}',
-            d.source = 'BookStack',
+            d.group_id = '{book}',
+            d.source = 'text',
             d.source_description = '{url}',
-            d.book = '{book_metadata}',
             d.valid_at = timestamp()
         RETURN d.uuid
         """
@@ -128,12 +126,12 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         
         # 2. Create entities with deduplication
         for entity in entities:
-            entity_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"entity_{entity.name}_{group_id}"))
+            entity_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"entity_{entity.name}_{book}"))
             entity_name = safe_cypher_string(normalize_entity_name(entity.name))
             entity_desc = safe_cypher_string(entity.description)
             
             entity_cypher = f"""
-            MERGE (e:Entity {{name: '{entity_name}', group_id: '{group_id}'}})
+            MERGE (e:Entity {{name: '{entity_name}', group_id: '{book}'}})
             ON CREATE SET e.uuid = '{entity_uuid}',
                          e.created_at = timestamp(),
                          e.labels = ['Entity']
@@ -148,8 +146,8 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
             mention_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"mention_{doc_uuid}_{entity_name}"))
             mention_cypher = f"""
             MATCH (d:Episodic {{uuid: '{doc_uuid}'}}),
-                  (e:Entity {{name: '{entity_name}', group_id: '{group_id}'}})
-            MERGE (d)-[r:MENTIONS {{group_id: '{group_id}'}}]->(e)
+                  (e:Entity {{name: '{entity_name}', group_id: '{book}'}})
+            MERGE (d)-[r:MENTIONS {{group_id: '{book}'}}]->(e)
             ON CREATE SET r.uuid = '{mention_uuid}',
                          r.created_at = timestamp()
             """
@@ -158,14 +156,14 @@ def export_to_falkor(page_info: Dict, entities: List[Entity], relationships: Lis
         
         # 4. Create relationships between entities
         for rel in relationships:
-            rel_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"rel_{rel.subject}_{rel.predicate}_{rel.object}_{group_id}"))
+            rel_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"rel_{rel.subject}_{rel.predicate}_{rel.object}_{book}"))
             subject = safe_cypher_string(normalize_entity_name(rel.subject))
             object_name = safe_cypher_string(normalize_entity_name(rel.object))
             
             rel_cypher = f"""
-            MATCH (e1:Entity {{name: '{subject}', group_id: '{group_id}'}}),
-                  (e2:Entity {{name: '{object_name}', group_id: '{group_id}'}})
-            MERGE (e1)-[r:RELATES_TO {{predicate: '{rel.predicate}', group_id: '{group_id}'}}]->(e2)
+            MATCH (e1:Entity {{name: '{subject}', group_id: '{book}'}}),
+                  (e2:Entity {{name: '{object_name}', group_id: '{book}'}})
+            MERGE (e1)-[r:RELATES_TO {{predicate: '{rel.predicate}', group_id: '{book}'}}]->(e2)
             ON CREATE SET r.uuid = '{rel_uuid}',
                          r.created_at = timestamp()
             SET r.fact = 'Extracted from: {title}'
@@ -185,8 +183,8 @@ def extract_html_content(parsed_json: dict) -> str:
     return html_to_text(parsed_json.get("body_html", ""))
 
 @cocoindex.op.function()
-def export_enhanced_to_falkor(json_content: str) -> str:
-    """Export enhanced LLM-processed data to FalkorDB."""
+def process_page_with_ollama(json_content: str) -> str:
+    """Process a single page with Ollama LLM extraction."""
     try:
         # Parse JSON
         if isinstance(json_content, str):
@@ -206,47 +204,12 @@ def export_enhanced_to_falkor(json_content: str) -> str:
         # Convert HTML to text
         text_content = html_to_text(page_data.get("body_html", ""))
         
-        # Create document summary (this would be enhanced by LLM)
-        summary = DocumentSummary(
-            title=page_info["title"],
-            summary=f"Enhanced summary of {page_info['title']}: {text_content[:200]}..."
-        )
-        
-        # Create enhanced entities (this would be enhanced by LLM)
-        enhanced_entities = []
-        for tag in page_info["tags"]:
-            enhanced_entities.append(Entity(
-                name=normalize_entity_name(tag),
-                type="CONCEPT",
-                description=f"Enhanced entity description for {tag} from LLM processing"
-            ))
-        
-        # Add technology entities from content
-        tech_keywords = ["docker", "kubernetes", "python", "api", "database", "redis", "postgresql", "falkor", "graphiti"]
-        for keyword in tech_keywords:
-            if keyword.lower() in text_content.lower():
-                enhanced_entities.append(Entity(
-                    name=normalize_entity_name(keyword),
-                    type="TECHNOLOGY",
-                    description=f"Technology entity: {keyword} (enhanced by LLM)"
-                ))
-        
-        # Create relationships (this would be enhanced by LLM)
-        relationships = []
-        if len(enhanced_entities) >= 2:
-            relationships.append(Relationship(
-                subject=enhanced_entities[0].name,
-                predicate="relates_to",
-                object=enhanced_entities[1].name
-            ))
-        
-        # Export to FalkorDB
-        export_to_falkor(page_info, enhanced_entities, relationships, summary)
-        
-        return f"Enhanced processing complete for {page_info['title']}: {len(enhanced_entities)} entities, {len(relationships)} relationships"
+        # This will be replaced with actual LLM calls in the CocoIndex flow
+        # For now, return processing info
+        return f"Processed {page_info['title']}: {len(text_content)} chars"
         
     except Exception as e:
-        return f"Error in enhanced processing: {e}"
+        return f"Error processing page: {e}"
 
 # --- Main CocoIndex Flow with Ollama Integration ---
 @cocoindex.flow_def(name="BookStackEnhancedOllama")
@@ -274,8 +237,7 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b",
-                    address="http://100.81.139.20:11434"
+                    model="gemma3:12b"
                 ),
                 output_type=DocumentSummary,
                 instruction="Please summarize the content of this BookStack document. Extract a clear title and concise summary."
@@ -287,8 +249,7 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b",
-                    address="http://100.81.139.20:11434"
+                    model="gemma3:12b"
                 ),
                 output_type=list[Entity],
                 instruction=(
@@ -305,8 +266,7 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b",
-                    address="http://100.81.139.20:11434"
+                    model="gemma3:12b"
                 ),
                 output_type=list[Relationship],
                 instruction=(
@@ -375,10 +335,6 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
         cocoindex.targets.Postgres(),
         primary_key_fields=["id"]
     )
-    
-    # Also export to FalkorDB using custom transform
-    with data_scope["pages"].row() as page:
-        page["content"].transform(export_enhanced_to_falkor)
 
 if __name__ == "__main__":
     print("Enhanced BookStack to FalkorDB Flow with Ollama LLM")
