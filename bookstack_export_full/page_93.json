@@ -2,10 +2,10 @@
   "id": 93,
   "title": "Implementation Details",
   "slug": "implementation-details",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/implementation-details",
+  "url": "https://knowledge.oculair.ca/page/93",
   "updated_at": "2025-04-15T00:28:12.000000Z",
   "body_html": "<h1 id=\"bkmrk-proof-of-concept\">Proof of Concept</h1>\n<p id=\"bkmrk-this-document-outlin\">This document outlines the implementation of our proof of concept using a small Language Model (LLM) combined with embedding techniques. The goal is to efficiently handle specific tasks by leveraging embeddings to enhance retrieval and response accuracy.</p>\n<p id=\"bkmrk-details%3A\">Details:</p>\n<ul id=\"bkmrk-small-llm-acts-as-th\">\n<li>Small LLM acts as the core processing unit.</li>\n<li>Embeddings are used for semantic search and context retrieval.</li>\n<li>This approach allows for a lightweight yet effective solution.</li>\n</ul>\n<p id=\"bkmrk-further-documentatio\">Further documentation will include setup steps, code snippets, and performance evaluation.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

@@ -2,10 +2,10 @@
   "id": 71,
   "title": "Opson's Tools",
   "slug": "opsons-tools",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/opsons-tools",
+  "url": "https://knowledge.oculair.ca/page/71",
   "updated_at": "2025-02-26T22:48:51.000000Z",
   "body_html": "<p id=\"bkmrk-opson-will-be-equipp\">Opson will be equipped with the following tools for managing the Letta tool library:</p><ol id=\"bkmrk-add-tool-to-library%3A\"><li><strong>Add Tool to Library:</strong><ul><li><strong>Name:</strong> add_tool</li><li><strong>Parameters:</strong><ul><li><code>tool_code</code> (string): The Python code of the tool.</li><li><code>tool_name</code> (string): The name of the tool.</li><li><code>description</code> (string): A description of the tool's functionality.</li><li><code>parameters</code> (list): A list of parameters the tool accepts, including their names, types, and descriptions.</li><li><code>validation_results</code> (dict): Results of the validation checks performed by OpenHands.</li></ul></li><li><strong>Functionality:</strong> Adds a new tool to the Letta tool library after performing independent validation.</li></ul></li><li><strong>List Available Tools:</strong><ul><li><strong>Name:</strong> list_tools</li><li><strong>Parameters:</strong> None</li><li><strong>Functionality:</strong> Returns a list of all available tools in the Letta library, including their names and descriptions.</li></ul></li><li><strong>Attach Tool to Agent:</strong><ul><li><strong>Name:</strong> attach_tool</li><li><strong>Parameters:</strong><ul><li><code>tool_name</code> (string): The name of the tool to attach.</li><li><code>agent_id</code> (string): The ID of the agent to attach the tool to.</li></ul></li><li><strong>Functionality:</strong> Attaches a specified tool to a specified agent.</li></ul></li></ol>",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

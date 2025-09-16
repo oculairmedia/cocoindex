@@ -1,8 +1,8 @@
 #!/bin/bash
 # Health check script for the BookStack pipeline container
 
-# Check if Python process is running
-if ! pgrep -f "python.*bookstack" > /dev/null; then
+# Check if CocoIndex process is running
+if ! pgrep -f "cocoindex update" > /dev/null; then
     echo "Pipeline process not running"
     exit 1
 fi

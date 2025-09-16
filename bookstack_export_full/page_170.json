@@ -2,10 +2,10 @@
   "id": 170,
   "title": "Reverse Proxy and Nginx",
   "slug": "reverse-proxy-and-nginx",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/reverse-proxy-and-nginx",
+  "url": "https://knowledge.oculair.ca/page/170",
   "updated_at": "2025-09-08T16:19:30.000000Z",
   "body_html": "<h1 id=\"bkmrk-reverse-proxy-and-ng\">Reverse Proxy and Nginx</h1>\n<h2 id=\"bkmrk-example\">Example</h2>\n<pre id=\"bkmrk-server-%7B-listen-443-\"><code class=\"language-nginx\">server {\n  listen 443 ssl http2;\n  server_name your-huly-domain.com;\n\n  # TLS config...\n\n  location /api/v1/webhooks {\n    proxy_pass http://huly-server:3000;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n    proxy_set_header X-Forwarded-Proto $scheme;\n\n    limit_req zone=webhook_api burst=10 nodelay;\n    add_header X-Content-Type-Options nosniff;\n    add_header X-Frame-Options DENY;\n    add_header X-XSS-Protection \"1; mode=block\";\n  }\n}\n\nhttp {\n  limit_req_zone $binary_remote_addr zone=webhook_api:10m rate=10r/m;\n}\n</code></pre>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

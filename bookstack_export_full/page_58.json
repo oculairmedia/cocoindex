@@ -2,10 +2,10 @@
   "id": 58,
   "title": "OpenWebUI Client Feedback - 2025-02-21",
   "slug": "openwebui-client-feedback-2025-02-21",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/openwebui-client-feedback-2025-02-21",
+  "url": "https://knowledge.oculair.ca/page/58",
   "updated_at": "2025-02-21T22:40:25.000000Z",
   "body_html": "<h1 id=\"bkmrk-openwebui-client-fee\">OpenWebUI Client Feedback - 2025-02-21</h1>\n<p id=\"bkmrk-context%3A-testing-a-n\"><strong>Context:</strong> Testing a new Python-based client for OpenWebUI (using Python <code>ask</code> instead of raw HTTPS API).</p>\n<p id=\"bkmrk-feedback%3A\"><strong>Feedback:</strong></p>\n<ul id=\"bkmrk-positive%3A-more-relia\">\n<li><strong>Positive:</strong> More reliable connection; DeepSeek support now functional.</li>\n<li><strong>Negative:</strong> Streaming responses are not currently working (regression from previous implementation).</li>\n</ul>\n<p id=\"bkmrk-note%3A-this-is-part-o\"><strong>Note:</strong> This is part of a running log for development efforts related to Letta integration with OpenWebUI.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

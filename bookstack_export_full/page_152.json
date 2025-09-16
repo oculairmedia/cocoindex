@@ -2,10 +2,10 @@
   "id": 152,
   "title": "Event Catalog and Payload Schema",
   "slug": "event-catalog-and-payload-schema",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/event-catalog-and-payload-schema",
+  "url": "https://knowledge.oculair.ca/page/152",
   "updated_at": "2025-09-08T16:19:16.000000Z",
   "body_html": "<h1 id=\"bkmrk-event-catalog-and-pa\">Event Catalog and Payload Schema</h1>\n<h2 id=\"bkmrk-event-types-%28example\">Event Types (Examples)</h2>\n<ul id=\"bkmrk-issue.created%2C-issue\">\n<li><code>issue.created</code>, <code>issue.updated</code>, <code>issue.deleted</code></li>\n<li><code>issue.status_changed</code>, <code>issue.assigned</code>, <code>issue.priority_changed</code></li>\n<li><code>project.created</code>, <code>project.updated</code>, <code>project.archived</code></li>\n<li><code>comment.created</code>, <code>attachment.added</code></li>\n</ul>\n<h2 id=\"bkmrk-headers\">Headers</h2>\n<ul id=\"bkmrk-content-type%3A-applic\">\n<li><code>Content-Type: application/json</code></li>\n<li><code>User-Agent: Huly-Webhook/1.0</code></li>\n<li><code>X-Huly-Event: &lt;eventType&gt;</code></li>\n<li><code>X-Huly-Delivery: &lt;uuid&gt;</code></li>\n<li><code>X-Huly-Attempt: &lt;n&gt;</code></li>\n<li><code>X-Huly-Signature-256: sha256=&lt;hex&gt;</code> (if secret configured)</li>\n</ul>\n<h2 id=\"bkmrk-payload-schema-%28exam\">Payload Schema (Example)</h2>\n<pre id=\"bkmrk-%7B-%22event%22%3A-%7B-%22id%22%3A-%22\"><code class=\"language-json\">{\n  \"event\": {\n    \"id\": \"uuid\",\n    \"type\": \"issue.created\",\n    \"timestamp\": \"2025-07-17T20:45:00Z\",\n    \"workspace\": \"workspace-name\"\n  },\n  \"data\": {\n    \"object\": { /* class-specific fields */ },\n    \"changes\": { /* for updates */ },\n    \"actor\": { \"id\": \"user-id\", \"name\": \"User\" }\n  },\n  \"metadata\": {\n    \"version\": \"1.0\",\n    \"delivery_id\": \"uuid\"\n  }\n}\n</code></pre>\n<h2 id=\"bkmrk-versioning\">Versioning</h2>\n<ul id=\"bkmrk-metadata.version-inc\">\n<li><code>metadata.version</code> increments when breaking payload changes occur</li>\n<li>Consumers should validate <code>X-Huly-Event</code> and schema</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

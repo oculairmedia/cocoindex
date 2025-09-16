@@ -2,10 +2,10 @@
   "id": 155,
   "title": "Integrated Plugin Architecture Plan",
   "slug": "integrated-plugin-architecture-plan",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/integrated-plugin-architecture-plan",
+  "url": "https://knowledge.oculair.ca/page/155",
   "updated_at": "2025-09-08T16:41:52.000000Z",
   "body_html": "<h1 id=\"bkmrk-integrated-plugin-ar\">Integrated Plugin Architecture Plan</h1>\n<h2 id=\"bkmrk-components\">Components</h2>\n<ul id=\"bkmrk-server-plugins%2Fwebho\">\n<li><code>server-plugins/webhook</code>: plugin definition (resources/functions)</li>\n<li><code>server-plugins/webhook-resources</code>: triggers, API, delivery service</li>\n<li><code>models/webhook</code>: data models &amp; indices</li>\n</ul>\n<h2 id=\"bkmrk-data-flow\">Data Flow</h2>\n<ol id=\"bkmrk-tx-occurs-%28create%2Fup\">\n<li>Tx occurs (create/update/delete)</li>\n<li>Trigger evaluates filters and emits WebhookEvent</li>\n<li>Delivery service picks up event, signs &amp; POSTs</li>\n<li>Result recorded; retries scheduled on failure</li>\n</ol>\n<h2 id=\"bkmrk-indices\">Indices</h2>\n<ul id=\"bkmrk-webhookconfig%3A-space\">\n<li>WebhookConfig: space, enabled</li>\n<li>WebhookEvent: status, nextRetry, webhookConfig</li>\n<li>DeliveryAttempt: webhookEvent, attemptedAt</li>\n</ul>\n<h2 id=\"bkmrk-extensibility\">Extensibility</h2>\n<ul id=\"bkmrk-event-mappers-per-cl\">\n<li>Event mappers per class</li>\n<li>Pluggable delivery backends (HTTP, queue)</li>\n</ul>\n<h2 id=\"bkmrk-component-map-%28diagr\">Component Map (Diagram)</h2>\n<pre id=\"bkmrk-flowchart-td-subgrap\"><code class=\"language-mermaid\">flowchart TD\n  subgraph Plugin\n    TRG[Triggers]\n    API[API Router]\n    DSV[Delivery Service]\n    UTIL[Utils]\n  end\n  subgraph Models\n    CFG[WebhookConfig]\n    EVT[WebhookEvent]\n    ATT[DeliveryAttempt]\n  end\n  TRG --&gt; EVT\n  API --&gt; CFG\n  DSV --&gt; ATT\n  EVT --&gt; DSV\n</code></pre>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

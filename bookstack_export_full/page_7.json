@@ -2,10 +2,10 @@
   "id": 7,
   "title": "Letta API Overview",
   "slug": "letta-api-overview",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/letta-api-overview",
+  "url": "https://knowledge.oculair.ca/page/7",
   "updated_at": "2025-02-12T20:27:47.000000Z",
   "body_html": "<p id=\"bkmrk-the-letta-platform-p\">The Letta platform provides multiple ways to interact with your stateful agents. Whether through the ADE’s visual interface or programmatically via our APIs, you’re always connecting to the same agents running in your Letta server.</p>\n<h2 id=\"bkmrk-apis-and-sdks\">APIs and SDKs</h2>\n<p id=\"bkmrk-we-provide-a-compreh\">We provide a comprehensive REST API and native SDKs in Python and TypeScript. All three interfaces - the ADE, REST API, and SDKs - use the same underlying API to interact with your agents, making it seamless to develop visually in the ADE and then integrate those agents into your applications.</p>\n<h3 id=\"bkmrk-python-sdk\">Python SDK</h3>\n<p id=\"bkmrk-the-legacy-letta-pyt\">The legacy Letta Python <code>LocalClient</code>/<code>RestClient</code> SDK is available under <code>pip install letta</code> (which also contains the server). This client is deprecated and will be replaced in a future release with the new <code>letta-client</code>. Please migrate any Python code using the old <code>RESTClient</code> or <code>LocalClient</code> to use <code>letta-client</code> to avoid breaking changes in the future.</p>\n<p id=\"bkmrk-the-letta-python-sdk\">The Letta <a href=\"https://github.com/letta-ai/letta-python\">Python SDK</a> can be downloaded with:</p>\n<p id=\"bkmrk-once-installed%2C-you-\">Once installed, you can instantiate the client in your Python code with:</p>\n<h3 id=\"bkmrk-typescript-sdk\">TypeScript SDK</h3>\n<p id=\"bkmrk-the-letta-typescript\">The Letta <a href=\"https://github.com/letta-ai/letta-node\">TypeScript (Node) SDK</a> can be downloaded with:</p>\n<p id=\"bkmrk-once-installed%2C-you--1\">Once installed, you can instantiate the client in your TypeScript code with:</p>\n<p id=\"bkmrk-built-with\"><a href=\"https://buildwithfern.com/?utm_campaign=buildWith&amp;utm_medium=docs&amp;utm_source=docs.letta.com\">Built with</a></p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

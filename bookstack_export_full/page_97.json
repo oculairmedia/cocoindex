@@ -2,10 +2,10 @@
   "id": 97,
   "title": "Dynamic Tool Attachment Testing Note",
   "slug": "dynamic-tool-attachment-testing-note",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/dynamic-tool-attachment-testing-note",
+  "url": "https://knowledge.oculair.ca/page/97",
   "updated_at": "2025-04-20T19:29:42.000000Z",
   "body_html": "<h1 id=\"bkmrk-dynamic-tool-attachm\">Dynamic Tool Attachment Testing Note</h1>\n<p id=\"bkmrk-this-page-records-no\">This page records notes and observations from testing the dynamic tool attachment feature.</p>\n<ul id=\"bkmrk-the-feature-was-unre\">\n<li>The feature was unreliable during multiple attempts.</li>\n<li>Various errors occurred: 502 network errors, ClosedResourceError, RuntimeError (event loop), but persistence paid off.</li>\n<li>Bookstack backend eventually recovered and allowed book listing.</li>\n</ul>\n<h2 id=\"bkmrk-reflections-on-compl\">Reflections on Complexity and Type Systems</h2>\n<p id=\"bkmrk-as-the-complexity-of\">As the complexity of the system increases, error rates tend to rise and bugs become more obscure and environment-specific. This makes troubleshooting more difficult. This may explain why many developers prefer heavily typed code over vanilla Python—static typing and type checking help catch issues early, reducing the risk of hidden runtime errors. Static analysis tools and type hints (like those used with mypy in Python) can help manage this complexity and improve reliability, even in dynamic languages.</p>\n<p id=\"bkmrk-feel-free-to-add-mor\">Feel free to add more details or updates as needed.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

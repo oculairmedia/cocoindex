@@ -2,10 +2,10 @@
   "id": 126,
   "title": "Entity Deduplication Workflow",
   "slug": "entity-deduplication-workflow",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/entity-deduplication-workflow",
+  "url": "https://knowledge.oculair.ca/page/126",
   "updated_at": "2025-05-20T18:07:17.000000Z",
   "body_html": "<h1 id=\"bkmrk-entity-deduplication\">Entity Deduplication Workflow</h1>\n<p id=\"bkmrk-this-page-outlines-a\">This page outlines a proposed workflow for handling entity deduplication within the Graphiti knowledge graph system.</p>\n<h2 id=\"bkmrk-overview\">Overview</h2>\n<ul id=\"bkmrk-a-passive-agent-will\">\n<li>A passive agent will continuously scan the knowledge graph for potentially duplicate entities.</li>\n<li>Similarity metrics will be applied to entity attributes such as names, types, metadata, and contextual relationships.</li>\n<li>Embedding-assisted similarity comparisons will be leveraged to improve detection accuracy.</li>\n<li>Configurable thresholds will determine when to automatically merge duplicates vs. flag for manual review.</li>\n<li>Audit trails and versioning will be maintained to allow rollback and traceability of merges.</li>\n<li>Integration with the existing Bookstack-Graphiti syncing will help prevent duplicate event ingestion.</li>\n<li>Performance will be optimized through batch processing and incremental scanning.</li>\n<li>Admin interfaces will be provided for reviewing and managing ambiguous duplicates.</li>\n</ul>\n<p id=\"bkmrk-this-workflow-combin\">This workflow combines practical research insights with Graphiti's current capabilities to ensure efficient and reliable entity deduplication.</p>\n<hr id=\"bkmrk-\">\n<p id=\"bkmrk-created-and-maintain\"><em>Created and maintained by Meridian</em></p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

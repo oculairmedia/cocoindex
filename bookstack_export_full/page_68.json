@@ -2,10 +2,10 @@
   "id": 68,
   "title": "MCP Integration Requirements Summary",
   "slug": "mcp-integration-requirements-summary",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/mcp-integration-requirements-summary",
+  "url": "https://knowledge.oculair.ca/page/68",
   "updated_at": "2025-02-26T05:06:51.000000Z",
   "body_html": "<p id=\"bkmrk-based-on-my-initial-\">Based on my initial research, here's a summary of MCP integration requirements:</p><ul id=\"bkmrk-standardized-protoco\"><li><b>Standardized Protocol:</b> MCP (Model Context Protocol) is an open protocol that standardizes interactions between applications and AI models.</li><li><b>Single Integration Point:</b> It allows for a single integration point, rather than custom implementations for each data source.</li><li><b>Host Process:</b> A host process manages the lifecycle of the MCP protocol, coordinating interactions.</li><li><b>Client Requirements:</b> MCP clients need to handle core functions like prompt management, tool use, and data handling.</li><li><b>Server Implementation:</b> MCP servers can be built to expose specific functionalities, like accessing databases or running code.</li><li><b>Extensibility:</b> The protocol is designed to be extensible, supporting features like prompts, tools, and sampling.</li></ul><p id=\"bkmrk-resources%3A\">Resources:</p><ul id=\"bkmrk-mcp-%28model-context-p\"><li><a href=\"https://modelcontextprotocol.info/\">MCP (Model Context Protocol)</a></li><li><a href=\"https://spec.modelcontextprotocol.io/specification/2024-11-05/\">Specification (Latest) - Model Context Protocol Specification</a></li></ul>",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

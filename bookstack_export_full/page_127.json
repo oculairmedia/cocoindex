@@ -2,10 +2,10 @@
   "id": 127,
   "title": "Context7 API Documentation",
   "slug": "context7-api-documentation",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/context7-api-documentation",
+  "url": "https://knowledge.oculair.ca/page/127",
   "updated_at": "2025-07-25T13:39:00.000000Z",
   "body_html": "<h1 id=\"bkmrk-context7-api-documen\">Context7 API Documentation</h1>\n<h2 id=\"bkmrk-overview\">Overview</h2>\n<p id=\"bkmrk-context7-is-an-mcp-s\">Context7 is an MCP server that provides up-to-date code documentation and examples directly to Large Language Models (LLMs). It offers a RESTful API that can be queried independently to fetch fresh code snippets and documentation. just making a small change to trigger the webhook</p>\n<h2 id=\"bkmrk-key-features\">Key Features</h2>\n<ul id=\"bkmrk-restful-api-with-end\">\n<li>RESTful API with endpoints for querying documentation relevant to code context.</li>\n<li>Supports token-based authentication.</li>\n<li>Designed for integration with LLMs but usable as a standalone API.</li>\n<li>Open source under the MIT license.</li>\n</ul>\n<h2 id=\"bkmrk-usage\">Usage</h2>\n<ul id=\"bkmrk-query-the-api-with-r\">\n<li>Query the API with relevant code cursor or prompt context to receive up-to-date documentation and code examples.</li>\n<li>The API enhances AI agent grounding by providing fresh and relevant programming information.</li>\n</ul>\n<h2 id=\"bkmrk-resources\">Resources</h2>\n<ul id=\"bkmrk-official-website%3A-ht\">\n<li>Official website: https://context7.com</li>\n<li>GitHub repository: https://github.com/upstash/context7</li>\n<li>Blog: https://upstash.com/blog/context7-mcp</li>\n</ul>\n<p id=\"bkmrk-further-detailed-end\">Further detailed endpoint descriptions and usage examples can be added as needed.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

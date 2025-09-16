@@ -2,10 +2,10 @@
   "id": 149,
   "title": "Gaps and Opportunities",
   "slug": "gaps-and-opportunities",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/gaps-and-opportunities",
+  "url": "https://knowledge.oculair.ca/page/149",
   "updated_at": "2025-09-08T16:19:14.000000Z",
   "body_html": "<h1 id=\"bkmrk-gaps-and-opportuniti\">Gaps and Opportunities</h1>\n<h2 id=\"bkmrk-identified-gaps\">Identified Gaps</h2>\n<ul id=\"bkmrk-event-semantics-deri\">\n<li>Event semantics derived from DB deltas can be ambiguous</li>\n<li>Limited filtering capabilities aligned with Huly’s hierarchies</li>\n<li>Separate logs/metrics and duplicated configuration</li>\n<li>Latency and consistency differences vs. transaction-time triggers</li>\n</ul>\n<h2 id=\"bkmrk-opportunities\">Opportunities</h2>\n<ul id=\"bkmrk-trigger-based-events\">\n<li>Trigger-based events with precise types (<code>issue.status_changed</code>, <code>issue.assigned</code>)</li>\n<li>Rich, class-aware filtering (projects, components, milestones)</li>\n<li>Unified API for webhook management in Huly UI</li>\n<li>Shared observability (metrics, logs, traces)</li>\n<li>Safer security model (re-use auth, permissions, secret storage)</li>\n</ul>\n<h2 id=\"bkmrk-next-steps\">Next Steps</h2>\n<ul id=\"bkmrk-build-integrated-mod\">\n<li>Build integrated models &amp; APIs</li>\n<li>Implement delivery service with retry and signatures</li>\n<li>Provide migration and replay tools</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

@@ -2,10 +2,10 @@
   "id": 132,
   "title": "RAG Orchestration (Haystack)",
   "slug": "rag-orchestration-haystack",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/rag-orchestration-haystack",
+  "url": "https://knowledge.oculair.ca/page/132",
   "updated_at": "2025-05-29T02:33:23.000000Z",
   "body_html": "<h3 id=\"bkmrk-rag-orchestration%3A-h\">RAG Orchestration: Haystack</h3>\n<p id=\"bkmrk-role%3A-haystack-serve\"><strong>Role:</strong> Haystack serves as the central orchestration layer within the RAG pipeline, managing the flow of data from raw text to contextual embeddings and facilitating efficient retrieval.</p>\n<p id=\"bkmrk-functionality%3A\"><strong>Functionality:</strong></p>\n<ul id=\"bkmrk-document-ingestion%3A-\">\n<li><strong>Document Ingestion:</strong> Takes extracted text from DocLing and processes it for optimal use in the RAG system.</li>\n<li><strong>Text Chunking:</strong> Breaks down large documents into smaller, semantically meaningful chunks, which are easier to embed and retrieve.</li>\n<li><strong>Embedding Generation:</strong> Utilizes various embedding models to convert text chunks into numerical vector representations (embeddings), capturing their semantic meaning.</li>\n<li><strong>Pipeline Management:</strong> Orchestrates the entire RAG workflow, including indexing, retrieval, and integration with language models.</li>\n<li><strong>Query Handling:</strong> Processes incoming queries, retrieves relevant document chunks based on semantic similarity, and prepares them for the final generation step.</li>\n</ul>\n<p id=\"bkmrk-integration-within-t\"><strong>Integration within the Pipeline:</strong> Haystack receives pre-processed text from DocLing, generates embeddings, and stores them in Neo4j. It is also responsible for interacting with the Hayhooks endpoint to serve contextual information to Letta agents. Its robust orchestration capabilities are fundamental to the effectiveness and responsiveness of the RAG system, ensuring that agents receive highly relevant and accurate information for their tasks.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

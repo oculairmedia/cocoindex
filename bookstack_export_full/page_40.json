@@ -2,10 +2,10 @@
   "id": 40,
   "title": "Initial Search Results: Open-Source Graphics APIs",
   "slug": "initial-search-results-open-source-graphics-apis",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/initial-search-results-open-source-graphics-apis",
+  "url": "https://knowledge.oculair.ca/page/40",
   "updated_at": "2025-02-17T09:42:12.000000Z",
   "body_html": "<ul id=\"bkmrk-wikipedia%27s-list-of-\">\n<li><strong>Wikipedia's List of 3D Graphics Libraries:</strong> <a href=\"https://en.wikipedia.org/wiki/List_of_3D_graphics_libraries\">https://en.wikipedia.org/wiki/List_of_3D_graphics_libraries</a></li>\n<li><strong>Awesome Graphics Libraries (GitHub):</strong> <a href=\"https://github.com/jslee02/awesome-graphics-libraries\">https://github.com/jslee02/awesome-graphics-libraries</a></li>\n<li><strong>LVGL (Light and Versatile Embedded Graphics Library):</strong> <a href=\"https://lvgl.io/\">https://lvgl.io/</a></li>\n<li><strong>Skia:</strong> <a href=\"https://skia.org/\">https://skia.org/</a></li>\n<li><strong>Mesa 3D Graphics Library:</strong> <a href=\"https://www.mesa3d.org/\">https://www.mesa3d.org/</a></li>\n<li><strong>Vulkan:</strong> <a href=\"https://www.vulkan.org/\">https://www.vulkan.org/</a></li>\n<li><strong>lib.rs Graphics APIs</strong>:<a href=\"https://lib.rs/rendering/graphics-api\">https://lib.rs/rendering/graphics-api</a></li>\n<li><strong>Reddit Minimal open-source library for cross-platform 2D graphics:</strong> <a href=\"https://www.reddit.com/r/cpp/comments/g13alk/minimal_opensource_library_for_crossplatform_2d/\">https://www.reddit.com/r/cpp/comments/g13alk/minimal_opensource_library_for_crossplatform_2d/</a></li>\n<li><strong>OGRE - Open Source 3D Graphics Engine:</strong> <a href=\"https://www.ogre3d.org/\">https://www.ogre3d.org/</a></li>\n<li><strong>Diligent Engine:</strong> <a href=\"https://github.com/DiligentGraphics/DiligentEngine\">https://github.com/DiligentGraphics/DiligentEngine</a></li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

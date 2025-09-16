@@ -2,10 +2,10 @@
   "id": 111,
   "title": "API Polling Integration: Letta → Graphiti",
   "slug": "api-polling-integration-letta-graphiti",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/api-polling-integration-letta-graphiti",
+  "url": "https://knowledge.oculair.ca/page/111",
   "updated_at": "2025-05-06T15:53:41.000000Z",
   "body_html": "<p id=\"bkmrk-this-integration-met\">This integration method uses the Letta API to synchronize conversation history with the Graphiti (Neo4j) knowledge graph, without direct database access.</p>\r\n<h2 id=\"bkmrk-workflow-overview\">Workflow Overview</h2>\r\n<ul id=\"bkmrk-list-all-agent-ids-u\">\r\n<li>List all agent IDs using the Letta API’s agent-listing endpoint.</li>\r\n<li>For each agent, retrieve the full message history using the message retrieval endpoint.</li>\r\n<li>Cache historic messages locally or in an external store for fast comparison.</li>\r\n<li>Set up a polling service to query each agent’s message endpoint every 60 seconds, fetching only new messages since the last check (using timestamps or message IDs).</li>\r\n<li>Ingest new messages into Graphiti, creating or updating corresponding nodes and relationships in Neo4j.</li>\r\n</ul>\r\n<h2 id=\"bkmrk-advantages\">Advantages</h2>\r\n<ul id=\"bkmrk-no-need-for-privileg\">\r\n<li>No need for privileged database access or modifications to the Letta backend.</li>\r\n<li>Resilient to Letta application changes, as long as the API remains stable.</li>\r\n<li>Simple to implement and maintain with standard tools.</li>\r\n</ul>\r\n<h2 id=\"bkmrk-limitations\">Limitations</h2>\r\n<ul id=\"bkmrk-potential-for-small-\">\r\n<li>Potential for small time gaps if new messages are posted and deleted between polling intervals.</li>\r\n<li>API rate limits or downtime could cause missed updates (mitigated with error handling and re-sync logic).</li>\r\n<li>Initial sync may be slow for large histories, but subsequent updates will be incremental and fast.</li>\r\n</ul>\r\n<h2 id=\"bkmrk-best-practices\">Best Practices</h2>\r\n<ul id=\"bkmrk-track-the-last-seen-\">\r\n<li>Track the last-seen message ID or timestamp per agent to ensure accurate incremental updates.</li>\r\n<li>Implement retry and error-handling for missed or failed API calls.</li>\r\n<li>Regularly re-sync full histories to correct for any missed updates.</li>\r\n</ul>\r\n<p id=\"bkmrk-this-polling-based-p\">This polling-based pipeline provides a low-friction, maintainable approach for keeping Graphiti in sync with Letta conversation history, suitable for most analytic and archival use cases.</p>",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

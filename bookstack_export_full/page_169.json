@@ -2,10 +2,10 @@
   "id": 169,
   "title": "Docker and Compose",
   "slug": "docker-and-compose",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/docker-and-compose",
+  "url": "https://knowledge.oculair.ca/page/169",
   "updated_at": "2025-09-08T16:19:29.000000Z",
   "body_html": "<h1 id=\"bkmrk-docker-and-compose\">Docker and Compose</h1>\n<h2 id=\"bkmrk-dockerfile-%28example%29\">Dockerfile (example)</h2>\n<pre id=\"bkmrk-from-node%3A18-alpine-\"><code class=\"language-dockerfile\">FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --only=production\nCOPY . .\nRUN npm run build\nEXPOSE 3000\nHEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\\n  CMD curl -f http://localhost:3000/api/health || exit 1\nCMD [\"npm\",\"start\"]\n</code></pre>\n<h2 id=\"bkmrk-docker-compose.yml-%28\">docker-compose.yml (excerpt)</h2>\n<pre id=\"bkmrk-services%3A-huly-serve\"><code class=\"language-yaml\">services:\n  huly-server:\n    image: huly/huly:latest\n    environment:\n      - WEBHOOK_ENABLED=true\n      - WEBHOOK_SECRET_KEY=${WEBHOOK_SECRET_KEY}\n      - WEBHOOK_API_KEY=${WEBHOOK_API_KEY}\n    volumes:\n      - ./server-plugins/webhook:/app/server-plugins/webhook\n      - ./server-plugins/webhook-resources:/app/server-plugins/webhook-resources\n    depends_on:\n      - mongodb\n</code></pre>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

@@ -2,10 +2,10 @@
   "id": 110,
   "title": "Future Optimization & Maintenance Strategy",
   "slug": "future-optimization-maintenance-strategy",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/future-optimization-maintenance-strategy",
+  "url": "https://knowledge.oculair.ca/page/110",
   "updated_at": "2025-05-06T15:47:08.000000Z",
   "body_html": "<p id=\"bkmrk-as-our-chat-memory-g\">As our chat memory graph grows, maintaining performance and memory quality will become increasingly important. While scheduled deduplication, merging, and graph optimization are not essential for small deployments, they are critical for large-scale, long-running systems. this was created while on my way why is the webhook integration slowing it down</p>\r\n<h2 id=\"bkmrk-why-optimization-mat\">Why Optimization Matters</h2>\r\n<ul id=\"bkmrk-reduces-redundant-or\">\r\n<li>Reduces redundant or fragmented memories</li>\r\n<li>Keeps queries fast and results accurate</li>\r\n<li>Ensures cost-effective use of Neo4j resources</li>\r\n</ul>\r\n<h2 id=\"bkmrk-recommended-approach\">Recommended Approaches</h2>\r\n<ul id=\"bkmrk-periodic-deduplicati\">\r\n<li>Periodic deduplication scripts (using Python or Cypher) to merge similar nodes and relationships</li>\r\n<li>Background jobs to clean up orphaned nodes and optimize memory chains</li>\r\n<li>Monitoring graph health and scheduling optimizations as data grows</li>\r\n</ul>\r\n<p id=\"bkmrk-we-recommend-beginni\">We recommend beginning with simple, manual reviews and scheduling more advanced jobs as our system and team scale. Reference: <a href=\"https://github.com/getzep/graphiti\">Graphiti examples</a> and <a href=\"https://arxiv.org/abs/2501.13956\">Zep agent memory paper</a>.</p>",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

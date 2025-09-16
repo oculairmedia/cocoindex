@@ -2,10 +2,10 @@
   "id": 123,
   "title": "Data Cleaning Strategies",
   "slug": "data-cleaning-strategies",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/data-cleaning-strategies",
+  "url": "https://knowledge.oculair.ca/page/123",
   "updated_at": "2025-05-13T07:43:34.000000Z",
   "body_html": "<p id=\"bkmrk-the-following-strate\">The following strategies ensure that only high-quality, relevant data is used for web research, improving Large Language Model (LLM) outputs and downstream analytics:</p>\n<ol id=\"bkmrk-source-credibility-a\">\n<li>\n<p><strong>Source Credibility Assessment</strong></p>\n<ul>\n<li>Filter unreliable sources using domain blacklists/whitelists and credibility checks.</li>\n</ul>\n</li>\n<li>\n<p><strong>Boilerplate Content Removal</strong></p>\n<ul>\n<li>Strip non-essential webpage elements (navigation, ads, cookie banners, sidebars, etc.) to minimize noise.</li>\n</ul>\n</li>\n<li>\n<p><strong>De-duplication</strong></p>\n<ul>\n<li>Identify and remove exact or near-duplicate content using hash-based or semantic similarity checks.</li>\n</ul>\n</li>\n<li>\n<p><strong>Format Normalization</strong></p>\n<ul>\n<li>Convert HTML to plain text with standardized encoding (UTF-8); handle special characters consistently.</li>\n</ul>\n</li>\n<li>\n<p><strong>Filtering Irrelevant Sections</strong></p>\n<ul>\n<li>Use heuristics or keyword filters to isolate main content, excluding unrelated sections (comments, bios, etc.).</li>\n</ul>\n</li>\n<li>\n<p><strong>Identifying &amp; Handling Errors/Noise</strong></p>\n<ul>\n<li>Detect and correct encoding errors, broken HTML, and script remnants for cleaner input.</li>\n</ul>\n</li>\n</ol>\n<hr id=\"bkmrk-\">\n<p id=\"bkmrk-note-on-searxng%3A-sea\"><strong>Note on SearxNG:</strong>\nSearxNG’s default workflow already covers many of these strategies, including filtering, de-duplication, and boilerplate removal. Documenting these steps ensures transparency and provides a foundation for custom extensions or integration with other search tools.</p>\n<p id=\"bkmrk-for-more-information\">For more information, visit the Optimized Web Research book or refer to the main workflow documentation.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

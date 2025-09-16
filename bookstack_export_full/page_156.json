@@ -2,10 +2,10 @@
   "id": 156,
   "title": "Migration Strategy",
   "slug": "migration-strategy",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/migration-strategy",
+  "url": "https://knowledge.oculair.ca/page/156",
   "updated_at": "2025-09-08T16:19:19.000000Z",
   "body_html": "<h1 id=\"bkmrk-migration-strategy-%28\">Migration Strategy (Standalone → Integrated)</h1>\n<h2 id=\"bkmrk-goals\">Goals</h2>\n<ul id=\"bkmrk-zero-data-loss-minim\">\n<li>Zero data loss</li>\n<li>Minimal downtime</li>\n<li>Observable cutover</li>\n</ul>\n<h2 id=\"bkmrk-steps\">Steps</h2>\n<ol id=\"bkmrk-enable-integrated-pl\">\n<li>Enable integrated plugin in shadow mode (disabled deliveries)</li>\n<li>Compare event counts/types vs standalone</li>\n<li>Enable integrated deliveries for a subset of webhooks</li>\n<li>Monitor metrics &amp; logs; fix discrepancies</li>\n<li>Gradually migrate all webhooks</li>\n<li>Decommission standalone or keep as fallback</li>\n</ol>\n<h2 id=\"bkmrk-replay\">Replay</h2>\n<ul id=\"bkmrk-provide-api-to-repla\">\n<li>Provide API to replay failed deliveries by deliveryId</li>\n<li>Optional backfill window using stored transactions</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

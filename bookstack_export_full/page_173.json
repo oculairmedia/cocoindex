@@ -2,10 +2,10 @@
   "id": 173,
   "title": "Troubleshooting",
   "slug": "troubleshooting",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/troubleshooting",
+  "url": "https://knowledge.oculair.ca/page/173",
   "updated_at": "2025-09-08T16:19:32.000000Z",
   "body_html": "<h1 id=\"bkmrk-troubleshooting\">Troubleshooting</h1>\n<h2 id=\"bkmrk-delivery-failures\">Delivery Failures</h2>\n<pre id=\"bkmrk-%23-check-config-curl-\"><code class=\"language-bash\"># Check config\ncurl -H \"X-API-Key: $WEBHOOK_API_KEY\" \\\n  http://localhost:3000/api/v1/webhooks/{id}\n\n# Test endpoint\ncurl -X POST https://your-endpoint/webhook \\\n  -H 'Content-Type: application/json' -d '{\"test\":true}'\n\n# Logs\ndocker logs huly-server | grep webhook\n</code></pre>\n<h2 id=\"bkmrk-performance-issues\">Performance Issues</h2>\n<pre id=\"bkmrk-curl-http%3A%2F%2Flocalhos\"><code class=\"language-bash\">curl http://localhost:3000/metrics | grep webhook\nmongosh --eval \"db.webhook_events.find({status:'pending'}).count()\"\n</code></pre>\n<h2 id=\"bkmrk-configuration\">Configuration</h2>\n<pre id=\"bkmrk-env-%7C-grep-webhook-c\"><code class=\"language-bash\">env | grep WEBHOOK\ncurl http://localhost:3000/api/health | jq '.checks.webhooks'\n</code></pre>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

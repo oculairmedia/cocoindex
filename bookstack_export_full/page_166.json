@@ -2,10 +2,10 @@
   "id": 166,
   "title": "Testing Strategy",
   "slug": "testing-strategy",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/testing-strategy",
+  "url": "https://knowledge.oculair.ca/page/166",
   "updated_at": "2025-09-08T16:19:27.000000Z",
   "body_html": "<h1 id=\"bkmrk-testing-strategy\">Testing Strategy</h1>\n<h2 id=\"bkmrk-unit-tests\">Unit Tests</h2>\n<ul id=\"bkmrk-trigger-mapping-from\">\n<li>Trigger mapping from Tx → event types</li>\n<li>Filter evaluation logic</li>\n<li>Signature generation</li>\n</ul>\n<h2 id=\"bkmrk-integration-tests\">Integration Tests</h2>\n<ul id=\"bkmrk-api-endpoints-%28creat\">\n<li>API endpoints (create/list/update/delete/test)</li>\n<li>Delivery flow with mocked HTTP targets</li>\n</ul>\n<h2 id=\"bkmrk-tooling\">Tooling</h2>\n<ul id=\"bkmrk-jest-for-unit%2Fintegr\">\n<li>Jest for unit/integration</li>\n<li>TestServer utilities if available</li>\n<li>CI: run tests and linters on PRs</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

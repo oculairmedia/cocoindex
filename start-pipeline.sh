@@ -62,7 +62,7 @@ fi
 if [ -n "$BS_URL" ] && [ -n "$BS_TOKEN_ID" ] && [ -n "$BS_TOKEN_SECRET" ]; then
     if [ ! -d "bookstack_export" ] || [ -z "$(ls -A bookstack_export 2>/dev/null)" ]; then
         echo "📥 Exporting BookStack JSON files for CocoIndex processing..."
-        python scripts/bookstack_export.py --limit 200 || {
+        python scripts/bookstack_export.py --limit 200 --out bookstack_export_full || {
             echo "⚠️  BookStack export failed, check credentials"
             echo "⏩  Continuing with existing files if available..."
         }
@@ -78,9 +78,9 @@ echo "Using database: $COCOINDEX_DATABASE_URL"
 
 # Setup CocoIndex flow (non-interactive)
 echo "📊 Setting up CocoIndex flow..."
-echo "y" | cocoindex update --setup "$FLOW_FILE" || {
-    echo "⚠️  CocoIndex setup failed, trying manual confirmation..."
-    cocoindex update --setup "$FLOW_FILE"
+cocoindex update --setup --force "$FLOW_FILE" || {
+    echo "⚠️  CocoIndex setup failed, retrying in 60s..."
+    sleep 60
 }
 
 # Run the enhanced pipeline once

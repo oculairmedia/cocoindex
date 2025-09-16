@@ -2,10 +2,10 @@
   "id": 125,
   "title": "Development Diary Summary",
   "slug": "development-diary-summary",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/development-diary-summary",
+  "url": "https://knowledge.oculair.ca/page/125",
   "updated_at": "2025-05-19T02:46:39.000000Z",
   "body_html": "<h1 id=\"bkmrk-development-diary\">Development Diary</h1>\n<p id=\"bkmrk-over-the-recent-peri\">Over the recent period, we've been deeply engaged in multiple innovative projects that span tool integration, multi-agent AI system enhancements, and collaborative knowledge management. Key highlights include:</p>\n<h2 id=\"bkmrk-1.-plane-project-man\">1. Plane Project Management Integration</h2>\n<ul id=\"bkmrk-successfully-interfa\">\n<li>Successfully interfaced with Plane to list projects and retrieve issue details.</li>\n<li>Created and managed issues dynamically within projects such as ReactiveResume MCP Project, enhancing tracking of Letta agent lockup problems.</li>\n</ul>\n<h2 id=\"bkmrk-2.-multi-agent-syste\">2. Multi-Agent System Communication</h2>\n<ul id=\"bkmrk-developed-robust-mec\">\n<li>Developed robust mechanisms for capturing, logging, and synchronizing chat events across Letta agents into a unified Graphiti knowledge graph.</li>\n<li>Emphasized reliable webhook design and proxy-based message interception for real-time context augmentation.</li>\n</ul>\n<h2 id=\"bkmrk-3.-archival-memory-a\">3. Archival Memory and Document Handling</h2>\n<ul id=\"bkmrk-investigated-and-int\">\n<li>Investigated and integrated advanced document handling strategies inspired by OpenWebUI, focusing on semantic similarity and chunking to improve document retrieval coherence.</li>\n</ul>\n<h2 id=\"bkmrk-4.-tool-discovery-an\">4. Tool Discovery and Dynamic Attachment</h2>\n<ul id=\"bkmrk-leveraged-letta%27s-to\">\n<li>Leveraged Letta's tool-finding capabilities to dynamically discover, attach, and utilize relevant MCP tools, enhancing agent adaptability and workflow automation.</li>\n</ul>\n<h2 id=\"bkmrk-5.-challenges-and-le\">5. Challenges and Learnings</h2>\n<ul id=\"bkmrk-encountered-limitati\">\n<li>Encountered limitations with OpenWebUI client development, leading to considerations for building a custom client solution.</li>\n<li>Navigated complexities of base64 data handling, memory synchronization, and multi-tool orchestration.</li>\n</ul>\n<p id=\"bkmrk-this-diary-will-evol\">This diary will evolve as we continue to develop, troubleshoot, and expand our system capabilities, serving as both a reflective record and a guide for future efforts.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

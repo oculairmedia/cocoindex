@@ -2,10 +2,10 @@
   "id": 151,
   "title": "Non-functional Requirements",
   "slug": "non-functional-requirements",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/non-functional-requirements",
+  "url": "https://knowledge.oculair.ca/page/151",
   "updated_at": "2025-09-08T16:19:15.000000Z",
   "body_html": "<h1 id=\"bkmrk-non-functional-requi\">Non-functional Requirements</h1>\n<h2 id=\"bkmrk-security\">Security</h2>\n<ul id=\"bkmrk-https-only-webhook-t\">\n<li>HTTPS-only webhook targets</li>\n<li>HMAC-SHA256 signatures (<code>X-Huly-Signature-256</code>)</li>\n<li>API key or session-based auth for management endpoints</li>\n<li>IP allowlist (optional)</li>\n</ul>\n<h2 id=\"bkmrk-reliability\">Reliability</h2>\n<ul id=\"bkmrk-at-least-once-delive\">\n<li>At-least-once delivery semantics</li>\n<li>Retry with exponential backoff; max attempts configurable</li>\n<li>Dead letter queue / failed status tracking</li>\n</ul>\n<h2 id=\"bkmrk-performance\">Performance</h2>\n<ul id=\"bkmrk-minimal-overhead-to-\">\n<li>Minimal overhead to transaction processing</li>\n<li>Async delivery via queue/worker when available</li>\n<li>Indexed queries for listing &amp; history</li>\n</ul>\n<h2 id=\"bkmrk-compliance\">Compliance</h2>\n<ul id=\"bkmrk-log-redaction-of-sec\">\n<li>Log redaction of secrets</li>\n<li>PII considerations in payloads where applicable</li>\n</ul>\n<h2 id=\"bkmrk-operability\">Operability</h2>\n<ul id=\"bkmrk-health-checks%2C-metri\">\n<li>Health checks, metrics, structured logs</li>\n<li>Config via env vars; safe defaults</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

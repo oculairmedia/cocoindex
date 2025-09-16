@@ -2,10 +2,10 @@
   "id": 148,
   "title": "Standalone vs Integrated Webhooks",
   "slug": "standalone-vs-integrated-webhooks",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/standalone-vs-integrated-webhooks",
+  "url": "https://knowledge.oculair.ca/page/148",
   "updated_at": "2025-09-08T16:19:13.000000Z",
   "body_html": "<h1 id=\"bkmrk-standalone-vs-integr\">Standalone vs Integrated Webhooks</h1>\n<h2 id=\"bkmrk-summary\">Summary</h2>\n<p id=\"bkmrk-huly-supports-a-stan\">Huly supports a standalone webhook service today. This page compares it with a proposed integrated plugin approach.</p>\n<h2 id=\"bkmrk-standalone-service-%28\">Standalone Service (Current)</h2>\n<ul id=\"bkmrk-separate-microservic\">\n<li>Separate microservice listening to MongoDB Change Streams</li>\n<li>Pros:\n<ul>\n<li>Isolated deployment; no changes to Huly core</li>\n<li>Mature retry/monitoring</li>\n</ul>\n</li>\n<li>Cons:\n<ul>\n<li>No access to Huly internals (permissions, business logic)</li>\n<li>Requires replica set &amp; separate operations</li>\n<li>Event derivation from DB deltas can drift from business semantics</li>\n</ul>\n</li>\n</ul>\n<h2 id=\"bkmrk-integrated-plugin-%28p\">Integrated Plugin (Proposed)</h2>\n<ul id=\"bkmrk-native-trigger-based\">\n<li>Native trigger-based event creation inside Huly</li>\n<li>Pros:\n<ul>\n<li>Uses transaction semantics; accurate event types</li>\n<li>Access to hierarchy, permissions, and models</li>\n<li>Unified logging/monitoring/security</li>\n</ul>\n</li>\n<li>Cons:\n<ul>\n<li>Requires work in core plugin system</li>\n<li>Needs careful performance and isolation</li>\n</ul>\n</li>\n</ul>\n<h2 id=\"bkmrk-recommendation\">Recommendation</h2>\n<ul id=\"bkmrk-implement-the-integr\">\n<li>Implement the integrated plugin in phases while keeping the standalone service available as a fallback/migration path.</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

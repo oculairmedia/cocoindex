@@ -48,7 +48,11 @@
       "Bash(export BS_TOKEN_SECRET=735wM5dScfUkcOy7qcrgqQ1eC5fBF7IE)",
       "Bash(docker logs:*)",
       "Bash(docker stop:*)",
-      "Bash(export:*)"
+      "Bash(export:*)",
+      "mcp__huly-mcp__huly_create_project",
+      "mcp__huly-mcp__huly_list_projects",
+      "mcp__huly-mcp__huly_create_issue",
+      "mcp__huly-mcp__huly_assign_repository_to_project"
     ],
     "deny": []
   }

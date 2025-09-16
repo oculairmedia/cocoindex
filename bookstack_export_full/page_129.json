@@ -2,10 +2,10 @@
   "id": 129,
   "title": "Content Acquisition (Readarr)",
   "slug": "content-acquisition-readarr",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/content-acquisition-readarr",
+  "url": "https://knowledge.oculair.ca/page/129",
   "updated_at": "2025-05-29T02:33:09.000000Z",
   "body_html": "<h3 id=\"bkmrk-content-acquisition%3A\">Content Acquisition: Readarr</h3>\n<p id=\"bkmrk-role%3A-readarr-is-the\"><strong>Role:</strong> Readarr is the initial component in the RAG pipeline, responsible for the automated sourcing and acquisition of digital documents and books.</p>\n<p id=\"bkmrk-functionality%3A\"><strong>Functionality:</strong></p>\n<ul id=\"bkmrk-automated-sourcing%3A-\">\n<li><strong>Automated Sourcing:</strong> Integrates with various sources (e.g., Usenet, torrents) to automatically find and download desired content based on predefined criteria.</li>\n<li><strong>Content Monitoring:</strong> Monitors release groups and RSS feeds for new content, ensuring timely acquisition.</li>\n<li><strong>Metadata Management:</strong> Automatically retrieves and organizes metadata for acquired books, including author, title, genre, and publication details.</li>\n<li><strong>Format Handling:</strong> Supports various e-book formats and can be configured to prioritize specific formats.</li>\n</ul>\n<p id=\"bkmrk-integration-within-t\"><strong>Integration within the Pipeline:</strong> Readarr acts as the entry point for raw content, feeding directly into Audiobookshelf for further management and processing. Its efficiency in acquiring diverse content is crucial for the richness and breadth of the knowledge base available to the Letta agents.</p>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

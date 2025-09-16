@@ -19,7 +19,7 @@ echo "✅ FalkorDB is ready"
 # Export BookStack data first using scripts (if credentials provided)
 if [ -n "$BS_URL" ] && [ -n "$BS_TOKEN_ID" ] && [ -n "$BS_TOKEN_SECRET" ]; then
     echo "📥 Exporting BookStack JSON files..."
-    python scripts/bookstack_export.py --limit 200 || {
+    python scripts/bookstack_export.py --limit 200 --out bookstack_export_full || {
         echo "⚠️  BookStack export failed, check credentials"
         exit 1
     }
@@ -28,7 +28,7 @@ fi
 # Continuous export loop using simple pipeline
 while true; do
     echo "📥 Running simple CocoIndex pipeline..."
-    echo "y" | cocoindex update --setup flows/bookstack_ollama_simple.py || {
+    cocoindex update --setup --force flows/bookstack_ollama_simple.py || {
         echo "⚠️  Setup failed, retrying in 60s..."
         sleep 60
         continue

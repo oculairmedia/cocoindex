@@ -2,12 +2,12 @@
   "id": 89,
   "title": "Searcher Agents",
   "slug": "searcher-agents",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/searcher-agents",
+  "url": "https://knowledge.oculair.ca/page/89",
   "updated_at": "2025-04-10T02:31:22.000000Z",
   "body_html": "<h1 id=\"bkmrk-searcher-agent-imple\">Searcher Agent Implementation</h1>\n<h2 id=\"bkmrk-specialization-types\">Specialization Types</h2>\n<ol id=\"bkmrk-academic-searcher-fo\">\n<li>\n<p><strong>Academic Searcher</strong></p>\n<ul>\n<li>Focus: Scholarly papers</li>\n<li>Sources: Semantic Scholar, arXiv</li>\n<li>Filters: Publication date, citation count</li>\n</ul>\n</li>\n<li>\n<p><strong>Commercial Searcher</strong></p>\n<ul>\n<li>Focus: Industry implementations</li>\n<li>Sources: Company blogs, news sites</li>\n<li>Filters: Company size, relevance</li>\n</ul>\n</li>\n<li>\n<p><strong>Technical Searcher</strong></p>\n<ul>\n<li>Focus: Implementation details</li>\n<li>Sources: GitHub, Stack Overflow</li>\n<li>Filters: Code quality, activity</li>\n</ul>\n</li>\n</ol>\n<h2 id=\"bkmrk-letta-implementation\">Letta Implementation</h2>\n<pre id=\"bkmrk-class-searcheragent%28\"><code class=\"language-python\">class SearcherAgent(letta.Agent):\n    def __init__(self, specialization):\n        tools = [\n            AcademicSearchTool if specialization == \"academic\" else\n            CommercialSearchTool if specialization == \"commercial\" else\n            TechnicalSearchTool\n        ]\n        super().__init__(tools=tools)\n    \n    async def execute_search(self, params):\n        # Specialized search logic\n        return await self.tools[0].search(**params)\n</code></pre>\n<h2 id=\"bkmrk-performance-optimiza\">Performance Optimization</h2>\n<ul id=\"bkmrk-query-rewriting-sour\">\n<li>Query rewriting</li>\n<li>Source prioritization</li>\n<li>Early termination</li>\n</ul>\n",
   "tags": [
-    "agent_type"
+    "agent_type:searcher"
   ],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

@@ -46,9 +46,9 @@ services:
         condition: service_healthy
     environment:
       # FalkorDB Configuration
-      FALKOR_HOST: falkordb
-      FALKOR_PORT: 6379
-      FALKOR_GRAPH: graphiti_migration
+      FALKOR_HOST: ${FALKOR_HOST}
+      FALKOR_PORT: ${FALKOR_PORT}
+      FALKOR_GRAPH: ${FALKOR_GRAPH}
       
       # PostgreSQL Configuration (for CocoIndex)
       COCOINDEX_DATABASE_URL: postgresql://cocoindex:cocoindex@postgres:5432/cocoindex

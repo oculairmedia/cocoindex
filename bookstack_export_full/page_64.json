@@ -2,10 +2,10 @@
   "id": 64,
   "title": "Google Calendar Integration",
   "slug": "google-calendar-integration",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/google-calendar-integration",
+  "url": "https://knowledge.oculair.ca/page/64",
   "updated_at": "2025-02-22T16:11:12.000000Z",
   "body_html": "<p id=\"bkmrk-integration-with-emm\">Integration with Emmanuel's Google Calendar.</p><p id=\"bkmrk-approach%3A-phased-imp\"><strong>Approach:</strong> Phased implementation, starting with read-only access to the calendar.</p><p id=\"bkmrk-future-goal%3A-managin\"><strong>Future Goal:</strong> Managing events and scheduling directly.</p>",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

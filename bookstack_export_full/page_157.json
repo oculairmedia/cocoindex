@@ -2,10 +2,10 @@
   "id": 157,
   "title": "Risks and Mitigations",
   "slug": "risks-and-mitigations",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/risks-and-mitigations",
+  "url": "https://knowledge.oculair.ca/page/157",
   "updated_at": "2025-09-08T16:19:20.000000Z",
   "body_html": "<h1 id=\"bkmrk-risks-and-mitigation\">Risks and Mitigations</h1>\n<h2 id=\"bkmrk-risks\">Risks</h2>\n<ul id=\"bkmrk-performance-impact-o\">\n<li>Performance impact on transaction processing</li>\n<li>Incorrect event mapping causing noisy deliveries</li>\n<li>Retry storms against failing endpoints</li>\n<li>Security misconfiguration (secrets, IPs)</li>\n</ul>\n<h2 id=\"bkmrk-mitigations\">Mitigations</h2>\n<ul id=\"bkmrk-use-async-queues%3B-ca\">\n<li>Use async queues; cap batch sizes</li>\n<li>Incremental rollout with tests and audit logs</li>\n<li>Exponential backoff + circuit breaker</li>\n<li>Enforce HTTPS and signatures; secret rotation</li>\n<li>Comprehensive metrics and alerts</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

@@ -2,10 +2,10 @@
   "id": 168,
   "title": "Environment Configuration",
   "slug": "environment-configuration",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/environment-configuration",
+  "url": "https://knowledge.oculair.ca/page/168",
   "updated_at": "2025-09-08T16:19:28.000000Z",
   "body_html": "<h1 id=\"bkmrk-environment-configur\">Environment Configuration</h1>\n<h2 id=\"bkmrk-key-variables\">Key Variables</h2>\n<pre id=\"bkmrk-webhook_enabled%3Dtrue\"><code>WEBHOOK_ENABLED=true\nWEBHOOK_MAX_RETRIES=3\nWEBHOOK_TIMEOUT=30000\nWEBHOOK_RATE_LIMIT=100\nWEBHOOK_SIGNATURE_ALGORITHM=sha256\nWEBHOOK_SECRET_KEY=change-me\nWEBHOOK_API_KEY=change-me\nWEBHOOK_ALLOWED_IPS=192.168.1.0/24,10.0.0.0/8\nWEBHOOK_BATCH_SIZE=10\nWEBHOOK_QUEUE_SIZE=1000\nWEBHOOK_WORKER_THREADS=4\nWEBHOOK_METRICS_ENABLED=true\nWEBHOOK_LOG_LEVEL=info\nWEBHOOK_HEALTH_CHECK_INTERVAL=30000\n</code></pre>\n<h2 id=\"bkmrk-notes\">Notes</h2>\n<ul id=\"bkmrk-use-secret-managers-\">\n<li>Use secret managers for sensitive values</li>\n<li>Provide sane defaults; allow overrides per env</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

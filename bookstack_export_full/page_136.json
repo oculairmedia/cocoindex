@@ -2,10 +2,10 @@
   "id": 136,
   "title": "AgentSet.ai vs Haystack Methodologies",
   "slug": "agentsetai-vs-haystack-methodologies",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/agentsetai-vs-haystack-methodologies",
+  "url": "https://knowledge.oculair.ca/page/136",
   "updated_at": "2025-05-30T04:11:57.000000Z",
   "body_html": "<h2 id=\"bkmrk-comparison-of-agents\">Comparison of AgentSet.ai and Haystack</h2>\n<h3 id=\"bkmrk-methodologies\">Methodologies</h3>\n<ul id=\"bkmrk-agentset.ai%3A-platfor\">\n<li><strong>AgentSet.ai:</strong> Platform for building, deploying, and managing AI agents.</li>\n<li><strong>Haystack:</strong> Web application by Deepset, deploying Haystack pipelines as REST APIs.</li>\n</ul>\n<h3 id=\"bkmrk-tests-conducted\">Tests Conducted</h3>\n<ul id=\"bkmrk-embedding-functions-\">\n<li>Embedding functions</li>\n<li>Dynamic tool pruning</li>\n<li>Integration workflows</li>\n</ul>\n<h3 id=\"bkmrk-observations\">Observations</h3>\n<ul id=\"bkmrk-performance-differen\">\n<li>Performance differences</li>\n<li>Integration ease and flexibility</li>\n</ul>\n<h3 id=\"bkmrk-conclusion\">Conclusion</h3>\n<ul id=\"bkmrk-recommendations-base\">\n<li>Recommendations based on specific use-cases and requirements.</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }

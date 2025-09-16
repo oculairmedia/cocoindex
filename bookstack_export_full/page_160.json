@@ -2,10 +2,10 @@
   "id": 160,
   "title": "Trigger Implementation Details",
   "slug": "trigger-implementation-details",
-  "url": "https://knowledge.oculair.ca/books/unknown/page/trigger-implementation-details",
+  "url": "https://knowledge.oculair.ca/page/160",
   "updated_at": "2025-09-08T16:19:22.000000Z",
   "body_html": "<h1 id=\"bkmrk-trigger-implementati\">Trigger Implementation Details</h1>\n<h2 id=\"bkmrk-strategy\">Strategy</h2>\n<ul id=\"bkmrk-subscribe-to-txcud-e\">\n<li>Subscribe to TxCUD events for relevant classes (Issue, Project, Comment, Attachment)</li>\n<li>Map Create/Update/Delete to event types</li>\n<li>Inspect <code>TxUpdateDoc.operations</code> for specific change types (status/assignee/priority)</li>\n</ul>\n<h2 id=\"bkmrk-filtering\">Filtering</h2>\n<ul id=\"bkmrk-evaluate-filters-aga\">\n<li>Evaluate filters against built doc or changed fields</li>\n<li>Use hierarchy checks for class derivation</li>\n</ul>\n<h2 id=\"bkmrk-output\">Output</h2>\n<ul id=\"bkmrk-create-webhookevent-\">\n<li>Create <code>WebhookEvent</code> Tx with payload, <code>deliveryId</code>, <code>status='pending'</code></li>\n<li>Schedule delivery via queue or background task</li>\n</ul>\n",
   "tags": [],
-  "book": "Unknown",
-  "chapter": ""
+  "book": null,
+  "chapter": null
 }
