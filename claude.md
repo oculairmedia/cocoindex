@@ -1,5 +1,20 @@
 # CocoIndex ↔ Graphiti FalkorDB Integration — Objectives & Plan
 
+## 0) Project Information
+
+**Huly Project Details:**
+- **Project Name**: CocoIndex Data Pipelines
+- **Project Code**: COCO
+- **Issues**: 5 active issues
+- **Description**: CocoIndex-based data transformation pipelines for knowledge extraction and graph ingestion. Manages multiple flows including BookStack-to-FalkorDB, LLM entity enhancement, and containerized processing workflows. Focused on batch processing, data quality, and scalable pipeline architecture.
+- **Status**: Active (Public, Not Archived)
+- **Huly URL**: Available via MCP server at http://192.168.50.90:3457/mcp
+
+**Repository Information:**
+- **Location**: /opt/stacks/cocoindex
+- **Current Branch**: main
+- **Git Status**: Modified files include flows, docker configs, and pipeline scripts
+
 ## 1) Executive Summary
 We are building a fast, incremental ingestion pipeline that pulls BookStack knowledge-base content and deposits it into a Graphiti-compatible knowledge graph running on FalkorDB. We will use CocoIndex for high‑performance ingestion, normalization, chunking, and embeddings, and write directly to FalkorDB via Cypher in a way that strictly conforms to Graphiti’s schema and indexing expectations. This allows Graphiti to treat the new nodes/edges identically to existing data.
 

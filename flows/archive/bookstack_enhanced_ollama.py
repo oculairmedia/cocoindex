@@ -237,7 +237,8 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b"
+                    model="gemma3:12b",
+                    address="http://100.81.139.20:11434"
                 ),
                 output_type=DocumentSummary,
                 instruction="Please summarize the content of this BookStack document. Extract a clear title and concise summary."
@@ -249,7 +250,8 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b"
+                    model="gemma3:12b",
+                    address="http://100.81.139.20:11434"
                 ),
                 output_type=list[Entity],
                 instruction=(
@@ -266,7 +268,8 @@ def bookstack_enhanced_ollama_flow(flow_builder: FlowBuilder, data_scope: DataSc
             cocoindex.functions.ExtractByLlm(
                 llm_spec=cocoindex.LlmSpec(
                     api_type=cocoindex.LlmApiType.OLLAMA,
-                    model="gemma3:12b"
+                    model="gemma3:12b",
+                    address="http://100.81.139.20:11434"
                 ),
                 output_type=list[Relationship],
                 instruction=(
