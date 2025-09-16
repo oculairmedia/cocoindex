@@ -58,27 +58,38 @@ if [ -n "$OLLAMA_URL" ]; then
     fi
 fi
 
-# Export BookStack data first (if credentials provided)
+# Export BookStack JSON files only if directory is empty (no direct FalkorDB export)
 if [ -n "$BS_URL" ] && [ -n "$BS_TOKEN_ID" ] && [ -n "$BS_TOKEN_SECRET" ]; then
-    echo "📥 Exporting BookStack data..."
-    python export_all_to_falkor.py || {
-        echo "⚠️  Direct export failed, continuing with CocoIndex pipeline..."
-    }
+    if [ ! -d "bookstack_export" ] || [ -z "$(ls -A bookstack_export 2>/dev/null)" ]; then
+        echo "📥 Exporting BookStack JSON files for CocoIndex processing..."
+        python scripts/bookstack_export.py --limit 200 || {
+            echo "⚠️  BookStack export failed, check credentials"
+            echo "⏩  Continuing with existing files if available..."
+        }
+    else
+        echo "📂 Using existing BookStack export files ($(ls bookstack_export/*.json 2>/dev/null | wc -l) files)"
+    fi
 fi
 
-# Setup CocoIndex flow
+# Setup CocoIndex flow ONLY - no direct export
 echo "🔧 Setting up CocoIndex flow..."
 export COCOINDEX_DATABASE_URL="${COCOINDEX_DATABASE_URL:-postgresql://cocoindex:cocoindex@postgres:5432/cocoindex}"
 echo "Using database: $COCOINDEX_DATABASE_URL"
 
-# Initialize CocoIndex and create tables
-echo "📊 Initializing database tables..."
-cocoindex update --setup "$FLOW_FILE"
+# Setup CocoIndex flow (non-interactive)
+echo "📊 Setting up CocoIndex flow..."
+echo "y" | cocoindex update --setup "$FLOW_FILE" || {
+    echo "⚠️  CocoIndex setup failed, trying manual confirmation..."
+    cocoindex update --setup "$FLOW_FILE"
+}
 
-# Run one-time update to ensure everything works
-echo "🔄 Running initial update..."
-cocoindex update "$FLOW_FILE"
+# Run the enhanced pipeline once
+echo "🔄 Running enhanced pipeline..."
+cocoindex update "$FLOW_FILE" || {
+    echo "⚠️  Pipeline failed, retrying in 60s..."
+    sleep 60
+}
 
-# Start the pipeline
-echo "🚀 Starting continuous pipeline..."
+# Start continuous monitoring
+echo "🚀 Starting continuous enhanced pipeline..."
 exec cocoindex update "$FLOW_FILE" -L

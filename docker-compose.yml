@@ -62,6 +62,9 @@ services:
       PIPELINE_MODE: ${PIPELINE_MODE:-enhanced}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       USE_SIMPLE_STARTUP: ${USE_SIMPLE_STARTUP:-false}
+      
+      # Ollama Configuration (external instance)
+      OLLAMA_URL: ${OLLAMA_URL:-http://100.81.139.20:11434}
     volumes:
       - ./bookstack_export_full:/app/bookstack_export_full
       - ./logs:/app/logs

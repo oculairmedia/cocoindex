@@ -42,7 +42,13 @@
       "Bash(taskkill:*)",
       "Bash(export PIPELINE_MODE=enhanced)",
       "Bash(export USE_SIMPLE_STARTUP=true)",
-      "Bash(export USE_SIMPLE_STARTUP=false)"
+      "Bash(export USE_SIMPLE_STARTUP=false)",
+      "Bash(export BS_URL=https://knowledge.oculair.ca)",
+      "Bash(export BS_TOKEN_ID=POnHR9Lbvm73T2IOcyRSeAqpA8bSGdMT)",
+      "Bash(export BS_TOKEN_SECRET=735wM5dScfUkcOy7qcrgqQ1eC5fBF7IE)",
+      "Bash(docker logs:*)",
+      "Bash(docker stop:*)",
+      "Bash(export:*)"
     ],
     "deny": []
   }
