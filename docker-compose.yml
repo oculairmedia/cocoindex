@@ -1,21 +1,22 @@
-
 services:
   # FalkorDB - Graph Database
   falkordb:
     image: falkordb/falkordb:latest
     container_name: falkordb
     ports:
-      - "6379:6379"
-      - "3000:3000"
+      - 6379:6379
+      - 3001:3000
     volumes:
       - falkor_data:/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+        - CMD
+        - redis-cli
+        - ping
       interval: 30s
       timeout: 10s
       retries: 3
-
   # PostgreSQL - CocoIndex Backend
   postgres:
     image: postgres:15
@@ -25,16 +26,17 @@ services:
       POSTGRES_USER: cocoindex
       POSTGRES_PASSWORD: cocoindex
     ports:
-      - "5433:5432"
+      - 5433:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cocoindex"]
+      test:
+        - CMD-SHELL
+        - pg_isready -U cocoindex
       interval: 30s
       timeout: 10s
       retries: 3
-
   # BookStack Pipeline - Enhanced Extraction
   bookstack-pipeline:
     build: .
@@ -49,47 +51,37 @@ services:
       FALKOR_HOST: ${FALKOR_HOST}
       FALKOR_PORT: ${FALKOR_PORT}
       FALKOR_GRAPH: ${FALKOR_GRAPH}
-      
       # PostgreSQL Configuration (for CocoIndex)
       COCOINDEX_DATABASE_URL: postgresql://cocoindex:cocoindex@postgres:5432/cocoindex
-      
       # BookStack Configuration (set these in .env file)
       BS_URL: ${BS_URL}
       BS_TOKEN_ID: ${BS_TOKEN_ID}
       BS_TOKEN_SECRET: ${BS_TOKEN_SECRET}
-      
       # Pipeline Configuration
-      PIPELINE_MODE: ${PIPELINE_MODE:-enhanced}
+      PIPELINE_TYPE: ${PIPELINE_TYPE:-bookstack}  # Options: bookstack, huly, both
+      PIPELINE_MODE: ${PIPELINE_MODE:-graphiti}   # Always use Graphiti-compliant
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
       USE_SIMPLE_STARTUP: ${USE_SIMPLE_STARTUP:-false}
-      
+      # Huly Configuration (if using huly or both)
+      HULY_URL: ${HULY_URL}
+      HULY_TOKEN: ${HULY_TOKEN}
       # Ollama Configuration (external instance)
       OLLAMA_URL: ${OLLAMA_URL:-http://100.81.139.20:11434}
     volumes:
       - ./bookstack_export_full:/app/bookstack_export_full
+      - ./huly_export_mock:/app/huly_export_mock
+      - ./huly_export_full:/app/huly_export_full
       - ./logs:/app/logs
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/usr/local/bin/docker-healthcheck.sh"]
+      test:
+        - CMD
+        - /usr/local/bin/docker-healthcheck.sh
       interval: 60s
       timeout: 30s
       retries: 3
       start_period: 120s
-
-
-  # Optional: Ollama for local LLM (if not using external Ollama)
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    restart: unless-stopped
-    profiles:
-      - ollama  # Only start with --profile ollama
-
 volumes:
-  falkor_data:
-  postgres_data:
-  ollama_data:
+  falkor_data: null
+  postgres_data: null
+networks: {}

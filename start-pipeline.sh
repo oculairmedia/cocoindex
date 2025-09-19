@@ -3,9 +3,11 @@
 
 set -e
 
-echo "🚀 Starting BookStack to FalkorDB Pipeline"
-echo "Pipeline Mode: ${PIPELINE_MODE:-enhanced}"
+echo "🚀 Starting Graphiti-Compliant Data Pipeline"
+echo "Pipeline Type: ${PIPELINE_TYPE:-bookstack}"
+echo "Pipeline Mode: ${PIPELINE_MODE:-graphiti}"
 echo "BookStack URL: ${BS_URL}"
+echo "Huly URL: ${HULY_URL}"
 echo "FalkorDB: ${FALKOR_HOST}:${FALKOR_PORT}"
 echo "Graph: ${FALKOR_GRAPH}"
 
@@ -36,17 +38,24 @@ except Exception as e:
     done
 fi
 
-# Choose pipeline based on mode
-case "${PIPELINE_MODE:-enhanced}" in
-    "simple")
-        FLOW_FILE="flows/bookstack_ollama_simple.py"
-        echo "🏃 Using Simple Pipeline (keyword-based extraction)"
-        ;;
-    "enhanced"|*)
-        FLOW_FILE="flows/bookstack_enhanced_ollama.py"
-        echo "🧠 Using Enhanced Pipeline (Ollama LLM + CocoIndex integration)"
-        ;;
-esac
+# Function to setup and run a pipeline
+run_pipeline() {
+    local flow_file=$1
+    local pipeline_name=$2
+
+    echo "📊 Setting up $pipeline_name pipeline..."
+    cocoindex update --setup --force "$flow_file" || {
+        echo "⚠️  $pipeline_name setup failed, retrying in 60s..."
+        sleep 60
+        cocoindex update --setup --force "$flow_file"
+    }
+
+    echo "🔄 Running $pipeline_name pipeline..."
+    cocoindex update "$flow_file" || {
+        echo "⚠️  $pipeline_name pipeline failed, retrying in 60s..."
+        sleep 60
+    }
+}
 
 # Test Ollama connectivity (optional)
 if [ -n "$OLLAMA_URL" ]; then
@@ -58,38 +67,90 @@ if [ -n "$OLLAMA_URL" ]; then
     fi
 fi
 
-# Export BookStack JSON files only if directory is empty (no direct FalkorDB export)
-if [ -n "$BS_URL" ] && [ -n "$BS_TOKEN_ID" ] && [ -n "$BS_TOKEN_SECRET" ]; then
-    if [ ! -d "bookstack_export" ] || [ -z "$(ls -A bookstack_export 2>/dev/null)" ]; then
-        echo "📥 Exporting BookStack JSON files for CocoIndex processing..."
-        python scripts/bookstack_export.py --limit 200 --out bookstack_export_full || {
-            echo "⚠️  BookStack export failed, check credentials"
-            echo "⏩  Continuing with existing files if available..."
-        }
-    else
-        echo "📂 Using existing BookStack export files ($(ls bookstack_export/*.json 2>/dev/null | wc -l) files)"
-    fi
-fi
+# Export data based on pipeline type
+case "${PIPELINE_TYPE:-bookstack}" in
+    "bookstack"|"both")
+        # Export BookStack JSON files only if directory is empty
+        if [ -n "$BS_URL" ] && [ -n "$BS_TOKEN_ID" ] && [ -n "$BS_TOKEN_SECRET" ]; then
+            if [ ! -d "bookstack_export_full" ] || [ -z "$(ls -A bookstack_export_full 2>/dev/null)" ]; then
+                echo "📥 Exporting BookStack JSON files for CocoIndex processing..."
+                python scripts/bookstack_export.py --limit 200 --out bookstack_export_full || {
+                    echo "⚠️  BookStack export failed, check credentials"
+                    echo "⏩  Continuing with existing files if available..."
+                }
+            else
+                echo "📂 Using existing BookStack export files ($(ls bookstack_export_full/*.json 2>/dev/null | wc -l) files)"
+            fi
+        fi
+        ;;
+esac
 
-# Setup CocoIndex flow ONLY - no direct export
-echo "🔧 Setting up CocoIndex flow..."
+case "${PIPELINE_TYPE:-bookstack}" in
+    "huly"|"both")
+        # Export Huly data if configured
+        if [ -n "$HULY_URL" ] && [ -n "$HULY_TOKEN" ]; then
+            if [ ! -d "huly_export_full" ] || [ -z "$(ls -A huly_export_full 2>/dev/null)" ]; then
+                echo "📥 Exporting Huly data for CocoIndex processing..."
+                python scripts/huly_export.py --url "$HULY_URL" --token "$HULY_TOKEN" --out huly_export_full || {
+                    echo "⚠️  Huly export failed, check credentials"
+                    echo "⏩  Using mock data if available..."
+                }
+            else
+                echo "📂 Using existing Huly export files ($(ls huly_export_full/*.json 2>/dev/null | wc -l) files)"
+            fi
+        else
+            echo "⏩ Using Huly mock data (no credentials configured)"
+        fi
+        ;;
+esac
+
+# Setup CocoIndex database
+echo "🔧 Setting up CocoIndex database..."
 export COCOINDEX_DATABASE_URL="${COCOINDEX_DATABASE_URL:-postgresql://cocoindex:cocoindex@postgres:5432/cocoindex}"
 echo "Using database: $COCOINDEX_DATABASE_URL"
 
-# Setup CocoIndex flow (non-interactive)
-echo "📊 Setting up CocoIndex flow..."
-cocoindex update --setup --force "$FLOW_FILE" || {
-    echo "⚠️  CocoIndex setup failed, retrying in 60s..."
-    sleep 60
-}
+# Run pipelines based on type
+case "${PIPELINE_TYPE:-bookstack}" in
+    "bookstack")
+        FLOW_FILE="flows/bookstack_graphiti_compliant.py"
+        echo "📚 Running BookStack Graphiti-compliant pipeline"
+        run_pipeline "$FLOW_FILE" "BookStack"
+        # Start continuous monitoring for BookStack
+        echo "🚀 Starting continuous BookStack pipeline..."
+        exec cocoindex update "$FLOW_FILE" -L
+        ;;
+    "huly")
+        FLOW_FILE="flows/huly_graphiti_compliant.py"
+        echo "📋 Running Huly Graphiti-compliant pipeline"
+        run_pipeline "$FLOW_FILE" "Huly"
+        # Start continuous monitoring for Huly
+        echo "🚀 Starting continuous Huly pipeline..."
+        exec cocoindex update "$FLOW_FILE" -L
+        ;;
+    "both")
+        echo "🔄 Running both BookStack and Huly pipelines"
+        # Setup and run BookStack first
+        BOOKSTACK_FLOW="flows/bookstack_graphiti_compliant.py"
+        run_pipeline "$BOOKSTACK_FLOW" "BookStack"
 
-# Run the enhanced pipeline once
-echo "🔄 Running enhanced pipeline..."
-cocoindex update "$FLOW_FILE" || {
-    echo "⚠️  Pipeline failed, retrying in 60s..."
-    sleep 60
-}
+        # Setup and run Huly
+        HULY_FLOW="flows/huly_graphiti_compliant.py"
+        run_pipeline "$HULY_FLOW" "Huly"
 
-# Start continuous monitoring
-echo "🚀 Starting continuous enhanced pipeline..."
-exec cocoindex update "$FLOW_FILE" -L
+        # Run both in continuous mode (alternating)
+        echo "🚀 Starting continuous monitoring for both pipelines..."
+        while true; do
+            echo "📚 Running BookStack update..."
+            cocoindex update "$BOOKSTACK_FLOW"
+            echo "📋 Running Huly update..."
+            cocoindex update "$HULY_FLOW"
+            echo "⏳ Waiting 60 seconds before next cycle..."
+            sleep 60
+        done
+        ;;
+    *)
+        echo "❌ Unknown pipeline type: ${PIPELINE_TYPE}"
+        echo "   Valid options: bookstack, huly, both"
+        exit 1
+        ;;
+esac

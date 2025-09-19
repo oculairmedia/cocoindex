@@ -1,4 +1,4 @@
-# BookStack to FalkorDB Enhanced Pipeline Container
+# BookStack and Huly to FalkorDB Graphiti-Compliant Pipeline Container
 FROM python:3.12-slim
 
 # Set working directory
@@ -25,8 +25,8 @@ RUN pip install --no-cache-dir \
 # Copy application code
 COPY . .
 
-# Create data directories
-RUN mkdir -p bookstack_export_full logs
+# Create data directories for both pipelines
+RUN mkdir -p bookstack_export_full huly_export_mock huly_export_full logs
 
 # Set environment variables with defaults
 ENV PYTHONPATH=/app
@@ -36,9 +36,15 @@ ENV PYTHONUNBUFFERED=1
 ENV FALKOR_HOST=falkordb
 ENV FALKOR_PORT=6379
 ENV FALKOR_GRAPH=graphiti_migration
+# BookStack configuration
 ENV BS_URL=""
 ENV BS_TOKEN_ID=""
 ENV BS_TOKEN_SECRET=""
+# Huly configuration
+ENV HULY_URL=""
+ENV HULY_TOKEN=""
+# Pipeline selection: bookstack, huly, or both
+ENV PIPELINE_TYPE="bookstack"
 
 # Copy and setup scripts
 COPY docker-healthcheck.sh start-pipeline.sh start-pipeline-simple.sh /usr/local/bin/
