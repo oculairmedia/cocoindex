@@ -6,7 +6,7 @@ Reads Huly project data via REST API and writes JSON files for processing.
 Required env vars:
   HULY_API_URL (default: http://192.168.50.90:3457/api)
 Optional env:
-  OUT_DIR (default: ./huly_export)
+  HULY_EXPORT_DIR (default: ./huly_export_full)
   EXPORT_LIMIT (default: no limit)
 
 This script does not run automatically. Execute manually when ready, e.g.:
@@ -29,9 +29,12 @@ def getenv_or_default(name: str, default: str) -> str:
     return os.getenv(name, default)
 
 
-def create_api_session() -> requests.Session:
+def create_api_session(base_url: Optional[str] = None) -> requests.Session:
     """Create HTTP session for Huly REST API calls."""
-    base_url = getenv_or_default("HULY_API_URL", "http://192.168.50.90:3457/api")
+    base_url = base_url or getenv_or_default("HULY_API_URL", "http://192.168.50.90:3457/api")
+
+    if not base_url:
+        raise ValueError("Huly API base URL is not configured. Set HULY_API_URL or pass --url.")
 
     session = requests.Session()
     session.headers.update({
@@ -368,21 +371,27 @@ def main():
     """Main export function."""
     parser = argparse.ArgumentParser(description="Export Huly data to JSON files")
     parser.add_argument("--limit", type=int, help="Limit number of issues per project")
-    parser.add_argument("--out", default="huly_export", help="Output directory")
+    parser.add_argument("--out", default=os.getenv("HULY_EXPORT_DIR", "huly_export_full"), help="Output directory")
     parser.add_argument("--projects-only", action="store_true", help="Export only projects")
+    parser.add_argument("--url", help="Override Huly API base URL (defaults to HULY_API_URL env)")
 
     args = parser.parse_args()
+
+    api_url = args.url or getenv_or_default("HULY_API_URL", "http://192.168.50.90:3457/api")
+    if not api_url:
+        print("❌ Huly API URL not provided. Set HULY_API_URL or pass --url.")
+        sys.exit(1)
 
     # Create output directory
     out_dir = Path(args.out)
     out_dir.mkdir(exist_ok=True)
 
     print(f"🚀 Starting Huly export to {out_dir}")
-    print(f"API URL: {getenv_or_default('HULY_API_URL', 'http://192.168.50.90:3457/api')}")
+    print(f"API URL: {api_url}")
 
     try:
         # Create API session
-        session = create_api_session()
+        session = create_api_session(api_url)
 
         # Test API connectivity
         health_response = session.get(f"{session.base_url}/health")

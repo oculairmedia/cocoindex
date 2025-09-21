@@ -7,9 +7,11 @@ echo "🚀 Starting Graphiti-Compliant Data Pipeline"
 echo "Pipeline Type: ${PIPELINE_TYPE:-bookstack}"
 echo "Pipeline Mode: ${PIPELINE_MODE:-graphiti}"
 echo "BookStack URL: ${BS_URL}"
-echo "Huly URL: ${HULY_URL}"
+echo "Huly API: ${HULY_API_URL:-${HULY_URL:-"(not set)"}}"
 echo "FalkorDB: ${FALKOR_HOST}:${FALKOR_PORT}"
 echo "Graph: ${FALKOR_GRAPH}"
+
+export HULY_EXPORT_PATH="${HULY_EXPORT_PATH:-huly_export_full}"
 
 # Wait for dependencies
 echo "⏳ Waiting for FalkorDB..."
@@ -87,19 +89,23 @@ esac
 
 case "${PIPELINE_TYPE:-bookstack}" in
     "huly"|"both")
-        # Export Huly data if configured
-        if [ -n "$HULY_URL" ] && [ -n "$HULY_TOKEN" ]; then
+        # Export Huly data if API configured
+        HULY_DATA_URL="${HULY_API_URL:-}"
+        if [ -z "$HULY_DATA_URL" ] && [ -n "$HULY_URL" ]; then
+            HULY_DATA_URL="${HULY_URL%/mcp}/api"
+        fi
+        if [ -n "$HULY_DATA_URL" ]; then
             if [ ! -d "huly_export_full" ] || [ -z "$(ls -A huly_export_full 2>/dev/null)" ]; then
                 echo "📥 Exporting Huly data for CocoIndex processing..."
-                python scripts/huly_export.py --url "$HULY_URL" --token "$HULY_TOKEN" --out huly_export_full || {
-                    echo "⚠️  Huly export failed, check credentials"
+                HULY_API_URL="$HULY_DATA_URL" python scripts/huly_export.py --out huly_export_full || {
+                    echo "⚠️  Huly export failed, check API connectivity"
                     echo "⏩  Using mock data if available..."
                 }
             else
                 echo "📂 Using existing Huly export files ($(ls huly_export_full/*.json 2>/dev/null | wc -l) files)"
             fi
         else
-            echo "⏩ Using Huly mock data (no credentials configured)"
+            echo "⏩ Using Huly mock data (HULY_API_URL not configured)"
         fi
         ;;
 esac
