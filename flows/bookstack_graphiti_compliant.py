@@ -12,6 +12,8 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import List
 
+from flows.utils import current_timestamp_iso
+
 import cocoindex
 from cocoindex import DataScope, FlowBuilder
 
@@ -77,7 +79,7 @@ def generate_deterministic_uuid(namespace: str, identifier: str) -> str:
 
 def create_iso_timestamp() -> str:
     """Create ISO 8601 timestamp."""
-    return datetime.now(timezone.utc).isoformat()
+    return current_timestamp_iso()
 
 def normalize_entity_name(name: str) -> str:
     """Normalize entity names for consistency."""
@@ -146,6 +148,22 @@ def parse_bookstack_json(json_content: str) -> BookStackPage:
     )
 
 @cocoindex.op.function()
+def filter_empty_content(page: BookStackPage) -> BookStackPage:
+    """Filter out pages with empty content."""
+    if not page.body_html or not page.body_html.strip():
+        logger.info(f"⏭️  Skipping empty page: {page.title} (ID: {page.id})")
+        # Skip this document by returning None - CocoIndex will handle gracefully
+        return None
+
+    # Also check for minimal content threshold
+    text_content = page.body_html.strip()
+    if len(text_content) < 10:  # Less than 10 characters is likely empty/useless
+        logger.info(f"⏭️  Skipping minimal content page: {page.title} (ID: {page.id}) - only {len(text_content)} chars")
+        return None
+
+    return page
+
+@cocoindex.op.function()
 def log_processing_start(page: BookStackPage) -> BookStackPage:
     """Log when starting to process a document."""
     logger.info(f"📄 Processing BookStack page: {page.title} (ID: {page.id})")
@@ -188,15 +206,17 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
         content = safe_cypher_string(full_content)
         summary = safe_cypher_string(analysis.summary.summary)
         
+        episodic_created_at = create_iso_timestamp()
+        episodic_valid_at = create_iso_timestamp()
+
         episodic_cypher = f"""
-        MERGE (e:Episodic {{uuid: '{episodic_uuid}'}})
+        MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
-                     e.group_id = '{group_id}',
                      e.source = 'bookstack',
                      e.source_description = 'BookStack knowledge base content',
-                     e.created_at = timestamp()
+                     e.created_at = '{episodic_created_at}'
         SET e.content = '{content}',
-            e.valid_at = timestamp(),
+            e.valid_at = '{episodic_valid_at}',
             e.bookstack_id = '{metadata.page_id}',
             e.bookstack_url = '{safe_cypher_string(metadata.url)}',
             e.book_name = '{safe_cypher_string(metadata.book)}'
@@ -212,10 +232,11 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
             entity_summary = safe_cypher_string(entity.description)
             entity_uuid = generate_deterministic_uuid("entity", f"{entity_name}-{group_id}")
             
+            entity_created_at = create_iso_timestamp()
+
             entity_cypher = f"""
-            MERGE (ent:Entity {{name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
-            ON CREATE SET ent.uuid = '{entity_uuid}',
-                         ent.created_at = timestamp()
+            MERGE (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
+            ON CREATE SET ent.created_at = '{entity_created_at}'
             SET ent.summary = '{entity_summary}',
                 ent.entity_type = '{entity.type}',
                 ent.labels = ['{entity.type}']
@@ -226,13 +247,13 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
             
             # Create MENTIONS relationship (Graphiti compliant)
             mention_uuid = generate_deterministic_uuid("mentions", f"{episodic_uuid}-{entity_uuid}")
+            mention_created_at = create_iso_timestamp()
+
             mention_cypher = f"""
             MATCH (ep:Episodic {{uuid: '{episodic_uuid}'}}),
-                  (ent:Entity {{name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
-            MERGE (ep)-[r:MENTIONS]->(ent)
-            ON CREATE SET r.uuid = '{mention_uuid}',
-                         r.created_at = timestamp(),
-                         r.group_id = '{group_id}'
+                  (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
+            MERGE (ep)-[r:MENTIONS {{uuid: '{mention_uuid}', group_id: '{group_id}'}}]->(ent)
+            ON CREATE SET r.created_at = '{mention_created_at}'
             """
             
             falkor.execute_command('GRAPH.QUERY', graph_name, mention_cypher)
@@ -246,13 +267,17 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
             
             relates_uuid = generate_deterministic_uuid("relates", f"{subject_name}-{object_name}-{group_id}")
             
+            # Generate UUIDs for the entities we're trying to relate
+            subject_uuid = generate_deterministic_uuid("entity", f"{subject_name}-{group_id}")
+            object_uuid = generate_deterministic_uuid("entity", f"{object_name}-{group_id}")
+
+            relates_created_at = create_iso_timestamp()
+
             relates_cypher = f"""
-            MATCH (e1:Entity {{name: '{safe_cypher_string(subject_name)}', group_id: '{group_id}'}}),
-                  (e2:Entity {{name: '{safe_cypher_string(object_name)}', group_id: '{group_id}'}})
-            MERGE (e1)-[r:RELATES_TO]->(e2)
-            ON CREATE SET r.uuid = '{relates_uuid}',
-                         r.created_at = timestamp(),
-                         r.group_id = '{group_id}'
+            MATCH (e1:Entity {{uuid: '{subject_uuid}', name: '{safe_cypher_string(subject_name)}', group_id: '{group_id}'}}),
+                  (e2:Entity {{uuid: '{object_uuid}', name: '{safe_cypher_string(object_name)}', group_id: '{group_id}'}})
+            MERGE (e1)-[r:RELATES_TO {{uuid: '{relates_uuid}', group_id: '{group_id}'}}]->(e2)
+            ON CREATE SET r.created_at = '{relates_created_at}'
             SET r.predicate = '{predicate}',
                 r.fact = '{fact}'
             """
@@ -285,14 +310,17 @@ def bookstack_graphiti_flow(flow_builder: FlowBuilder, data_scope: DataScope) ->
         # Parse JSON content into structured data
         doc["parsed"] = doc["content"].transform(parse_bookstack_json)
 
+        # Filter out empty content pages
+        doc["filtered"] = doc["parsed"].transform(filter_empty_content)
+
         # Log processing start
-        doc["logged"] = doc["parsed"].transform(log_processing_start)
+        doc["logged"] = doc["filtered"].transform(log_processing_start)
 
-        # Extract metadata
-        doc["metadata"] = doc["parsed"].transform(extract_page_metadata)
+        # Extract metadata from filtered data
+        doc["metadata"] = doc["filtered"].transform(extract_page_metadata)
 
-        # Extract full text content
-        doc["full_content"] = doc["parsed"].transform(extract_text_from_html)
+        # Extract full text content from filtered data
+        doc["full_content"] = doc["filtered"].transform(extract_text_from_html)
         
         # Extract comprehensive analysis using Ollama
         doc["analysis"] = doc["full_content"].transform(

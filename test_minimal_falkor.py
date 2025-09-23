@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
 Minimal test to verify FalkorDB connection and data insertion works
+with ISO8601 timestamps.
 """
-import redis
+
 import json
 import os
+
+import redis
+
+from flows.utils import current_timestamp_iso
 
 def test_falkor_basic():
     """Test basic FalkorDB connection and node creation"""
@@ -20,14 +25,15 @@ def test_falkor_basic():
 
         graph_name = "graphiti_migration"
 
+        created_at = current_timestamp_iso()
         # Create a simple test node
-        cypher = """
-        CREATE (n:TestNode {
+        cypher = f"""
+        CREATE (n:TestNode {{
             title: 'Basic Test Node',
             content: 'Testing direct FalkorDB insertion',
-            created_at: timestamp(),
+            created_at: '{created_at}',
             group_id: 'test'
-        })
+        }})
         RETURN n.title
         """
 
@@ -48,12 +54,13 @@ def test_falkor_basic():
 
             title = data.get('title', 'No Title').replace("'", "\\'")
             page_id = data.get('id', 0)
+            page_created_at = current_timestamp_iso()
 
             book_cypher = f"""
             CREATE (n:BookStackPage {{
                 title: '{title}',
                 page_id: {page_id},
-                created_at: timestamp(),
+                created_at: '{page_created_at}',
                 group_id: 'bookstack_test'
             }})
             RETURN n.title
@@ -72,6 +79,7 @@ def test_falkor_basic():
 
     except Exception as e:
         print(f"❌ Error: {e}")
+
 
 if __name__ == "__main__":
     test_falkor_basic()

@@ -13,6 +13,8 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Any
 
+from flows.utils import current_timestamp_iso
+
 import cocoindex
 from cocoindex import DataScope, FlowBuilder
 
@@ -40,6 +42,19 @@ class Relationship:
     fact: str
 
 @dataclasses.dataclass
+class HulyMetadata:
+    """Huly issue/project metadata structure."""
+    type: str
+    id: str
+    name: str
+    description: str
+    project_id: str
+    status: str
+    priority: str
+    component: str
+    milestone: str
+
+@dataclasses.dataclass
 class HulyAnalysis:
     """Complete analysis of Huly project/issue data."""
     summary: str
@@ -53,7 +68,7 @@ def generate_deterministic_uuid(namespace: str, identifier: str) -> str:
 
 def create_iso_timestamp() -> str:
     """Create ISO 8601 timestamp."""
-    return datetime.now(timezone.utc).isoformat()
+    return current_timestamp_iso()
 
 def normalize_entity_name(name: str) -> str:
     """Normalize entity names for consistency."""
@@ -61,9 +76,26 @@ def normalize_entity_name(name: str) -> str:
 
 def create_group_id(project_name: str) -> str:
     """Create group_id from project name."""
-    if not project_name:
+    if not project_name or project_name.strip() == "":
         return "huly-default"
-    return f"huly-{project_name.lower().replace(' ', '-').replace('_', '-')}"
+
+    # Clean and normalize the project name
+    cleaned = project_name.strip().lower()
+    # Replace spaces and underscores with hyphens
+    cleaned = cleaned.replace(' ', '-').replace('_', '-')
+    # Remove any non-alphanumeric characters except hyphens
+    cleaned = ''.join(c if c.isalnum() or c == '-' else '' for c in cleaned)
+    # Remove multiple consecutive hyphens
+    while '--' in cleaned:
+        cleaned = cleaned.replace('--', '-')
+    # Remove leading/trailing hyphens
+    cleaned = cleaned.strip('-')
+
+    # If cleaning resulted in empty string, use default
+    if not cleaned:
+        return "huly-default"
+
+    return f"huly-{cleaned}"
 
 def safe_cypher_string(text: str) -> str:
     """Make string safe for Cypher queries."""
@@ -73,75 +105,73 @@ def safe_cypher_string(text: str) -> str:
 
 # --- CocoIndex transform functions ---
 @cocoindex.op.function()
-def extract_huly_metadata(content: str) -> Dict[str, Any]:
+def extract_huly_metadata(content: str) -> HulyMetadata:
     """Extract metadata from Huly JSON content."""
     try:
         data = json.loads(content) if isinstance(content, str) else content
-        
-        return {
-            "type": data.get("type", "unknown"),
-            "id": data.get("id", ""),
-            "name": data.get("name", data.get("title", "")),
-            "description": data.get("description", ""),
-            "project_id": data.get("project_id", ""),
-            "status": data.get("status", ""),
-            "priority": data.get("priority", ""),
-            "component": data.get("component", ""),
-            "milestone": data.get("milestone", ""),
-            "raw_data": data.get("raw_data", {})
-        }
+
+        return HulyMetadata(
+            type=data.get("type", "unknown"),
+            id=data.get("id", ""),
+            name=data.get("name", data.get("title", "")),
+            description=data.get("description", ""),
+            project_id=data.get("project_id", ""),
+            status=data.get("status", ""),
+            priority=data.get("priority", ""),
+            component=data.get("component", ""),
+            milestone=data.get("milestone", "")
+        )
     except Exception as e:
         logger.error(f"Error extracting Huly metadata: {e}")
-        return {
-            "type": "unknown",
-            "id": "",
-            "name": "",
-            "description": "",
-            "project_id": "",
-            "status": "",
-            "priority": "",
-            "component": "",
-            "milestone": "",
-            "raw_data": {}
-        }
+        return HulyMetadata(
+            type="unknown",
+            id="",
+            name="",
+            description="",
+            project_id="",
+            status="",
+            priority="",
+            component="",
+            milestone=""
+        )
 
 @cocoindex.op.function()
-def extract_text_content(metadata: Dict[str, Any]) -> str:
+def extract_text_content(metadata: HulyMetadata) -> str:
     """Extract clean text content from Huly data."""
     content_parts = []
     
     # Add title/name
-    if metadata.get("name"):
-        content_parts.append(f"Title: {metadata['name']}")
-    
+    if metadata.name:
+        content_parts.append(f"Title: {metadata.name}")
+
     # Add description
-    if metadata.get("description"):
-        content_parts.append(f"Description: {metadata['description']}")
-    
+    if metadata.description:
+        content_parts.append(f"Description: {metadata.description}")
+
     # Add project context
-    if metadata.get("project_id"):
-        content_parts.append(f"Project: {metadata['project_id']}")
-    
+    if metadata.project_id:
+        content_parts.append(f"Project: {metadata.project_id}")
+
     # Add status and priority
-    if metadata.get("status"):
-        content_parts.append(f"Status: {metadata['status']}")
-    if metadata.get("priority"):
-        content_parts.append(f"Priority: {metadata['priority']}")
-    
+    if metadata.status:
+        content_parts.append(f"Status: {metadata.status}")
+    if metadata.priority:
+        content_parts.append(f"Priority: {metadata.priority}")
+
     # Add component and milestone
-    if metadata.get("component"):
-        content_parts.append(f"Component: {metadata['component']}")
-    if metadata.get("milestone"):
-        content_parts.append(f"Milestone: {metadata['milestone']}")
+    if metadata.component:
+        content_parts.append(f"Component: {metadata.component}")
+    if metadata.milestone:
+        content_parts.append(f"Milestone: {metadata.milestone}")
     
     return "\n".join(content_parts)
 
 @cocoindex.op.function()
-def log_processing_start(metadata: Dict[str, Any]) -> Dict[str, Any]:
+def log_processing_start(metadata: HulyMetadata) -> HulyMetadata:
     """Log when starting to process a Huly item."""
-    name = metadata.get("name", "Untitled")
-    item_type = metadata.get("type", "unknown")
-    item_id = metadata.get("id", "unknown")
+    name = metadata.name or "Untitled"
+    item_type = metadata.type or "unknown"
+    item_id = metadata.id or "unknown"
     logger.info(f"📄 Processing Huly {item_type}: {name} (ID: {item_id})")
     return metadata
 
@@ -161,7 +191,7 @@ def get_falkor_connection():
         return None
 
 @cocoindex.op.function()
-def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: Dict[str, Any], full_content: str) -> HulyAnalysis:
+def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, full_content: str) -> HulyAnalysis:
     """Export analysis results to FalkorDB with full Graphiti schema compliance."""
     falkor = get_falkor_connection()
     if not falkor:
@@ -169,35 +199,57 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: Dict[str, Any], 
         return analysis
 
     graph_name = os.environ.get('FALKOR_GRAPH', 'graphiti_migration')
-    
+
     try:
-        # Create group_id based on project
-        project_name = metadata.get("project_id") or metadata.get("name", "")
+        # Create group_id based on project with extensive debugging
+        project_name = metadata.project_id or metadata.name or ""
+        logger.info(f"🔍 Debug: project_name='{project_name}', metadata.project_id='{metadata.project_id}', metadata.name='{metadata.name}'")
+
         group_id = create_group_id(project_name)
-        
+        logger.info(f"🔍 Debug: Initial group_id='{group_id}'")
+
+        # Ensure group_id is never empty with multiple fallbacks
+        if not group_id or group_id.strip() == "" or group_id == "huly-":
+            group_id = "huly-default"
+            logger.warning(f"⚠️  Using default group_id for item: {metadata.name} (project: {metadata.project_id})")
+
+        # Final validation - absolutely ensure group_id is not empty
+        if not group_id:
+            group_id = "huly-fallback"
+            logger.error(f"🚨 Emergency fallback group_id used for item: {metadata.name}")
+
+        logger.info(f"🔍 Debug: Final group_id='{group_id}'")
+
         # Generate deterministic UUID for episodic node
-        item_id = metadata.get("id", str(uuid.uuid4()))
+        item_id = metadata.id or str(uuid.uuid4())
         episodic_uuid = generate_deterministic_uuid("huly-episodic", item_id)
-        
+
         # Create Episodic node (Graphiti compliant)
-        title = safe_cypher_string(metadata.get("name", "Untitled"))
+        title = safe_cypher_string(metadata.name or "Untitled")
         content = safe_cypher_string(full_content)
-        content_type = metadata.get("type", "unknown")
-        
+        content_type = metadata.type or "unknown"
+
+        # Final safety check before Cypher execution
+        if not group_id or group_id.strip() == "":
+            group_id = "huly-emergency"
+            logger.error(f"🚨 CRITICAL: Empty group_id detected before Cypher execution! Using emergency fallback.")
+
+        created_at = create_iso_timestamp()
+        valid_at = create_iso_timestamp()
+
         episodic_cypher = f"""
-        MERGE (e:Episodic {{uuid: '{episodic_uuid}'}})
+        MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
-                     e.group_id = '{group_id}',
                      e.source = 'huly',
                      e.source_description = 'Huly project management data',
-                     e.created_at = timestamp()
+                     e.created_at = '{created_at}'
         SET e.content = '{content}',
-            e.valid_at = timestamp(),
+            e.valid_at = '{valid_at}',
             e.huly_type = '{content_type}',
             e.huly_id = '{safe_cypher_string(item_id)}',
-            e.project_id = '{safe_cypher_string(metadata.get("project_id", ""))}',
-            e.status = '{safe_cypher_string(metadata.get("status", ""))}',
-            e.priority = '{safe_cypher_string(metadata.get("priority", ""))}'
+            e.project_id = '{safe_cypher_string(metadata.project_id or "")}',
+            e.status = '{safe_cypher_string(metadata.status or "")}',
+            e.priority = '{safe_cypher_string(metadata.priority or "")}'
         RETURN e.uuid
         """
         
@@ -209,11 +261,15 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: Dict[str, Any], 
             entity_name = normalize_entity_name(entity.name)
             entity_summary = safe_cypher_string(entity.description)  # Use description as summary
             entity_uuid = generate_deterministic_uuid("entity", f"{entity_name}-{group_id}")
-            
+
+            # Safety check for group_id in entity creation
+            safe_group_id = group_id if group_id and group_id.strip() else "huly-emergency"
+
+            entity_created_at = create_iso_timestamp()
+
             entity_cypher = f"""
-            MERGE (ent:Entity {{name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
-            ON CREATE SET ent.uuid = '{entity_uuid}',
-                         ent.created_at = timestamp()
+            MERGE (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{safe_group_id}'}})
+            ON CREATE SET ent.created_at = '{entity_created_at}'
             SET ent.summary = '{entity_summary}',
                 ent.entity_type = '{entity.type}',
                 ent.labels = ['{entity.type}']
@@ -224,13 +280,13 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: Dict[str, Any], 
             
             # Create MENTIONS relationship (Graphiti compliant)
             mention_uuid = generate_deterministic_uuid("mentions", f"{episodic_uuid}-{entity_uuid}")
+            mention_created_at = create_iso_timestamp()
+
             mention_cypher = f"""
             MATCH (ep:Episodic {{uuid: '{episodic_uuid}'}}),
-                  (ent:Entity {{name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
-            MERGE (ep)-[r:MENTIONS]->(ent)
-            ON CREATE SET r.uuid = '{mention_uuid}',
-                         r.created_at = timestamp(),
-                         r.group_id = '{group_id}'
+                  (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{safe_group_id}'}})
+            MERGE (ep)-[r:MENTIONS {{uuid: '{mention_uuid}', group_id: '{safe_group_id}'}}]->(ent)
+            ON CREATE SET r.created_at = '{mention_created_at}'
             """
             
             falkor.execute_command('GRAPH.QUERY', graph_name, mention_cypher)
@@ -241,16 +297,22 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: Dict[str, Any], 
             object_name = normalize_entity_name(rel.object)
             predicate = safe_cypher_string(rel.predicate)
             fact = safe_cypher_string(rel.fact)
-            
-            relates_uuid = generate_deterministic_uuid("relates", f"{subject_name}-{object_name}-{group_id}")
-            
+
+            # Use the same safe_group_id for consistency
+            safe_group_id_rel = group_id if group_id and group_id.strip() else "huly-emergency"
+
+            # Generate UUIDs for the entities we're trying to relate
+            subject_uuid = generate_deterministic_uuid("entity", f"{subject_name}-{safe_group_id_rel}")
+            object_uuid = generate_deterministic_uuid("entity", f"{object_name}-{safe_group_id_rel}")
+            relates_uuid = generate_deterministic_uuid("relates", f"{subject_name}-{object_name}-{safe_group_id_rel}")
+
+            relates_created_at = create_iso_timestamp()
+
             relates_cypher = f"""
-            MATCH (e1:Entity {{name: '{safe_cypher_string(subject_name)}', group_id: '{group_id}'}}),
-                  (e2:Entity {{name: '{safe_cypher_string(object_name)}', group_id: '{group_id}'}})
-            MERGE (e1)-[r:RELATES_TO]->(e2)
-            ON CREATE SET r.uuid = '{relates_uuid}',
-                         r.created_at = timestamp(),
-                         r.group_id = '{group_id}'
+            MATCH (e1:Entity {{uuid: '{subject_uuid}', name: '{safe_cypher_string(subject_name)}', group_id: '{safe_group_id_rel}'}}),
+                  (e2:Entity {{uuid: '{object_uuid}', name: '{safe_cypher_string(object_name)}', group_id: '{safe_group_id_rel}'}})
+            MERGE (e1)-[r:RELATES_TO {{uuid: '{relates_uuid}', group_id: '{safe_group_id_rel}'}}]->(e2)
+            ON CREATE SET r.created_at = '{relates_created_at}'
             SET r.predicate = '{predicate}',
                 r.fact = '{fact}'
             """
@@ -272,7 +334,7 @@ def huly_graphiti_flow(flow_builder: FlowBuilder, data_scope: DataScope) -> None
     # Add source for Huly JSON files
     data_scope["documents"] = flow_builder.add_source(
         cocoindex.sources.LocalFile(
-            path="huly_export_mock",  # Will be changed to huly_export_full when API works
+            path=os.environ.get("HULY_EXPORT_PATH", "huly_export_full"),
             included_patterns=["*.json"]
         ),
         refresh_interval=timedelta(minutes=2)
@@ -283,8 +345,8 @@ def huly_graphiti_flow(flow_builder: FlowBuilder, data_scope: DataScope) -> None
         # Parse JSON content
         doc["parsed"] = doc["content"].transform(cocoindex.functions.ParseJson())
         
-        # Extract metadata
-        doc["metadata"] = doc["parsed"].transform(extract_huly_metadata)
+        # Extract metadata from raw content
+        doc["metadata"] = doc["content"].transform(extract_huly_metadata)
         
         # Log processing start
         doc["logged"] = doc["metadata"].transform(log_processing_start)
