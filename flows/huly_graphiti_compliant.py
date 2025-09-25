@@ -228,6 +228,9 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, fu
         title = safe_cypher_string(metadata.name or "Untitled")
         content = safe_cypher_string(full_content)
         content_type = metadata.type or "unknown"
+        source_description = safe_cypher_string(metadata.project_id or metadata.name)
+        if not source_description:
+            source_description = safe_cypher_string("Huly project management data")
 
         # Final safety check before Cypher execution
         if not group_id or group_id.strip() == "":
@@ -241,9 +244,9 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, fu
         MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
                      e.source = 'huly',
-                     e.source_description = 'Huly project management data',
                      e.created_at = '{created_at}'
-        SET e.content = '{content}',
+        SET e.source_description = '{source_description}',
+            e.content = '{content}',
             e.valid_at = '{valid_at}',
             e.huly_type = '{content_type}',
             e.huly_id = '{safe_cypher_string(item_id)}',

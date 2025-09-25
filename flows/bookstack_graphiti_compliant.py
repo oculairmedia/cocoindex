@@ -205,7 +205,10 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
         title = safe_cypher_string(metadata.title)
         content = safe_cypher_string(full_content)
         summary = safe_cypher_string(analysis.summary.summary)
-        
+        source_description = safe_cypher_string(metadata.book)
+        if not source_description:
+            source_description = safe_cypher_string("BookStack knowledge base content")
+
         episodic_created_at = create_iso_timestamp()
         episodic_valid_at = create_iso_timestamp()
 
@@ -213,9 +216,9 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
         MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
                      e.source = 'bookstack',
-                     e.source_description = 'BookStack knowledge base content',
                      e.created_at = '{episodic_created_at}'
-        SET e.content = '{content}',
+        SET e.source_description = '{source_description}',
+            e.content = '{content}',
             e.valid_at = '{episodic_valid_at}',
             e.bookstack_id = '{metadata.page_id}',
             e.bookstack_url = '{safe_cypher_string(metadata.url)}',
