@@ -369,25 +369,25 @@ def huly_graphiti_flow(flow_builder: FlowBuilder, data_scope: DataScope) -> None
                 instruction="""
                 You are an expert knowledge graph entity extractor for project management data. Analyze this Huly project/issue data and extract:
 
-                1. **Entities** (5-15 key concepts):
-                   - TECHNOLOGY: Docker, GitHub Actions, Redis, FalkorDB, etc.
-                   - COMPONENT: Pipeline, Container, Registry, Database, etc.
-                   - CONCEPT: CI/CD, Deployment, Integration, Automation, etc.
-                   - ORGANIZATION: GitHub, Project teams, etc.
-                   - PROJECT: Applications, Services, Tools, etc.
-                   - MILESTONE: Releases, Versions, Deadlines, etc.
-                   - PERSON: Developers, Users, Stakeholders, etc.
+                1. ENTITIES: Extract important entities and classify them:
+                   - TECHNOLOGY: Docker, GitHub Actions, Redis, FalkorDB, programming languages, frameworks
+                   - COMPONENT: Pipeline, Container, Registry, Database, modules, services
+                   - CONCEPT: CI/CD, Deployment, Integration, Automation, methodologies, processes
+                   - ORGANIZATION: GitHub, Project teams, companies, institutions
+                   - PROJECT: Applications, Services, Tools, repositories
+                   - MILESTONE: Releases, Versions, Deadlines, sprints
+                   - PERSON: Developers, Users, Stakeholders, contributors
 
-                2. **Relationships** (3-8 connections):
-                   - How technologies work together
-                   - Process flows and dependencies
-                   - Component interactions
-                   - Deployment relationships
+                   For each entity populate the `description` field with 1-2 complete sentences that explain the entity's role or key traits as stated in the document. Mention *how* the entity is configured, used, or why it matters in this specific context. Avoid generic words like "process" or repeating the entity name alone; every description must be at least 12 words and grounded in facts from the source text.
 
-                3. **Summary**: Brief description of the issue/project content.
+                2. RELATIONSHIPS: Identify meaningful relationships between entities:
+                   - Use predicates like: uses, implements, part_of, depends_on, created_by, relates_to
+                   - Provide supporting facts from the text
 
-                Focus on technical entities and meaningful relationships. Normalize entity names to lowercase.
-                Return a complete HulyAnalysis with summary, entities, and relationships.
+                3. SUMMARY: Create a clear title and brief 2-3 sentence summary covering the main purpose of the issue/project.
+
+                Focus on technical and domain-specific entities. Normalize entity names to lowercase.
+                Return a complete HulyAnalysis with entities, relationships, and summary.
                 """
             )
         )
