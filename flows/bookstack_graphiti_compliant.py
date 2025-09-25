@@ -345,11 +345,13 @@ def bookstack_graphiti_flow(flow_builder: FlowBuilder, data_scope: DataScope) ->
                    - LOCATION: Places, regions, countries
                    - TAG: Labels or categories
 
+                   For each entity populate the `description` field with 1-2 complete sentences that explain the entity's role or key traits as stated in the document. Mention *how* the entity is configured, used, or why it matters in this specific context. Avoid generic words like "process" or repeating the entity name alone; every description must be at least 12 words and grounded in facts from the source text.
+
                 2. RELATIONSHIPS: Identify meaningful relationships between entities:
                    - Use predicates like: uses, implements, part_of, depends_on, created_by, relates_to
                    - Provide supporting facts from the text
 
-                3. SUMMARY: Create a clear title and brief 2-3 sentence summary.
+                3. SUMMARY: Create a clear title and brief 2-3 sentence summary covering the main purpose of the page.
 
                 Focus on technical and domain-specific entities. Normalize entity names to lowercase.
                 Return a complete DocumentAnalysis with entities, relationships, and summary.
