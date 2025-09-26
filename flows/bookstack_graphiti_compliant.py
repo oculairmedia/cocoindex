@@ -12,7 +12,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import List
 
-from flows.utils import current_timestamp_iso
+from flows.utils import current_timestamp_iso, embed_texts, format_vector
 
 import cocoindex
 from cocoindex import DataScope, FlowBuilder
@@ -212,17 +212,28 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
         episodic_created_at = create_iso_timestamp()
         episodic_valid_at = create_iso_timestamp()
 
+        title_embedding, content_embedding = embed_texts([metadata.title, full_content])
+
+        episodic_set_parts = [
+            f"e.source_description = '{source_description}'",
+            f"e.content = '{content}'",
+            f"e.valid_at = '{episodic_valid_at}'",
+            f"e.bookstack_id = '{metadata.page_id}'",
+            f"e.bookstack_url = '{safe_cypher_string(metadata.url)}'",
+            f"e.book_name = '{safe_cypher_string(metadata.book)}'",
+        ]
+        if title_embedding:
+            episodic_set_parts.append(f"e.name_embedding = {format_vector(title_embedding)}")
+        if content_embedding:
+            episodic_set_parts.append(f"e.content_embedding = {format_vector(content_embedding)}")
+        set_section = ",\n            ".join(episodic_set_parts)
+
         episodic_cypher = f"""
         MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
                      e.source = 'bookstack',
                      e.created_at = '{episodic_created_at}'
-        SET e.source_description = '{source_description}',
-            e.content = '{content}',
-            e.valid_at = '{episodic_valid_at}',
-            e.bookstack_id = '{metadata.page_id}',
-            e.bookstack_url = '{safe_cypher_string(metadata.url)}',
-            e.book_name = '{safe_cypher_string(metadata.book)}'
+        SET {set_section}
         RETURN e.uuid
         """
         
@@ -234,15 +245,24 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
             entity_name = normalize_entity_name(entity.name)
             entity_summary = safe_cypher_string(entity.description)
             entity_uuid = generate_deterministic_uuid("entity", f"{entity_name}-{group_id}")
-            
+
             entity_created_at = create_iso_timestamp()
+
+            (entity_name_embedding,) = embed_texts([entity.name])
+
+            entity_set_parts = [
+                f"ent.summary = '{entity_summary}'",
+                f"ent.entity_type = '{entity.type}'",
+                f"ent.labels = ['{entity.type}']",
+            ]
+            if entity_name_embedding:
+                entity_set_parts.append(f"ent.name_embedding = {format_vector(entity_name_embedding)}")
+            entity_set_section = ",\n                ".join(entity_set_parts)
 
             entity_cypher = f"""
             MERGE (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{group_id}'}})
             ON CREATE SET ent.created_at = '{entity_created_at}'
-            SET ent.summary = '{entity_summary}',
-                ent.entity_type = '{entity.type}',
-                ent.labels = ['{entity.type}']
+            SET {entity_set_section}
             RETURN ent.uuid
             """
             
@@ -267,22 +287,31 @@ def export_to_falkor_graphiti(analysis: DocumentAnalysis, metadata: PageMetadata
             object_name = normalize_entity_name(rel.object)
             predicate = safe_cypher_string(rel.predicate)
             fact = safe_cypher_string(rel.fact)
-            
+
             relates_uuid = generate_deterministic_uuid("relates", f"{subject_name}-{object_name}-{group_id}")
-            
+
             # Generate UUIDs for the entities we're trying to relate
             subject_uuid = generate_deterministic_uuid("entity", f"{subject_name}-{group_id}")
             object_uuid = generate_deterministic_uuid("entity", f"{object_name}-{group_id}")
 
             relates_created_at = create_iso_timestamp()
 
+            (fact_embedding,) = embed_texts([rel.fact])
+
+            relationship_set_parts = [
+                f"r.predicate = '{predicate}'",
+                f"r.fact = '{fact}'",
+            ]
+            if fact_embedding:
+                relationship_set_parts.append(f"r.fact_embedding = {format_vector(fact_embedding)}")
+            relationship_set_section = ",\n                ".join(relationship_set_parts)
+
             relates_cypher = f"""
             MATCH (e1:Entity {{uuid: '{subject_uuid}', name: '{safe_cypher_string(subject_name)}', group_id: '{group_id}'}}),
                   (e2:Entity {{uuid: '{object_uuid}', name: '{safe_cypher_string(object_name)}', group_id: '{group_id}'}})
             MERGE (e1)-[r:RELATES_TO {{uuid: '{relates_uuid}', group_id: '{group_id}'}}]->(e2)
             ON CREATE SET r.created_at = '{relates_created_at}'
-            SET r.predicate = '{predicate}',
-                r.fact = '{fact}'
+            SET {relationship_set_section}
             """
             
             falkor.execute_command('GRAPH.QUERY', graph_name, relates_cypher)

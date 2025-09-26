@@ -13,7 +13,7 @@ import logging
 from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Any
 
-from flows.utils import current_timestamp_iso
+from flows.utils import current_timestamp_iso, embed_texts, format_vector
 
 import cocoindex
 from cocoindex import DataScope, FlowBuilder
@@ -240,19 +240,30 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, fu
         created_at = create_iso_timestamp()
         valid_at = create_iso_timestamp()
 
+        title_embedding, content_embedding = embed_texts([metadata.name, full_content])
+
+        episodic_set_parts = [
+            f"e.source_description = '{source_description}'",
+            f"e.content = '{content}'",
+            f"e.valid_at = '{valid_at}'",
+            f"e.huly_type = '{content_type}'",
+            f"e.huly_id = '{safe_cypher_string(item_id)}'",
+            f"e.project_id = '{safe_cypher_string(metadata.project_id or '')}'",
+            f"e.status = '{safe_cypher_string(metadata.status or '')}'",
+            f"e.priority = '{safe_cypher_string(metadata.priority or '')}'",
+        ]
+        if title_embedding:
+            episodic_set_parts.append(f"e.name_embedding = {format_vector(title_embedding)}")
+        if content_embedding:
+            episodic_set_parts.append(f"e.content_embedding = {format_vector(content_embedding)}")
+        episodic_set_section = ",\n            ".join(episodic_set_parts)
+
         episodic_cypher = f"""
         MERGE (e:Episodic {{uuid: '{episodic_uuid}', group_id: '{group_id}'}})
         ON CREATE SET e.name = '{title}',
                      e.source = 'huly',
                      e.created_at = '{created_at}'
-        SET e.source_description = '{source_description}',
-            e.content = '{content}',
-            e.valid_at = '{valid_at}',
-            e.huly_type = '{content_type}',
-            e.huly_id = '{safe_cypher_string(item_id)}',
-            e.project_id = '{safe_cypher_string(metadata.project_id or "")}',
-            e.status = '{safe_cypher_string(metadata.status or "")}',
-            e.priority = '{safe_cypher_string(metadata.priority or "")}'
+        SET {episodic_set_section}
         RETURN e.uuid
         """
         
@@ -270,12 +281,21 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, fu
 
             entity_created_at = create_iso_timestamp()
 
+            (entity_name_embedding,) = embed_texts([entity.name])
+
+            entity_set_parts = [
+                f"ent.summary = '{entity_summary}'",
+                f"ent.entity_type = '{entity.type}'",
+                f"ent.labels = ['{entity.type}']",
+            ]
+            if entity_name_embedding:
+                entity_set_parts.append(f"ent.name_embedding = {format_vector(entity_name_embedding)}")
+            entity_set_section = ",\n                ".join(entity_set_parts)
+
             entity_cypher = f"""
             MERGE (ent:Entity {{uuid: '{entity_uuid}', name: '{safe_cypher_string(entity_name)}', group_id: '{safe_group_id}'}})
             ON CREATE SET ent.created_at = '{entity_created_at}'
-            SET ent.summary = '{entity_summary}',
-                ent.entity_type = '{entity.type}',
-                ent.labels = ['{entity.type}']
+            SET {entity_set_section}
             RETURN ent.uuid
             """
             
@@ -311,13 +331,22 @@ def export_to_falkor_graphiti(analysis: HulyAnalysis, metadata: HulyMetadata, fu
 
             relates_created_at = create_iso_timestamp()
 
+            (fact_embedding,) = embed_texts([rel.fact])
+
+            relationship_set_parts = [
+                f"r.predicate = '{predicate}'",
+                f"r.fact = '{fact}'",
+            ]
+            if fact_embedding:
+                relationship_set_parts.append(f"r.fact_embedding = {format_vector(fact_embedding)}")
+            relationship_set_section = ",\n                ".join(relationship_set_parts)
+
             relates_cypher = f"""
             MATCH (e1:Entity {{uuid: '{subject_uuid}', name: '{safe_cypher_string(subject_name)}', group_id: '{safe_group_id_rel}'}}),
                   (e2:Entity {{uuid: '{object_uuid}', name: '{safe_cypher_string(object_name)}', group_id: '{safe_group_id_rel}'}})
             MERGE (e1)-[r:RELATES_TO {{uuid: '{relates_uuid}', group_id: '{safe_group_id_rel}'}}]->(e2)
             ON CREATE SET r.created_at = '{relates_created_at}'
-            SET r.predicate = '{predicate}',
-                r.fact = '{fact}'
+            SET {relationship_set_section}
             """
             
             falkor.execute_command('GRAPH.QUERY', graph_name, relates_cypher)
