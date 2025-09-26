@@ -117,6 +117,17 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Embedding request timeout in seconds",
     )
+    parser.add_argument(
+        "--include-letta",
+        action="store_true",
+        help="Include rooms normally auto-excluded (e.g., Letta webhook rooms)",
+    )
+    parser.add_argument(
+        "--exclude-substring",
+        action="append",
+        default=None,
+        help="Additional case-insensitive substring to auto-exclude from Matrix room IDs/names",
+    )
     return parser.parse_args(argv)
 
 
@@ -125,6 +136,20 @@ def main(argv: Iterable[str] | None = None) -> int:
     configure_logging(args.verbose)
 
     config = MatrixConfig.from_env()
+    if args.include_letta:
+        config.auto_exclude_enabled = False
+        logger.info("Auto-exclude disabled via --include-letta; Letta rooms will be processed")
+    if args.exclude_substring:
+        extras = [value.strip() for value in args.exclude_substring if value and value.strip()]
+        if extras:
+            existing = {item.lower(): item for item in config.auto_exclude_room_substrings}
+            for value in extras:
+                existing[value.lower()] = value
+            config.auto_exclude_room_substrings = list(existing.values())
+            logger.info(
+                "Extending auto-exclude substrings with: %s",
+                ", ".join(extras),
+            )
     extractor = MatrixExtractor(config, log=logger)
 
     exporter: MatrixGraphExporter | None = None
